@@ -33,11 +33,11 @@ mongoose
 const app = express();
 
 const storage = multer.diskStorage({
-  destination: (_, __, callBack) => {
+  destination: (req, file, callBack) => {
     // помилки, куди загружати
     callBack(null, "uploads");
   },
-  filename: (_, file, callBack) => {
+  filename: (req, file, callBack) => {
     callBack(null, file.originalname);
   },
 });
@@ -56,9 +56,27 @@ app.post("/auth/login", loginValidation, checkValidationError, loginUser);
 app.get("/auth/me", checkAuth, getMe);
 
 app.post("/upload", checkAuth, upload.single("image"), (req, res) => {
-  res.json({
-    url: `/uploads/${req.file.originalname}`,
-  });
+  try {
+    res.json({
+      url: `/uploads/${req.file.originalname}`,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      message: "Невдалося завантажити файл",
+    });
+  }
+});
+app.get("/download/:filename", (req, res) => {
+  try {
+    const filename = req.params.filename;
+    const filePath = "uploads/" + filename;
+    res.download(filePath);
+  } catch (error) {
+    res.status(400).json({
+      message: "Невдалося скачати файл",
+    });
+  }
 });
 
 app.get("/posts", getAllPosts);
