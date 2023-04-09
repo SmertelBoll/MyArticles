@@ -13,6 +13,7 @@ import {
   updatePost,
 } from "./controllers/postControllers.js";
 import { postCreateValidation } from "./validations/post.js";
+import multer from "multer";
 
 // підключаємось до бази даних
 mongoose
@@ -31,8 +32,20 @@ mongoose
 // Створюємо програму
 const app = express();
 
+const storage = multer.diskStorage({
+  destination: (_, __, callBack) => {
+    // помилки, куди загружати
+    callBack(null, "uploads");
+  },
+  filename: (_, file, callBack) => {
+    callBack(null, file.originalname);
+  },
+});
+const upload = multer({ storage });
+
 // Настройки
 app.use(express.json()); // дозволяє читати json
+app.use("/uploads", express.static("uploads")); // щоб діставати статичні файли з папки (в гугл наприклад)
 
 // Запроси
 app.get("/", (req, res) => {
@@ -42,11 +55,17 @@ app.post("/auth/register", registerValidation, checkValidationError, registerUse
 app.post("/auth/login", loginValidation, checkValidationError, loginUser);
 app.get("/auth/me", checkAuth, getMe);
 
+app.post("/upload", checkAuth, upload.single("image"), (req, res) => {
+  res.json({
+    url: `/uploads/${req.file.originalname}`,
+  });
+});
+
 app.get("/posts", getAllPosts);
 app.get("/posts/:id", getOnePost);
 app.post("/posts", checkAuth, postCreateValidation, createPost);
 app.delete("/posts/:id", checkAuth, removePost);
-app.patch("/posts/:id", checkAuth, updatePost);
+app.patch("/posts/:id", checkAuth, postCreateValidation, updatePost);
 
 // на якому хості запускаємо, функція що робити якщо помилка
 app.listen(4444, (err) => {
