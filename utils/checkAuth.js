@@ -1,0 +1,25 @@
+import jwt from "jsonwebtoken";
+
+export const checkAuth = (req, res, next) => {
+  // const token = (req.headers.authorization || "").replace(/Bearer\s?/, "");
+  const token = (req.headers.authorization || "").replace("Bearer ", "");
+
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, "secret-key");
+
+      req.userId = decoded._id; // вшиваємо в req щоб мати доступ будь де
+      next(); // все нормально, можна виконувати наступну функцію в app.get
+    } catch (error) {
+      console.log(error);
+      return res.status(403).json({
+        message: "немає доступу",
+      });
+    }
+  } else {
+    // return щоб не було двох відповідей
+    return res.status(403).json({
+      message: "немає доступу",
+    });
+  }
+};
