@@ -3,8 +3,16 @@ import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { loginValidation, registerValidation } from "./validations/auth.js";
 import { checkValidationError } from "./utils/checkValidationError.js";
-import { getMeController, loginController, registerController } from "./controllers/userControllers.js";
+import { getMe, loginUser, registerUser } from "./controllers/userControllers.js";
 import { checkAuth } from "./utils/checkAuth.js";
+import {
+  createPost,
+  getAllPosts,
+  getOnePost,
+  removePost,
+  updatePost,
+} from "./controllers/postControllers.js";
+import { postCreateValidation } from "./validations/post.js";
 
 // підключаємось до бази даних
 mongoose
@@ -30,9 +38,15 @@ app.use(express.json()); // дозволяє читати json
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
-app.post("/auth/register", registerValidation, checkValidationError, registerController);
-app.post("/auth/login", loginValidation, checkValidationError, loginController);
-app.get("/auth/me", checkAuth, getMeController);
+app.post("/auth/register", registerValidation, checkValidationError, registerUser);
+app.post("/auth/login", loginValidation, checkValidationError, loginUser);
+app.get("/auth/me", checkAuth, getMe);
+
+app.get("/posts", getAllPosts);
+app.get("/posts/:id", getOnePost);
+app.post("/posts", checkAuth, postCreateValidation, createPost);
+app.delete("/posts/:id", checkAuth, removePost);
+app.patch("/posts/:id", checkAuth, updatePost);
 
 // на якому хості запускаємо, функція що робити якщо помилка
 app.listen(4444, (err) => {

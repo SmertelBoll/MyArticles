@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 import UserModel from "../models/user.js";
 
-export const registerController = async (req, res) => {
+export const registerUser = async (req, res) => {
   try {
     const password = req.body.password;
     const salt = await bcrypt.genSalt(10); // шифрування
@@ -40,7 +40,7 @@ export const registerController = async (req, res) => {
   }
 };
 
-export const loginController = async (req, res) => {
+export const loginUser = async (req, res) => {
   try {
     const user = await UserModel.findOne({ email: req.body.email });
 
@@ -81,7 +81,7 @@ export const loginController = async (req, res) => {
   }
 };
 
-export const getMeController = async (req, res) => {
+export const getMe = async (req, res) => {
   try {
     const user = await UserModel.findById(req.userId);
 
