@@ -34,6 +34,14 @@ const typography = {
     },
     fontWeight: 700,
   },
+  button: {
+    fontSize: smallFormula(16, 20),
+    "@media (min-width:767px)": {
+      fontSize: largeFormula(16, 20),
+    },
+    fontWeight: 400,
+    textTransform: "unset",
+  },
 };
 
 export default typography;
