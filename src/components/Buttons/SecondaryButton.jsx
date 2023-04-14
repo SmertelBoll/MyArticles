@@ -1,19 +1,21 @@
 import { Button, Typography } from "@mui/material";
 import React from "react";
 
-function ButtonYellow({ children }) {
+function SecondaryButton({ active, children, onClick, sx }) {
   return (
     <Button
+      onClick={onClick}
       sx={{
-        backgroundColor: "yellow.main",
+        backgroundColor: active ? "yellow.main" : "",
         color: "black",
-        borderRadius: "16px",
-        px: 5,
+        px: 2,
         alignSelf: "center",
+        borderRadius: "8px",
 
         ":hover": {
-          backgroundColor: "yellow.dark",
+          backgroundColor: "yellow.main",
         },
+        ...sx,
       }}
     >
       <Typography variant="button">{children}</Typography>
@@ -21,4 +23,4 @@ function ButtonYellow({ children }) {
   );
 }
 
-export default ButtonYellow;
+export default SecondaryButton;

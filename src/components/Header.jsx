@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import React from "react";
 import ContainerCustom from "./ContainerCustom";
 import Logo from "./Logo";
-import ButtonYellow from "./ButtonYellow";
+import MainButton from "./Buttons/MainButton";
 
 function Header() {
   return (
@@ -12,8 +12,8 @@ function Header() {
           <Logo />
 
           <Box sx={{ display: "flex", gap: 2 }}>
-            <ButtonYellow>Sing up</ButtonYellow>
-            <ButtonYellow>Log in</ButtonYellow>
+            <MainButton>Sing up</MainButton>
+            <MainButton>Log in</MainButton>
           </Box>
         </Box>
       </ContainerCustom>
