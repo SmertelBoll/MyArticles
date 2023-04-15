@@ -1,4 +1,4 @@
-import { IconButton, InputAdornment, TextField } from "@mui/material";
+import { IconButton, TextField } from "@mui/material";
 import React, { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -41,7 +41,8 @@ function Search() {
       value={value}
       onChange={handleChange}
       sx={{
-        width: 600,
+        width: "100%",
+        maxWidth: { xs: "auto", md: "35vw" },
         "& .Mui-focused .MuiIconButton-root": { color: "black" },
       }}
       InputProps={{

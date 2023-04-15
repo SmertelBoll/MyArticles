@@ -19,11 +19,29 @@ const typography = {
     },
     fontWeight: 600,
   },
+  h2: {
+    fontSize: smallFormula(24, 48),
+    "@media (min-width:767px)": {
+      fontSize: largeFormula(24, 48),
+    },
+    fontWeight: 600,
+  },
   p: {
     fontSize: smallFormula(16, 28),
     "@media (min-width:767px)": {
       fontSize: largeFormula(16, 28),
     },
+    fontWeight: 400,
+    textTransform: "unset",
+  },
+  // description
+  desc1: {
+    fontSize: 16,
+    fontWeight: 600,
+    textTransform: "unset",
+  },
+  desc2: {
+    fontSize: 14,
     fontWeight: 400,
     textTransform: "unset",
   },
