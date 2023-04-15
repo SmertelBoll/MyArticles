@@ -98,7 +98,6 @@ function RegistrationForm() {
             id="email"
             label="Email Address"
             name="email"
-            autoFocus
           />
           <InputBox
             value={formData.password}
