@@ -3,7 +3,7 @@ import React from "react";
 import Article from "../components/Article/Article";
 import ContainerCustom from "../components/ContainerCustom";
 import Sorting from "../components/Sorting/Sorting";
-import Comment from "../components/Comment";
+import Comment from "../components/Article/Comment";
 
 const testComments = [1, 2, 3, 4];
 

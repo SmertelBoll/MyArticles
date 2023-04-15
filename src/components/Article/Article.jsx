@@ -1,19 +1,34 @@
-import { Avatar, Box, Typography } from "@mui/material";
-import React from "react";
+import { Avatar, Box, IconButton, Typography } from "@mui/material";
+import React, { useState } from "react";
 import TagButton from "../Buttons/TagButton";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
+import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
 
 const testTags = ["react", "hohoho", "hello!1", "react", "hohoho", "hello!1"];
 
 function Article() {
+  const [isHovering, setIsHovering] = useState(false);
+
+  const handleMouseOver = () => {
+    setIsHovering(true);
+  };
+
+  const handleMouseOut = () => {
+    setIsHovering(false);
+  };
+
   return (
     <Box
+      onMouseOver={handleMouseOver}
+      onMouseOut={handleMouseOut}
       sx={{
         display: "flex",
         flexDirection: "column",
         borderRadius: 2,
         overflow: "hidden",
+        position: "relative",
         "&:hover": {
           outline: "1px solid",
           outlineColor: (theme) => theme.palette.black,
@@ -29,7 +44,30 @@ function Article() {
           objectFit: "cover",
         }}
         src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
       />
+
+      {/* update button */}
+      <Box
+        sx={{
+          position: "absolute",
+          top: 10,
+          right: 10,
+          bgcolor: "white",
+          p: "3px",
+          borderRadius: 2,
+          opacity: isHovering ? 1 : 0,
+          transition: "opacity 0.2s ease-in-out",
+        }}
+      >
+        <IconButton>
+          <EditIcon />
+        </IconButton>
+        <IconButton>
+          <CloseIcon />
+        </IconButton>
+      </Box>
 
       {/* info */}
       <Box sx={{ backgroundColor: "white", p: { xs: 2, sm: 3 } }}>
