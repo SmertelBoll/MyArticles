@@ -10,7 +10,7 @@ function SecondaryButton({ active, children, onClick, sx }) {
         color: "black",
         px: 2,
         alignSelf: "center",
-        borderRadius: "8px",
+        borderRadius: 2,
 
         ":hover": {
           backgroundColor: "yellow.main",

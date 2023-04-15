@@ -12,11 +12,11 @@ function Article() {
       sx={{
         display: "flex",
         flexDirection: "column",
-        borderRadius: "8px",
+        borderRadius: 2,
         overflow: "hidden",
         "&:hover": {
-          border: "1px solid",
-          borderColor: "black",
+          outline: "1px solid",
+          outlineColor: (theme) => theme.palette.black,
         },
       }}
     >
