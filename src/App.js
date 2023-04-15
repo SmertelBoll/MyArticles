@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import RegistrationForm from "./components/Auth/RegistrationForm";
+import LoginForm from "./components/Auth/LoginForm";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/sing-up" element={<RegistrationForm />} />
+          <Route path="/log-in" element={<LoginForm />} />
         </Routes>
       </main>
       <Footer />

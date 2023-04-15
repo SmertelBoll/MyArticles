@@ -18,7 +18,9 @@ function Header() {
             <Link to="/sing-up">
               <MainButton>Sing up</MainButton>
             </Link>
-            <MainButton>Log in</MainButton>
+            <Link to="/log-in">
+              <MainButton>Log in</MainButton>
+            </Link>
           </Box>
         </Box>
       </ContainerCustom>

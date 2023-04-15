@@ -5,14 +5,11 @@ import MainButton from "../Buttons/MainButton";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
-function RegistrationForm() {
+function LoginForm() {
   const [formData, setFormData] = useState({
-    fullName: "",
     email: "",
     password: "",
-    avatar: null,
   });
-  const [avatarUrl, setAvatarUrl] = useState("");
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -25,27 +22,6 @@ function RegistrationForm() {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(formData);
-  };
-
-  // Обробка завантаженого аватару
-  const handleFileInputChange = (event) => {
-    const file = event.target.files[0];
-
-    if (file && file.type.startsWith("image/")) {
-      const imageUrl = URL.createObjectURL(file);
-
-      setFormData((prevData) => ({
-        ...prevData,
-        avatar: file,
-      }));
-      setAvatarUrl(imageUrl);
-    }
-  };
-
-  const inputRef = useRef(null);
-
-  const handleAvatarClick = () => {
-    inputRef.current.click();
   };
 
   return (
@@ -62,39 +38,17 @@ function RegistrationForm() {
           boxShadow: 0,
           display: "flex",
           flexDirection: "column",
+
           gap: 3,
         }}
       >
-        <Typography variant="h2">Create your account</Typography>
+        <Typography variant="h2">Welcome</Typography>
 
         <Box
           component="form"
           onSubmit={handleSubmit}
           sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}
         >
-          <Avatar
-            onClick={handleAvatarClick}
-            src={avatarUrl}
-            sx={{ width: 90, height: 90, cursor: "pointer" }}
-          />
-          <input
-            type="file"
-            onChange={handleFileInputChange}
-            style={{ display: "none" }}
-            ref={inputRef}
-            accept="image/*"
-          />
-
-          <InputBox
-            value={formData.fullName}
-            onChange={handleInputChange}
-            required
-            fullWidth
-            id="fullname"
-            label="Full Name"
-            name="fullName"
-            autoFocus
-          />
           <InputBox
             value={formData.email}
             onChange={handleInputChange}
@@ -103,6 +57,7 @@ function RegistrationForm() {
             id="email"
             label="Email Address"
             name="email"
+            autoFocus
           />
           <InputBox
             value={formData.password}
@@ -116,7 +71,7 @@ function RegistrationForm() {
           />
 
           <MainButton type="submit" fullWidth sx={{ borderRadius: 1 }}>
-            Sign up
+            Log in
           </MainButton>
         </Box>
       </Box>
@@ -124,4 +79,4 @@ function RegistrationForm() {
   );
 }
 
-export default RegistrationForm;
+export default LoginForm;
