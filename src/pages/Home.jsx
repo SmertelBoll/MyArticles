@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import Article from "../components/Article/Article";
-import ContainerCustom from "../components/ContainerCustom";
+import ContainerCustom from "../components/customMUI/ContainerCustom";
 import Sorting from "../components/Sorting/Sorting";
 import Comment from "../components/Article/Comment";
 

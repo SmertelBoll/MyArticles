@@ -3,30 +3,9 @@ import React, { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import styled from "@emotion/styled";
+import TextFieldCustom from "../customMUI/TextFieldCustom";
 
-const SearchBox = styled(TextField)(() => ({
-  "& input": {
-    "&:-webkit-autofill": {
-      "-webkit-box-shadow": "0 0 0 100px #E6E4DA inset",
-    },
-  },
-  "& fieldset": {
-    borderRadius: "30px",
-    display: "flex",
-    alignItems: "center",
-  },
-  "& label.Mui-focused": {
-    color: "#0C1618",
-  },
-  "& .MuiOutlinedInput-root": {
-    "&:hover fieldset": {
-      borderColor: "#0C1618",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#0C1618",
-    },
-  },
-}));
+const SearchBox = TextFieldCustom("#E6E4DA");
 
 function Search() {
   const [value, setValue] = useState("");
@@ -44,6 +23,7 @@ function Search() {
         width: "100%",
         maxWidth: { xs: "auto", md: "35vw" },
         "& .Mui-focused .MuiIconButton-root": { color: "black" },
+        "& .MuiOutlinedInput-notchedOutline": { borderRadius: "30px" },
       }}
       InputProps={{
         startAdornment: (

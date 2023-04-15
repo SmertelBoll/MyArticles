@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import React from "react";
-import ContainerCustom from "./ContainerCustom";
+import ContainerCustom from "./customMUI/ContainerCustom";
 import Logo from "./Logo";
 import MainButton from "./Buttons/MainButton";
 

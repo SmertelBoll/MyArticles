@@ -1,9 +1,11 @@
 import { Button, Typography } from "@mui/material";
 import React from "react";
 
-function MainButton({ children }) {
+function MainButton(props) {
+  const { children, sx, ...rest } = props;
   return (
     <Button
+      {...rest}
       sx={{
         backgroundColor: "yellow.main",
         color: "black",
@@ -14,6 +16,7 @@ function MainButton({ children }) {
         ":hover": {
           backgroundColor: "yellow.dark",
         },
+        ...sx,
       }}
     >
       <Typography variant="button">{children}</Typography>
