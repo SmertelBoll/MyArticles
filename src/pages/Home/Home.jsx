@@ -49,6 +49,7 @@ function Home() {
               display: "flex",
               flexDirection: "column",
               gap: 2,
+              alignSelf: "start",
             }}
           >
             <Typography variant="p">Comments</Typography>

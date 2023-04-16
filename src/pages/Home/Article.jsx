@@ -61,10 +61,10 @@ function Article() {
           transition: "opacity 0.2s ease-in-out",
         }}
       >
-        <IconButton>
+        <IconButton sx={{ color: "black" }}>
           <EditIcon />
         </IconButton>
-        <IconButton>
+        <IconButton sx={{ color: "black" }}>
           <CloseIcon />
         </IconButton>
       </Box>

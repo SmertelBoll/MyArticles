@@ -99,11 +99,7 @@ function RegistrationForm() {
 
             {avatarUrl && (
               <IconButton sx={{ position: "absolute", top: -25, right: -25, color: "black" }}>
-                <HighlightOffIcon
-                  fontSize="large"
-                  onClick={handleDeleteAvatar}
-                  // sx={{ position: "absolute", top: -15, right: -15 }}
-                />
+                <HighlightOffIcon fontSize="large" onClick={handleDeleteAvatar} />
               </IconButton>
             )}
           </Box>
