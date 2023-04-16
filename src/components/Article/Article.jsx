@@ -97,8 +97,8 @@ function Article() {
 
           {/* tags */}
           <Box sx={{ display: "flex", gap: "0 16px", flexWrap: "wrap" }}>
-            {testTags.map((name) => (
-              <TagButton>#{name}</TagButton>
+            {testTags.map((name, id) => (
+              <TagButton key={`${id}_${name}`}>#{name}</TagButton>
             ))}
           </Box>
 

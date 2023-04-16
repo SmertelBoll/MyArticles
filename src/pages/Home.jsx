@@ -53,8 +53,8 @@ function Home() {
             >
               <Typography variant="p">Comments</Typography>
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                {testComments.map((_) => (
-                  <Comment />
+                {testComments.map((name) => (
+                  <Comment key={name} />
                 ))}
               </Box>
             </Box>
