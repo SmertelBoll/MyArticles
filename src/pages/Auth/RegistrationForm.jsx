@@ -1,8 +1,9 @@
-import { Avatar, Box, Typography } from "@mui/material";
+import { Avatar, Box, IconButton, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
 import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
 import ContainerCustom from "../../components/customMUI/ContainerCustom";
 import MainButton from "../../components/Buttons/MainButton";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
@@ -43,6 +44,14 @@ function RegistrationForm() {
     }
   };
 
+  const handleDeleteAvatar = () => {
+    setFormData((prevData) => ({
+      ...prevData,
+      avatar: null,
+    }));
+    setAvatarUrl("");
+  };
+
   const inputRef = useRef(null);
 
   const handleAvatarClick = () => {
@@ -74,18 +83,30 @@ function RegistrationForm() {
           onSubmit={handleSubmit}
           sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}
         >
-          <Avatar
-            onClick={handleAvatarClick}
-            src={avatarUrl}
-            sx={{ width: 90, height: 90, cursor: "pointer" }}
-          />
-          <input
-            type="file"
-            onChange={handleFileInputChange}
-            style={{ display: "none" }}
-            ref={inputRef}
-            accept="image/*"
-          />
+          <Box sx={{ position: "relative" }}>
+            <Avatar
+              onClick={handleAvatarClick}
+              src={avatarUrl}
+              sx={{ width: 90, height: 90, cursor: "pointer" }}
+            />
+            <input
+              type="file"
+              onChange={handleFileInputChange}
+              style={{ display: "none" }}
+              ref={inputRef}
+              accept="image/*"
+            />
+
+            {avatarUrl && (
+              <IconButton sx={{ position: "absolute", top: -25, right: -25, color: "black" }}>
+                <HighlightOffIcon
+                  fontSize="large"
+                  onClick={handleDeleteAvatar}
+                  // sx={{ position: "absolute", top: -15, right: -15 }}
+                />
+              </IconButton>
+            )}
+          </Box>
 
           <InputBox
             value={formData.fullName}
