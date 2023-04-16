@@ -5,6 +5,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home/Home";
 import RegistrationForm from "./pages/Auth/RegistrationForm";
 import LoginForm from "./pages/Auth/LoginForm";
+import CreateArticle from "./pages/CreateArticle/CreateArticle";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/sing-up" element={<RegistrationForm />} />
           <Route path="/log-in" element={<LoginForm />} />
+          <Route path="/create-article" element={<CreateArticle />} />
         </Routes>
       </main>
       <Footer />
