@@ -5,7 +5,7 @@ import SecondaryButton from "../Buttons/SecondaryButton";
 
 const sortBy = ["New", "Popularity", "Search"];
 
-function Sorting() {
+function SortingBlock() {
   const [sortItem, setSortItem] = useState(sortBy[0]);
 
   return (
@@ -46,4 +46,4 @@ function Sorting() {
   );
 }
 
-export default Sorting;
+export default SortingBlock;

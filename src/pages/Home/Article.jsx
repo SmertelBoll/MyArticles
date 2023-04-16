@@ -1,6 +1,6 @@
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
 import React, { useState } from "react";
-import TagButton from "../Buttons/TagButton";
+import TagButton from "../../components/Buttons/TagButton";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import CloseIcon from "@mui/icons-material/Close";

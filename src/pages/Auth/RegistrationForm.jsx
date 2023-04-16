@@ -1,8 +1,8 @@
 import { Avatar, Box, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
-import TextFieldCustom from "../customMUI/TextFieldCustom";
-import MainButton from "../Buttons/MainButton";
-import ContainerCustom from "../customMUI/ContainerCustom";
+import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
+import ContainerCustom from "../../components/customMUI/ContainerCustom";
+import MainButton from "../../components/Buttons/MainButton";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 

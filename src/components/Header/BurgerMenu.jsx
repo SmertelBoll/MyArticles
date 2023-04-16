@@ -45,7 +45,7 @@ const BurgerMenu = ({ sx }) => {
   return (
     <Box sx={{ display: "flex", ...sx }}>
       <Button onClick={handleDrawerOpen} sx={{ alignSelf: "center", p: 2, color: "black" }}>
-        <MenuIcon />
+        <MenuIcon fontSize="large" />
       </Button>
       <Drawer
         anchor="right"

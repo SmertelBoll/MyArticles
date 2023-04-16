@@ -6,15 +6,14 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import TextFieldCustom from "../customMUI/TextFieldCustom";
-import MainButton from "../Buttons/MainButton";
+import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
+import ContainerCustom from "../../components/customMUI/ContainerCustom";
+import MainButton from "../../components/Buttons/MainButton";
+import SecondaryButton from "../../components/Buttons/SecondaryButton";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import SecondaryButton from "../Buttons/SecondaryButton";
-import ContainerCustom from "../customMUI/ContainerCustom";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
@@ -112,6 +111,7 @@ function LoginForm() {
           <InfoOutlinedIcon />
           <Typography sx={{ ml: "2px" }}>test account</Typography>
         </Button>
+
         <Dialog open={openDialog} onClose={handleClose}>
           <DialogTitle variant="p" sx={{ color: "black" }}>
             Test account

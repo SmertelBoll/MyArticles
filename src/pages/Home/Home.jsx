@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
-import Article from "../components/Article/Article";
-import ContainerCustom from "../components/customMUI/ContainerCustom";
-import Sorting from "../components/Sorting/Sorting";
-import Comment from "../components/Article/Comment";
+import ContainerCustom from "../../components/customMUI/ContainerCustom";
+import SortingBlock from "../../components/Sorting/SortingBlock";
+import Article from "./Article";
+import Comment from "./Comment";
 
 const testComments = [1, 2, 3, 4];
 
@@ -11,7 +11,7 @@ function Home() {
   return (
     <Box>
       <ContainerCustom>
-        <Sorting />
+        <SortingBlock />
 
         <Box sx={{ display: "flex", gap: 3 }}>
           {/* articles */}
