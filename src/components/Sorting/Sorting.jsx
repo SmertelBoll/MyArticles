@@ -28,7 +28,7 @@ function Sorting() {
             }}
           >
             {name === sortItem ? (
-              <SecondaryButton onClick={() => setSortItem(name)} active>
+              <SecondaryButton onClick={() => setSortItem(name)} active="true">
                 {name}
               </SecondaryButton>
             ) : (

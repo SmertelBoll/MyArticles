@@ -2,6 +2,7 @@ import { Avatar, Box, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
 import TextFieldCustom from "../customMUI/TextFieldCustom";
 import MainButton from "../Buttons/MainButton";
+import ContainerCustom from "../customMUI/ContainerCustom";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
@@ -49,11 +50,12 @@ function RegistrationForm() {
   };
 
   return (
-    <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+    <ContainerCustom sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
       <Box
         sx={{
-          maxWidth: "380px",
+          maxWidth: "500px",
           width: "100%",
+          boxSizing: "border-box",
           textAlign: "center",
           bgcolor: "white",
           borderRadius: 2,
@@ -120,7 +122,7 @@ function RegistrationForm() {
           </MainButton>
         </Box>
       </Box>
-    </Box>
+    </ContainerCustom>
   );
 }
 

@@ -16,7 +16,7 @@ function Logo() {
         sx={{
           ...styles,
           color: "yellow.main",
-          WebkitTextStrokeWidth: { xs: "1px", sm: "2px" },
+          WebkitTextStrokeWidth: "2px",
           WebkitTextStrokeColor: "black",
         }}
       >

@@ -1,10 +1,11 @@
 import { Button, Typography } from "@mui/material";
 import React from "react";
 
-function SecondaryButton({ active, children, onClick, sx }) {
+function SecondaryButton(props) {
+  const { children, sx, active, ...rest } = props;
   return (
     <Button
-      onClick={onClick}
+      {...props}
       sx={{
         backgroundColor: active ? "yellow.main" : "",
         color: "black",

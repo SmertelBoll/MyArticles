@@ -5,7 +5,7 @@ const TextFieldCustom = (bgcolor) => {
   return styled(TextField)(() => ({
     "& input": {
       "&:-webkit-autofill": {
-        "-webkit-box-shadow": `0 0 0 100px ${bgcolor} inset`,
+        WebkitBoxShadow: `0 0 0 100px ${bgcolor} inset`,
       },
     },
     "& fieldset": {
