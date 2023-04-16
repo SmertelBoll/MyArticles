@@ -35,6 +35,7 @@ function Home() {
             sx={{
               flexGrow: "1",
               flexBasis: "33.33%",
+              display: { xs: "none", md: "flex" },
               // display: "flex",
               // flexDirection: "column",
               // gap: 3,

@@ -1,9 +1,10 @@
 import { Box } from "@mui/material";
 import React from "react";
-import ContainerCustom from "./customMUI/ContainerCustom";
+import ContainerCustom from "../customMUI/ContainerCustom";
 import Logo from "./Logo";
-import MainButton from "./Buttons/MainButton";
+import MainButton from "../Buttons/MainButton";
 import { Link } from "react-router-dom";
+import BurgerMenu from "./BurgerMenu";
 
 function Header() {
   return (
@@ -14,7 +15,8 @@ function Header() {
             <Logo />
           </Link>
 
-          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+          {/* button menu */}
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2, alignItems: "center" }}>
             <Link to="/sing-up">
               <MainButton>Sing up</MainButton>
             </Link>
@@ -22,6 +24,9 @@ function Header() {
               <MainButton>Log in</MainButton>
             </Link>
           </Box>
+
+          {/* burger menu */}
+          <BurgerMenu sx={{ display: { xs: "flex", md: "none" } }} />
         </Box>
       </ContainerCustom>
     </Box>

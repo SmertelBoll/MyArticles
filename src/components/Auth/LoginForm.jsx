@@ -14,6 +14,7 @@ import TextFieldCustom from "../customMUI/TextFieldCustom";
 import MainButton from "../Buttons/MainButton";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import SecondaryButton from "../Buttons/SecondaryButton";
+import ContainerCustom from "../customMUI/ContainerCustom";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
@@ -46,11 +47,12 @@ function LoginForm() {
   };
 
   return (
-    <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+    <ContainerCustom sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
       <Box
         sx={{
-          maxWidth: "380px",
+          maxWidth: "500px",
           width: "100%",
+          boxSizing: "border-box",
           textAlign: "center",
           bgcolor: "white",
           borderRadius: 2,
@@ -127,7 +129,7 @@ function LoginForm() {
           </DialogActions>
         </Dialog>
       </Box>
-    </Box>
+    </ContainerCustom>
   );
 }
 
