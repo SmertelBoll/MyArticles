@@ -2,10 +2,12 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
-import Home from "./pages/Home/Home";
+import Home from "./pages/Home";
 import RegistrationForm from "./pages/Auth/RegistrationForm";
 import LoginForm from "./pages/Auth/LoginForm";
 import CreateArticle from "./pages/CreateArticle/CreateArticle";
+import CommentsPage from "./pages/CommentsPage";
+import FullArticle from "./pages/FullArticle";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
           <Route path="/sing-up" element={<RegistrationForm />} />
           <Route path="/log-in" element={<LoginForm />} />
           <Route path="/create-article" element={<CreateArticle />} />
+          <Route path="/comments" element={<CommentsPage />} />
+          <Route path="/article/:id" element={<FullArticle />} />
         </Routes>
       </main>
       <Footer />

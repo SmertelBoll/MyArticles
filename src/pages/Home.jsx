@@ -1,11 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
-import ContainerCustom from "../../components/customMUI/ContainerCustom";
-import SortingBlock from "../../components/Sorting/SortingBlock";
-import Article from "./Article";
-import Comment from "./Comment";
-
-const testComments = [1, 2, 3, 4];
+import ContainerCustom from "../components/customMUI/ContainerCustom";
+import SortingBlock from "../components/Sorting/SortingBlock";
+import Article from "../components/Article/Article";
+import CommentsBlock from "./Comments/CommentBlock";
+import { Link } from "react-router-dom";
 
 function Home() {
   return (
@@ -41,24 +40,9 @@ function Home() {
           }}
         >
           {/* comments */}
-          <Box
-            sx={{
-              backgroundColor: "white",
-              borderRadius: 2,
-              p: 2,
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-              alignSelf: "start",
-            }}
-          >
-            <Typography variant="p">Comments</Typography>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              {testComments.map((name) => (
-                <Comment key={name} />
-              ))}
-            </Box>
-          </Box>
+          <Link to="/comments">
+            <CommentsBlock />
+          </Link>
         </Box>
       </Box>
     </ContainerCustom>

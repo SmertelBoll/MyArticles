@@ -16,17 +16,17 @@ function Header() {
           </Link>
 
           {/* button menu */}
-          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2, alignItems: "center" }}>
+          {/* <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2, alignItems: "center" }}>
             <Link to="/sing-up">
               <MainButton>Sing up</MainButton>
             </Link>
             <Link to="/log-in">
               <MainButton>Log in</MainButton>
             </Link>
-          </Box>
+          </Box> */}
 
           {/* burger menu */}
-          <BurgerMenu sx={{ display: { xs: "flex", md: "none" } }} />
+          <BurgerMenu sx={{ display: { xs: "flex", md: "flex" } }} />
         </Box>
       </ContainerCustom>
     </Box>

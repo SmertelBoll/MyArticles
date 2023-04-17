@@ -1,13 +1,14 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
+import { Box } from "@mui/material";
 import ContainerCustom from "../../components/customMUI/ContainerCustom";
 import SimpleMDE from "react-simplemde-editor";
 import ReactDOMServer from "react-dom/server";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import InputTags from "./InputTags";
-import "easymde/dist/easymde.min.css";
 import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
-import { Box } from "@mui/material";
 import MainButton from "../../components/Buttons/MainButton";
+
+import "easymde/dist/easymde.min.css";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
@@ -37,7 +38,7 @@ function CreateArticle() {
   const options = useMemo(
     () => ({
       spellChecker: false,
-      maxHeight: "400px",
+      maxHeight: "85vh",
       autofocus: true,
       placeholder: "Enter text...",
       status: false,
