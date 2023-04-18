@@ -1,4 +1,4 @@
-import PostSchema from "../models/user.js";
+import PostSchema from "../models/post.js";
 
 export const getAllPosts = async (req, res) => {
   try {

@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import multer from "multer";
+import cors from "cors";
 
 import { loginValidation, registerValidation } from "./validations/auth.js";
 import { checkValidationError } from "./utils/checkValidationError.js";
@@ -45,6 +46,7 @@ const upload = multer({ storage });
 
 // Настройки
 app.use(express.json()); // дозволяє читати json
+app.use(cors());
 app.use("/uploads", express.static("uploads")); // щоб діставати статичні файли з папки (в гугл наприклад)
 
 // Запроси
