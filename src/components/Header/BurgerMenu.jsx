@@ -21,8 +21,8 @@ import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 //  -1 - all users
 const navLinks = [
   { title: "Home", link: "/", auth: -1, icon: <HomeIcon /> },
-  { title: "Log in", link: "/log-in", auth: 0, icon: <LoginIcon /> },
-  { title: "Sing up", link: "/sing-up", auth: 0, icon: <PersonAddIcon /> },
+  { title: "Log in", link: "/login", auth: 0, icon: <LoginIcon /> },
+  { title: "Sing up", link: "/register", auth: 0, icon: <PersonAddIcon /> },
   { title: "Write an article", link: "/create-article", auth: 1, icon: <CreateIcon /> },
   { title: "Comments", link: "/comments", auth: 1, icon: <CommentOutlinedIcon /> },
   // { title: "", link: "/", auth: -1, icon: </> },

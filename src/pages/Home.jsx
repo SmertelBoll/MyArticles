@@ -1,12 +1,21 @@
-import { Box, Typography } from "@mui/material";
-import React from "react";
+import { Box } from "@mui/material";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ContainerCustom from "../components/customMUI/ContainerCustom";
 import SortingBlock from "../components/Sorting/SortingBlock";
 import Article from "../components/Article/Article";
 import CommentsBlock from "./Comments/CommentBlock";
 import { Link } from "react-router-dom";
+import { fetchPosts } from "../redux/slices/PostsSlice";
 
 function Home() {
+  const dispatch = useDispatch();
+  const { items, isLoaded } = useSelector((state) => state.posts);
+
+  useEffect(() => {
+    dispatch(fetchPosts());
+  }, []);
+
   return (
     <ContainerCustom>
       <SortingBlock />
@@ -23,10 +32,19 @@ function Home() {
             mb: 2,
           }}
         >
+          {isLoaded ? (
+            <>
+              {items.map((obj) => (
+                <Article key={obj._id} />
+              ))}
+            </>
+          ) : (
+            <div>loading</div>
+          )}
+          {/* <Article />
           <Article />
           <Article />
-          <Article />
-          <Article />
+          <Article /> */}
         </Box>
 
         <Box
@@ -41,7 +59,9 @@ function Home() {
         >
           {/* comments */}
           <Link to="/comments">
-            <CommentsBlock />
+            <Box sx={{ borderRadius: 2, "&:hover": { outline: "1px solid black" } }}>
+              <CommentsBlock />
+            </Box>
           </Link>
         </Box>
       </Box>

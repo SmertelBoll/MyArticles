@@ -17,10 +17,10 @@ function Header() {
 
           {/* button menu */}
           {/* <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2, alignItems: "center" }}>
-            <Link to="/sing-up">
+            <Link to="/register">
               <MainButton>Sing up</MainButton>
             </Link>
-            <Link to="/log-in">
+            <Link to="/login">
               <MainButton>Log in</MainButton>
             </Link>
           </Box> */}

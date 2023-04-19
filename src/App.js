@@ -16,8 +16,8 @@ function App() {
       <main style={{ flex: "1 1 auto" }}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/sing-up" element={<RegistrationForm />} />
-          <Route path="/log-in" element={<LoginForm />} />
+          <Route path="/register" element={<RegistrationForm />} />
+          <Route path="/login" element={<LoginForm />} />
           <Route path="/create-article" element={<CreateArticle />} />
           <Route path="/comments" element={<CommentsPage />} />
           <Route path="/article/:id" element={<FullArticle />} />
