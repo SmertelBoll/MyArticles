@@ -1,19 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Comments from "./Comments";
 import ContainerCustom from "../../components/customMUI/ContainerCustom";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchComments } from "../../redux/slices/CommentsSlice";
+import axios from "../../axios";
 
 function CommentsPage() {
-  const dispatch = useDispatch();
-  const { items, isLoaded } = useSelector((state) => state.comments);
+  const [comments, setComments] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchComments());
+    axios
+      .get(`/comments`)
+      .then((res) => {
+        setComments(res.data);
+        setIsLoaded(true);
+      })
+      .catch((err) => {
+        console.warn(err);
+        alert("Помилка при отриманні коментарів");
+      });
   }, []);
   return (
     <ContainerCustom paddingY>
-      <Comments items={items} isLoaded={isLoaded} />
+      <Comments items={comments} isLoaded={isLoaded} />
     </ContainerCustom>
   );
 }

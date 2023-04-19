@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
@@ -8,8 +8,16 @@ import LoginForm from "./pages/Auth/LoginForm";
 import CreateArticle from "./pages/CreateArticle/CreateArticle";
 import CommentsPage from "./pages/Comments/CommentsPage";
 import FullArticle from "./pages/FullArticle";
+import { useDispatch } from "react-redux";
+import { fetchAuthMe } from "./redux/slices/AuthSlice";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchAuthMe());
+  }, []);
+
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <Header />

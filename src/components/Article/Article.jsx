@@ -5,7 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 import ArticleInfoBlock from "./ArticleInfoBlock";
 
-function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsCount }) {
+function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsCount, isOwner }) {
   const [isHovering, setIsHovering] = useState(false);
 
   const handleMouseOver = () => {
@@ -45,25 +45,28 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
         />
 
         {/* update button */}
-        <Box
-          sx={{
-            position: "absolute",
-            top: 10,
-            right: 10,
-            bgcolor: "white",
-            p: "3px",
-            borderRadius: 2,
-            opacity: isHovering ? 1 : 0,
-            transition: "opacity 0.2s ease-in-out",
-          }}
-        >
-          <IconButton sx={{ color: "black" }}>
-            <EditIcon />
-          </IconButton>
-          <IconButton sx={{ color: "black" }}>
-            <CloseIcon />
-          </IconButton>
-        </Box>
+        {/* {console.log(isOwner)} */}
+        {isOwner && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: 10,
+              right: 10,
+              bgcolor: "white",
+              p: "3px",
+              borderRadius: 2,
+              opacity: isHovering ? 1 : 0,
+              transition: "opacity 0.2s ease-in-out",
+            }}
+          >
+            <IconButton sx={{ color: "black" }}>
+              <EditIcon />
+            </IconButton>
+            <IconButton sx={{ color: "black" }}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        )}
 
         {/* info */}
         <ArticleInfoBlock

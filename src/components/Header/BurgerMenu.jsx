@@ -14,22 +14,26 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import CreateIcon from "@mui/icons-material/Create";
 import SecondaryButton from "../Buttons/SecondaryButton";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
+import { useSelector } from "react-redux";
+import { selectIsAuth } from "../../redux/slices/AuthSlice";
 
-// auth: show information to
-//  0 - users without registration
-//  1 - registered users
-//  -1 - all users
-const navLinks = [
-  { title: "Home", link: "/", auth: -1, icon: <HomeIcon /> },
-  { title: "Log in", link: "/login", auth: 0, icon: <LoginIcon /> },
-  { title: "Sing up", link: "/register", auth: 0, icon: <PersonAddIcon /> },
-  { title: "Write an article", link: "/create-article", auth: 1, icon: <CreateIcon /> },
-  { title: "Comments", link: "/comments", auth: 1, icon: <CommentOutlinedIcon /> },
-  // { title: "", link: "/", auth: -1, icon: </> },
-  { title: "Log out", auth: 1, icon: <LogoutIcon /> },
-];
+const BurgerMenu = ({ sx, onClickLogout }) => {
+  // auth: show information to
+  //  0 - users without registration
+  //  1 - registered users
+  //  -1 - all users
+  const navLinks = [
+    { title: "Home", link: "/", auth: -1, icon: <HomeIcon />, func: null },
+    { title: "Log in", link: "/login", auth: 0, icon: <LoginIcon />, func: null },
+    { title: "Sing up", link: "/register", auth: 0, icon: <PersonAddIcon />, func: null },
+    { title: "Write an article", link: "/create-article", auth: 1, icon: <CreateIcon />, func: null },
+    { title: "Comments", link: "/comments", auth: 1, icon: <CommentOutlinedIcon />, func: null },
+    // { title: "", link: "/", auth: -1, icon: </>, func: null },
+    { title: "Log out", auth: 1, icon: <LogoutIcon />, func: onClickLogout },
+  ];
 
-const BurgerMenu = ({ sx }) => {
+  const isAuth = useSelector(selectIsAuth);
+  const { data, isLoaded } = useSelector((state) => state.auth);
   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
@@ -39,8 +43,6 @@ const BurgerMenu = ({ sx }) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-  const user = true;
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
@@ -64,9 +66,9 @@ const BurgerMenu = ({ sx }) => {
         }}
       >
         {/* user */}
-        {user && (
+        {isAuth && isLoaded && (
           <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
-            <Avatar sx={{ width: 75, height: 75, cursor: "pointer" }} />
+            <Avatar src={data?.user?.avatarUrl} sx={{ width: 75, height: 75, cursor: "pointer" }} />
             <Typography
               sx={{
                 display: "-webkit-box",
@@ -78,7 +80,7 @@ const BurgerMenu = ({ sx }) => {
                 fontSize: "24px",
               }}
             >
-              Lyubomyr Sholop
+              {data?.user?.fullName}
             </Typography>
           </Box>
         )}
@@ -88,7 +90,7 @@ const BurgerMenu = ({ sx }) => {
           {navLinks.map((obj) => (
             <React.Fragment key={obj.title}>
               {/* choose which buttons to show depending on authorization */}
-              {(true || obj.auth === -1 || obj.auth == user) && (
+              {(obj.auth === -1 || obj.auth == isAuth) && (
                 <>
                   {/* check if you need to forward to another page */}
                   {obj.link ? (
@@ -96,7 +98,7 @@ const BurgerMenu = ({ sx }) => {
                       <SecondaryButton
                         startIcon={obj.icon}
                         fullWidth
-                        onClick={handleDrawerClose}
+                        onClick={obj.func ? obj.func : handleDrawerClose}
                         sx={{ display: "flex", justifyContent: "flex-start" }}
                       >
                         {obj.title}
@@ -106,7 +108,7 @@ const BurgerMenu = ({ sx }) => {
                     <SecondaryButton
                       startIcon={obj.icon}
                       fullWidth
-                      // onClick={handleDrawerClose}
+                      onClick={obj.func ? obj.func : handleDrawerClose}
                       sx={{ display: "flex", justifyContent: "flex-start" }}
                     >
                       {obj.title}

@@ -3,20 +3,23 @@ import React, { useEffect, useState } from "react";
 import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
 import TelegramIcon from "@mui/icons-material/Telegram";
 import MainButton from "../../components/Buttons/MainButton";
-import { fetchComments } from "../../redux/slices/CommentsSlice";
-import { useDispatch, useSelector } from "react-redux";
 import CommentBlock from "./CommentBlock";
+import { useSelector } from "react-redux";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
 function Comments({ addCommnet, items, isLoaded, limit }) {
   const [commentText, setCommentText] = useState("");
+  const { data: userData, isLoaded: isLoadedDataUser } = useSelector((state) => state.auth);
+
+  const isPoints = limit < items?.length;
+  if (limit) {
+    items = items?.slice(0, limit);
+  }
 
   const handleChange = (e) => {
     setCommentText(e.target.value);
   };
-
-  console.log(items);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -41,9 +44,9 @@ function Comments({ addCommnet, items, isLoaded, limit }) {
         Comments
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
-        {addCommnet && (
+        {addCommnet && isLoadedDataUser && (
           <Box sx={{ display: "flex", gap: 2, mb: 2, width: "100%" }}>
-            <Avatar src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2" />
+            <Avatar src={userData?.user?.avatarUrl} />
 
             <Box
               component="form"
@@ -85,12 +88,12 @@ function Comments({ addCommnet, items, isLoaded, limit }) {
         ) : (
           <div>loading...</div>
         )}
-        {false && (
-          <>
-            {[1, 2, 3, 4, 5].map((obj) => (
-              <CommentBlock key={obj._id} />
-            ))}
-          </>
+        {isPoints && (
+          <Box sx={{ textAlign: "center" }}>
+            <Typography variant="p" sx={{ color: "grey.dark" }}>
+              ...
+            </Typography>
+          </Box>
         )}
       </Box>
     </Box>

@@ -14,7 +14,7 @@ const initialState = {
 const postsSlice = createSlice({
   name: "posts",
   initialState,
-  reducer: {},
+  reducers: {},
   extraReducers: {
     [fetchPosts.pending]: (state) => {
       // якщо відправка

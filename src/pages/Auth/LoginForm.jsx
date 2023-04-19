@@ -14,14 +14,19 @@ import ContainerCustom from "../../components/customMUI/ContainerCustom";
 import MainButton from "../../components/Buttons/MainButton";
 import SecondaryButton from "../../components/Buttons/SecondaryButton";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAuth, selectIsAuth } from "../../redux/slices/AuthSlice";
+import { Navigate } from "react-router-dom";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
 function LoginForm() {
+  const dispatch = useDispatch();
+  const isAuth = useSelector(selectIsAuth);
   const [openDialog, setOpenDialog] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: "sholop@gmail.com",
+    password: "1234",
   });
 
   const handleClickOpen = () => {
@@ -40,10 +45,20 @@ function LoginForm() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData);
+    const data = await dispatch(fetchAuth(formData));
+
+    if (data?.payload?.token) {
+      window.localStorage.setItem("token", data.payload.token);
+    } else {
+      alert("Не вдалося аторизуватися");
+    }
   };
+
+  if (isAuth) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <ContainerCustom sx={{ width: "100%", display: "flex", justifyContent: "center" }}>

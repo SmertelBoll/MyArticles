@@ -4,10 +4,15 @@ import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
 import ContainerCustom from "../../components/customMUI/ContainerCustom";
 import MainButton from "../../components/Buttons/MainButton";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchRegister, selectIsAuth } from "../../redux/slices/AuthSlice";
+import { Navigate } from "react-router-dom";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
 function RegistrationForm() {
+  const dispatch = useDispatch();
+  const isAuth = useSelector(selectIsAuth);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -22,11 +27,6 @@ function RegistrationForm() {
       ...prevData,
       [name]: value,
     }));
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(formData);
   };
 
   // Обробка завантаженого аватару
@@ -57,6 +57,21 @@ function RegistrationForm() {
   const handleAvatarClick = () => {
     inputRef.current.click();
   };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = await dispatch(fetchRegister(formData));
+
+    if (data?.payload?.token) {
+      window.localStorage.setItem("token", data.payload.token);
+    } else {
+      alert("Не вдалося зареєструватися");
+    }
+  };
+
+  if (isAuth) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <ContainerCustom sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
