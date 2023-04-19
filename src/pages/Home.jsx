@@ -4,17 +4,22 @@ import { useDispatch, useSelector } from "react-redux";
 import ContainerCustom from "../components/customMUI/ContainerCustom";
 import SortingBlock from "../components/Sorting/SortingBlock";
 import Article from "../components/Article/Article";
-import CommentsBlock from "./Comments/CommentBlock";
+import Comments from "./Comments/Comments";
 import { Link } from "react-router-dom";
 import { fetchPosts } from "../redux/slices/PostsSlice";
 
 function Home() {
   const dispatch = useDispatch();
   const { items, isLoaded } = useSelector((state) => state.posts);
+  const isAuth = false;
 
   useEffect(() => {
     dispatch(fetchPosts());
   }, []);
+
+  // useEffect(() => {
+  //   console.log(items);
+  // }, [items]);
 
   return (
     <ContainerCustom>
@@ -35,35 +40,40 @@ function Home() {
           {isLoaded ? (
             <>
               {items.map((obj) => (
-                <Article key={obj._id} />
+                <Article
+                  key={obj._id}
+                  _id={obj._id}
+                  title={obj.title}
+                  tags={obj.tags}
+                  imageUrl={obj.imageUrl}
+                  date={obj.updatedAt}
+                  user={obj.user}
+                  viewsCount={obj.viewsCount}
+                  commentsCount={obj.commentsCount}
+                />
               ))}
             </>
           ) : (
             <div>loading</div>
           )}
-          {/* <Article />
-          <Article />
-          <Article />
-          <Article /> */}
         </Box>
 
-        <Box
-          sx={{
-            flexGrow: "1",
-            flexBasis: "33.33%",
-            display: { xs: "none", md: "flex" },
-            // display: "flex",
-            // flexDirection: "column",
-            // gap: 3,
-          }}
-        >
-          {/* comments */}
-          <Link to="/comments">
-            <Box sx={{ borderRadius: 2, "&:hover": { outline: "1px solid black" } }}>
-              <CommentsBlock />
-            </Box>
-          </Link>
-        </Box>
+        {isAuth && (
+          <Box
+            sx={{
+              flexGrow: "1",
+              flexBasis: "33.33%",
+              display: { xs: "none", md: "flex" },
+            }}
+          >
+            {/* comments */}
+            <Link to="/comments">
+              <Box sx={{ borderRadius: 2, "&:hover": { outline: "1px solid black" } }}>
+                <Comments />
+              </Box>
+            </Link>
+          </Box>
+        )}
       </Box>
     </ContainerCustom>
   );

@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import RegistrationForm from "./pages/Auth/RegistrationForm";
 import LoginForm from "./pages/Auth/LoginForm";
 import CreateArticle from "./pages/CreateArticle/CreateArticle";
-import CommentsPage from "./pages/CommentsPage";
+import CommentsPage from "./pages/Comments/CommentsPage";
 import FullArticle from "./pages/FullArticle";
 
 function App() {

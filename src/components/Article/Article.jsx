@@ -5,7 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 import ArticleInfoBlock from "./ArticleInfoBlock";
 
-function Article() {
+function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsCount }) {
   const [isHovering, setIsHovering] = useState(false);
 
   const handleMouseOver = () => {
@@ -17,7 +17,7 @@ function Article() {
   };
 
   return (
-    <Link to={`/article/0`}>
+    <Link to={`/article/${_id}`}>
       <Box
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
@@ -38,10 +38,10 @@ function Article() {
           component="img"
           sx={{
             width: "100%",
-            maxHeight: "40vh",
+            maxHeight: "50vh",
             objectFit: "cover",
           }}
-          src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
+          src={imageUrl}
         />
 
         {/* update button */}
@@ -66,7 +66,14 @@ function Article() {
         </Box>
 
         {/* info */}
-        <ArticleInfoBlock />
+        <ArticleInfoBlock
+          title={title}
+          tags={tags}
+          date={date}
+          user={user}
+          viewsCount={viewsCount}
+          commentsCount={commentsCount}
+        />
       </Box>
     </Link>
   );

@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../../axios";
 
-export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
-  const res = await axios.get("/posts");
+export const fetchComments = createAsyncThunk("comments/fetchComments", async () => {
+  const res = await axios.get("/comments");
   return res.data;
 });
 
@@ -11,22 +11,22 @@ const initialState = {
   isLoaded: false,
 };
 
-const postsSlice = createSlice({
-  name: "posts",
+const commentsSlice = createSlice({
+  name: "comments",
   initialState,
   reducer: {},
   extraReducers: {
-    [fetchPosts.pending]: (state) => {
+    [fetchComments.pending]: (state) => {
       // якщо відправка
       state.items = []; // щоб випадко не показало старі елементи
       state.isLoaded = false;
     },
-    [fetchPosts.fulfilled]: (state, action) => {
+    [fetchComments.fulfilled]: (state, action) => {
       // якщо успішно
       state.items = action.payload;
       state.isLoaded = true;
     },
-    [fetchPosts.rejected]: (state) => {
+    [fetchComments.rejected]: (state) => {
       // якщо помилка
       state.items = [];
       state.isLoaded = true;
@@ -34,4 +34,4 @@ const postsSlice = createSlice({
   },
 });
 
-export const postsReducer = postsSlice.reducer;
+export const commentsReducer = commentsSlice.reducer;
