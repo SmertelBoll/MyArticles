@@ -101,3 +101,30 @@ export const getMe = async (req, res) => {
     });
   }
 };
+
+export const getUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "Користувач не знайдений",
+      });
+    }
+
+    const { _id, fullName, avatarUrl } = user;
+
+    res.json({
+      _id,
+      fullName,
+      avatarUrl,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Невдалося отримати дані",
+    });
+  }
+};

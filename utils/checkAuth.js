@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 
 export const checkAuth = (req, res, next) => {
-  // const token = (req.headers.authorization || "").replace(/Bearer\s?/, "");
-  const token = (req.headers.authorization || "").replace("Bearer ", "");
+  const token = (req.headers.authorization || "").replace(/Bearer\s?/, "");
+  // const token = (req.headers.authorization || "").replace("Bearer ", "");
 
   if (token) {
     try {

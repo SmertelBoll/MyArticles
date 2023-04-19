@@ -16,7 +16,10 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
     avatarUrl: String,
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   {
     // при створенні чи оновленні зберігаємо час

@@ -5,7 +5,7 @@ import cors from "cors";
 
 import { loginValidation, registerValidation } from "./validations/auth.js";
 import { checkValidationError } from "./utils/checkValidationError.js";
-import { getMe, loginUser, registerUser } from "./controllers/userControllers.js";
+import { getMe, getUser, loginUser, registerUser } from "./controllers/userControllers.js";
 import { checkAuth } from "./utils/checkAuth.js";
 import {
   createPost,
@@ -15,6 +15,13 @@ import {
   updatePost,
 } from "./controllers/postControllers.js";
 import { postCreateValidation } from "./validations/post.js";
+import {
+  createComment,
+  getAllCommentsByPost,
+  getAllCommentsByUser,
+  removeComment,
+} from "./controllers/commentControllers.js";
+import { commentCreateValidation } from "./validations/comment.js";
 
 // підключаємось до бази даних
 mongoose
@@ -56,6 +63,7 @@ app.get("/", (req, res) => {
 app.post("/auth/register", registerValidation, checkValidationError, registerUser);
 app.post("/auth/login", loginValidation, checkValidationError, loginUser);
 app.get("/auth/me", checkAuth, getMe);
+app.get("/auth/:id", getUser);
 
 app.post("/upload", checkAuth, upload.single("image"), (req, res) => {
   try {
@@ -86,6 +94,11 @@ app.get("/posts/:id", getOnePost);
 app.post("/posts", checkAuth, postCreateValidation, createPost);
 app.delete("/posts/:id", checkAuth, removePost);
 app.patch("/posts/:id", checkAuth, postCreateValidation, updatePost);
+
+app.get("/comments/:postId", getAllCommentsByPost);
+app.get("/comments", checkAuth, getAllCommentsByUser);
+app.post("/comments", checkAuth, commentCreateValidation, createComment);
+app.delete("/comments/:id", checkAuth, removeComment);
 
 // на якому хості запускаємо, функція що робити якщо помилка
 app.listen(4444, (err) => {
