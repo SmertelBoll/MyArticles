@@ -9,7 +9,7 @@ export const registerValidation = [
 
 export const loginValidation = [
   body("email").isEmail(),
-  body("password", "пароль повинен містити мінімум 5 символів").isLength({
+  body("password").isLength({
     min: 5,
   }),
 ];

@@ -63,7 +63,6 @@ app.get("/", (req, res) => {
 app.post("/auth/register", registerValidation, checkValidationError, registerUser);
 app.post("/auth/login", loginValidation, checkValidationError, loginUser);
 app.get("/auth/me", checkAuth, getMe);
-app.get("/auth/:id", getUser);
 
 app.post("/upload", checkAuth, upload.single("image"), (req, res) => {
   try {
