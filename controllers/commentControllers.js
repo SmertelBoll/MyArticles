@@ -5,7 +5,10 @@ export const getAllCommentsByPost = async (req, res) => {
   try {
     const postId = req.params.postId;
 
-    const comments = await CommentSchema.find({ post: postId }).populate("user").exec();
+    const comments = await CommentSchema.find({ post: postId })
+      .sort({ createdAt: -1 })
+      .populate("user")
+      .exec();
 
     res.send(comments);
   } catch (error) {

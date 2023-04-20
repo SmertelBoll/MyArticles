@@ -14,7 +14,11 @@ export const getAllPosts = async (req, res) => {
       sortObj[sortBy] = -1;
       posts = await PostSchema.find({ title: regex }).sort(sortObj).populate("user").exec();
     } else {
-      posts = await PostSchema.find({ title: regex }).sort({ createdAt: -1 }).populate("user").exec();
+      if (filter) {
+        posts = await PostSchema.find({ title: regex }).sort({ viewsCount: -1 }).populate("user").exec();
+      } else {
+        posts = await PostSchema.find({ title: regex }).sort({ createdAt: -1 }).populate("user").exec();
+      }
     }
 
     res.send(posts);
