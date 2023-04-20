@@ -2,7 +2,20 @@ import PostSchema from "../models/post.js";
 
 export const getAllPosts = async (req, res) => {
   try {
-    const posts = await PostSchema.find().populate("user").exec();
+    const filter = req.query.filter || "";
+    const regex = new RegExp(filter, "i");
+
+    const sortBy = req.query.sortBy;
+    const sortObj = {};
+
+    let posts = [];
+
+    if (sortBy) {
+      sortObj[sortBy] = -1;
+      posts = await PostSchema.find({ title: regex }).sort(sortObj).populate("user").exec();
+    } else {
+      posts = await PostSchema.find({ title: regex }).sort({ createdAt: -1 }).populate("user").exec();
+    }
 
     res.send(posts);
   } catch (error) {

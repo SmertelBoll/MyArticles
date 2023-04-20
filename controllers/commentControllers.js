@@ -19,11 +19,13 @@ export const getAllCommentsByPost = async (req, res) => {
 export const getAllCommentsByUser = async (req, res) => {
   try {
     const userId = req.userId;
+
     const postsByUser = await PostSchema.find({ user: userId }).exec();
 
     const postsId = postsByUser.map((obj) => obj._id);
 
-    const comments = await CommentSchema.find({ post: { $in: postsId } })
+    let comments = await CommentSchema.find({ post: { $in: postsId } })
+      .sort({ createdAt: -1 })
       .populate("user")
       .exec();
 

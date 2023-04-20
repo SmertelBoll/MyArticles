@@ -5,7 +5,7 @@ import cors from "cors";
 
 import { loginValidation, registerValidation } from "./validations/auth.js";
 import { checkValidationError } from "./utils/checkValidationError.js";
-import { getMe, getUser, loginUser, registerUser } from "./controllers/userControllers.js";
+import { getMe, loginUser, registerUser } from "./controllers/userControllers.js";
 import { checkAuth } from "./utils/checkAuth.js";
 import {
   createPost,
@@ -90,13 +90,13 @@ app.get("/download/:filename", (req, res) => {
 
 app.get("/posts", getAllPosts);
 app.get("/posts/:id", getOnePost);
-app.post("/posts", checkAuth, postCreateValidation, createPost);
+app.post("/posts", checkAuth, postCreateValidation, checkValidationError, createPost);
 app.delete("/posts/:id", checkAuth, removePost);
-app.patch("/posts/:id", checkAuth, postCreateValidation, updatePost);
+app.patch("/posts/:id", checkAuth, postCreateValidation, checkValidationError, updatePost);
 
 app.get("/comments/:postId", getAllCommentsByPost);
 app.get("/comments", checkAuth, getAllCommentsByUser);
-app.post("/comments", checkAuth, commentCreateValidation, createComment);
+app.post("/comments", checkAuth, commentCreateValidation, checkValidationError, createComment);
 app.delete("/comments/:id", checkAuth, removeComment);
 
 // на якому хості запускаємо, функція що робити якщо помилка
