@@ -26,7 +26,7 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
     { title: "Home", link: "/", auth: -1, icon: <HomeIcon />, func: null },
     { title: "Log in", link: "/login", auth: 0, icon: <LoginIcon />, func: null },
     { title: "Sing up", link: "/register", auth: 0, icon: <PersonAddIcon />, func: null },
-    { title: "Write an article", link: "/create-article", auth: 1, icon: <CreateIcon />, func: null },
+    { title: "Write an article", link: "/create", auth: 1, icon: <CreateIcon />, func: null },
     { title: "Comments", link: "/comments", auth: 1, icon: <CommentOutlinedIcon />, func: null },
     // { title: "", link: "/", auth: -1, icon: </>, func: null },
     { title: "Log out", auth: 1, icon: <LogoutIcon />, func: onClickLogout },

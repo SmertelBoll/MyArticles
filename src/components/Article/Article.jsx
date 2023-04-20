@@ -1,4 +1,4 @@
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
@@ -17,68 +17,75 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
   };
 
   return (
-    <Link to={`/article/${_id}`}>
-      <Box
-        onMouseOver={handleMouseOver}
-        onMouseOut={handleMouseOut}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          borderRadius: 2,
-          overflow: "hidden",
-          position: "relative",
-          "&:hover": {
-            outline: "1px solid",
-            outlineColor: (theme) => theme.palette.black,
-          },
-        }}
-      >
-        {/* image */}
+    <Box onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} sx={{ position: "relative" }}>
+      <Link to={`/article/${_id}`}>
         <Box
-          component="img"
           sx={{
-            width: "100%",
-            maxHeight: "50vh",
-            objectFit: "cover",
-          }}
-          src={imageUrl}
-        />
+            display: "flex",
+            flexDirection: "column",
+            borderRadius: 2,
+            overflow: "hidden",
 
-        {/* update button */}
-        {/* {console.log(isOwner)} */}
-        {isOwner && (
-          <Box
-            sx={{
-              position: "absolute",
-              top: 10,
-              right: 10,
-              bgcolor: "white",
-              p: "3px",
-              borderRadius: 2,
-              opacity: isHovering ? 1 : 0,
-              transition: "opacity 0.2s ease-in-out",
-            }}
-          >
-            <IconButton sx={{ color: "black" }}>
-              <EditIcon />
-            </IconButton>
+            "&:hover": {
+              outline: "1px solid",
+              outlineColor: (theme) => theme.palette.black,
+            },
+          }}
+        >
+          {/* image */}
+          {imageUrl && (
+            <Box
+              component="img"
+              sx={{
+                width: "100%",
+                maxHeight: "50vh",
+                objectFit: "cover",
+              }}
+              src={imageUrl}
+            />
+          )}
+
+          {/* info */}
+          <ArticleInfoBlock
+            title={title}
+            tags={tags}
+            date={date}
+            user={user}
+            viewsCount={viewsCount}
+            commentsCount={commentsCount}
+          />
+        </Box>
+      </Link>
+
+      {/* update button */}
+      {isOwner && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: 10,
+            right: 10,
+            bgcolor: "white",
+            p: "3px",
+            borderRadius: 2,
+            opacity: isHovering ? 1 : 0,
+            transition: "opacity 0.2s ease-in-out",
+          }}
+        >
+          <Tooltip title={<Typography fontSize={16}>Edit</Typography>} placement="top">
+            <Link to={`/update/${_id}`}>
+              <IconButton sx={{ color: "black" }}>
+                <EditIcon />
+              </IconButton>
+            </Link>
+          </Tooltip>
+          <Tooltip title={<Typography fontSize={16}>Delete</Typography>} placement="top">
             <IconButton sx={{ color: "black" }}>
               <CloseIcon />
             </IconButton>
-          </Box>
-        )}
-
-        {/* info */}
-        <ArticleInfoBlock
-          title={title}
-          tags={tags}
-          date={date}
-          user={user}
-          viewsCount={viewsCount}
-          commentsCount={commentsCount}
-        />
-      </Box>
-    </Link>
+          </Tooltip>
+        </Box>
+      )}
+    </Box>
   );
 }
 

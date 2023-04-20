@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Box } from "@mui/material";
 import ContainerCustom from "../../components/customMUI/ContainerCustom";
 import SimpleMDE from "react-simplemde-editor";
@@ -7,19 +7,44 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import InputTags from "./InputTags";
 import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
 import MainButton from "../../components/Buttons/MainButton";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "../../axios";
 
 import "easymde/dist/easymde.min.css";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
-function CreateArticle() {
+function CreateArticle({ update }) {
   const [imageUrl, setImageUrl] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     text: "",
     tags: [],
-    image: null,
+    imageUrl: null,
   });
+
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (update) {
+      axios
+        .get(`/posts/${id}`)
+        .then((res) => {
+          setFormData({
+            title: res.data.title,
+            text: res.data.text,
+            tags: res.data.tags,
+            image: res.data.image,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("Помилка при спробі редагування");
+          navigate("/");
+        });
+    }
+  }, []);
 
   const onChangeTitle = (e) => {
     setFormData((prevData) => ({
@@ -62,7 +87,7 @@ function CreateArticle() {
 
       setFormData((prevData) => ({
         ...prevData,
-        image: file,
+        imageUrl: file,
       }));
       setImageUrl(imageUrl);
     }
@@ -71,7 +96,7 @@ function CreateArticle() {
   const handleDeleteImage = () => {
     setFormData((prevData) => ({
       ...prevData,
-      image: null,
+      imageUrl: null,
     }));
     setImageUrl("");
   };
@@ -84,7 +109,31 @@ function CreateArticle() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
+    if (update) {
+      // редагування
+      axios
+        .patch(`posts/${id}`, formData)
+        .then((res) => {
+          alert("Стаття успішно змінена");
+          navigate("/");
+        })
+        .catch((err) => {
+          console.warn(err);
+          alert("Помилка при редагуванні статті");
+        });
+    } else {
+      // створення
+      axios
+        .post(`posts/${id}`, formData)
+        .then((res) => {
+          alert("Стаття успішно створена");
+          navigate("/");
+        })
+        .catch((err) => {
+          console.warn(err);
+          alert("Помилка при створенні статті");
+        });
+    }
   };
 
   return (
@@ -141,7 +190,7 @@ function CreateArticle() {
         {/* text */}
         <SimpleMDE value={formData.text} onChange={onChangeText} options={options} />
 
-        <MainButton type="submit">Create the article</MainButton>
+        <MainButton type="submit">{update ? "Update the" : "Create an"} article</MainButton>
       </Box>
     </ContainerCustom>
   );

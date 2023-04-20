@@ -10,6 +10,7 @@ import CommentsPage from "./pages/Comments/CommentsPage";
 import FullArticle from "./pages/FullArticle";
 import { useDispatch } from "react-redux";
 import { fetchAuthMe } from "./redux/slices/AuthSlice";
+import UpdateArticle from "./pages/UpdateArticle";
 
 function App() {
   const dispatch = useDispatch();
@@ -26,7 +27,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<RegistrationForm />} />
           <Route path="/login" element={<LoginForm />} />
-          <Route path="/create-article" element={<CreateArticle />} />
+          <Route path="/create" element={<CreateArticle />} />
+          <Route path="/update/:id" element={<UpdateArticle />} />
           <Route path="/comments" element={<CommentsPage />} />
           <Route path="/article/:id" element={<FullArticle />} />
         </Routes>

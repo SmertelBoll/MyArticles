@@ -4,6 +4,7 @@ import TagButton from "../Buttons/TagButton";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import { Link } from "react-router-dom";
 
 function ArticleInfoBlock({ title, text, tags, date, user, viewsCount, commentsCount }) {
   const yearMonthDay = date.split("T")[0];
