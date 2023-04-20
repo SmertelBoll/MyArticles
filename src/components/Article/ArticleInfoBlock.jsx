@@ -1,4 +1,4 @@
-import { Avatar, Box, Typography } from "@mui/material";
+import { Avatar, Box, Divider, Typography } from "@mui/material";
 import React from "react";
 import TagButton from "../Buttons/TagButton";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
@@ -40,9 +40,12 @@ function ArticleInfoBlock({ title, text, tags, date, user, viewsCount, commentsC
 
         {/* fullText */}
         {text && (
-          <Box sx={{ py: 2 }}>
-            <ReactMarkdown children={text} />
-          </Box>
+          <>
+            <Divider />
+            <Box sx={{ py: 2 }}>
+              <ReactMarkdown children={text} />
+            </Box>
+          </>
         )}
 
         {/* views and comments */}

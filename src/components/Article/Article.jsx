@@ -5,8 +5,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 import ArticleInfoBlock from "./ArticleInfoBlock";
 import axios from "../../axios";
+import { useDispatch } from "react-redux";
+import { deletePost } from "../../redux/slices/PostsSlice";
 
 function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsCount, isOwner }) {
+  const dispatch = useDispatch();
   const [isHovering, setIsHovering] = useState(false);
 
   const handleMouseOver = () => {
@@ -23,6 +26,7 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
         .delete(`/posts/${_id}`)
         .then((res) => {
           alert("Стаття успішно видалена");
+          dispatch(deletePost(_id));
         })
         .catch((err) => {
           console.warn(err);
@@ -32,7 +36,11 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
   };
 
   return (
-    <Box onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} sx={{ position: "relative" }}>
+    <Box
+      onMouseOver={handleMouseOver}
+      onMouseOut={handleMouseOut}
+      sx={{ position: "relative", boxShadow: 0 }}
+    >
       <Link to={`/article/${_id}`}>
         <Box
           sx={{

@@ -53,6 +53,7 @@ function Comments({ addCommnet, items, isLoaded, limit, postId, onUpdate }) {
         alignSelf: "start",
         boxSizing: "border-box",
         width: "100%",
+        boxShadow: 0,
       }}
     >
       <Typography variant="p" sx={{ color: "black" }}>

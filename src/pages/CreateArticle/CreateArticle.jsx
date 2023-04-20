@@ -20,7 +20,7 @@ function CreateArticle({ update }) {
     title: "",
     text: "",
     tags: [],
-    imageUrl: null,
+    imageUrl: "",
   });
 
   const { id } = useParams();
@@ -35,7 +35,7 @@ function CreateArticle({ update }) {
             title: res.data.title,
             text: res.data.text,
             tags: res.data.tags,
-            image: res.data.image,
+            imageUrl: res.data.imageUrl,
           });
         })
         .catch((err) => {
@@ -112,7 +112,7 @@ function CreateArticle({ update }) {
     if (update) {
       // редагування
       axios
-        .patch(`posts/${id}`, formData)
+        .patch(`/posts/${id}`, formData)
         .then((res) => {
           alert("Стаття успішно змінена");
           navigate("/");
@@ -124,13 +124,16 @@ function CreateArticle({ update }) {
     } else {
       // створення
       axios
-        .post(`posts/${id}`, formData)
+        .post(
+          `/posts`,
+          formData.imageUrl ? formData : { title: formData.title, text: formData.text, tags: formData.tags }
+        )
         .then((res) => {
           alert("Стаття успішно створена");
           navigate("/");
         })
         .catch((err) => {
-          console.warn(err);
+          console.log(err);
           alert("Помилка при створенні статті");
         });
     }
@@ -148,6 +151,7 @@ function CreateArticle({ update }) {
           display: "flex",
           flexDirection: "column",
           gap: 3,
+          boxShadow: 0,
         }}
       >
         {/* image */}
