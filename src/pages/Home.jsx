@@ -1,5 +1,5 @@
-import { Box } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Box, debounce } from "@mui/material";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ContainerCustom from "../components/customMUI/ContainerCustom";
 import SortingBlock from "../components/Sorting/SortingBlock";
@@ -10,6 +10,12 @@ import { fetchPosts } from "../redux/slices/PostsSlice";
 import { selectIsAuth } from "../redux/slices/AuthSlice";
 import axios from "../axios";
 
+const sortBy = [
+  { title: "New", sortBy: "createdAt" },
+  { title: "Popularity", sortBy: "viewsCount" },
+  { title: "Search", sortBy: "_filter_" },
+];
+
 function Home() {
   const dispatch = useDispatch();
   const { items: postItems, isLoaded: isLoadedPosts } = useSelector((state) => state.posts);
@@ -18,27 +24,63 @@ function Home() {
 
   const [commentItems, setCommentItems] = useState(null);
   const [isLoadedComments, setIsLoadedComments] = useState(false);
+  const [sortItem, setSortItem] = useState(sortBy[0]);
+  const [inputText, setInputText] = useState(""); // відповідає за відображення тексту в input
+  const [searchValue, setSearchValue] = useState(""); // загружається кінцеве значення після debounce для запроса
+
+  // comments
+  useEffect(() => {
+    if (isAuth) {
+      axios
+        .get(`/comments`)
+        .then((res) => {
+          setCommentItems(res.data);
+          setIsLoadedComments(true);
+        })
+        .catch((err) => {
+          console.warn(err);
+          alert("Помилка при отриманні коментарів");
+        });
+    }
+  }, [isAuth]);
+
+  // posts (потрібно два useEffect щоб не відправляти запрос при переході на Search)
+  useEffect(() => {
+    if (sortItem.sortBy === "_filter_") return;
+    dispatch(fetchPosts({ sortBy: sortItem.sortBy, search: searchValue }));
+  }, [sortItem]);
 
   useEffect(() => {
-    axios
-      .get(`/comments`)
-      .then((res) => {
-        setCommentItems(res.data);
-        setIsLoadedComments(true);
-      })
-      .catch((err) => {
-        console.warn(err);
-        alert("Помилка при отриманні коментарів");
-      });
-  }, []);
+    dispatch(fetchPosts({ sortBy: sortItem.sortBy, search: searchValue }));
+  }, [searchValue]);
 
-  useEffect(() => {
-    dispatch(fetchPosts());
-  }, []);
+  // робота з пошуком
+  const updateSearchValue = useCallback(
+    debounce((str) => {
+      setSearchValue(str);
+    }, 500),
+    []
+  );
+  const onChangeInput = (e, empty = false) => {
+    if (empty) {
+      // затираємо значення
+      setInputText("");
+      updateSearchValue("");
+    } else {
+      setInputText(e.target.value);
+      updateSearchValue(e.target.value);
+    }
+  };
 
   return (
     <ContainerCustom>
-      <SortingBlock />
+      <SortingBlock
+        sortItem={sortItem}
+        setSortItem={setSortItem}
+        sortBy={sortBy}
+        inputText={inputText}
+        onChangeInput={onChangeInput}
+      />
 
       <Box sx={{ display: "flex", gap: 3 }}>
         {/* articles */}

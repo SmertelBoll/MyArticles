@@ -5,10 +5,11 @@ import TelegramIcon from "@mui/icons-material/Telegram";
 import MainButton from "../../components/Buttons/MainButton";
 import CommentBlock from "./CommentBlock";
 import { useSelector } from "react-redux";
+import axios from "../../axios";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
-function Comments({ addCommnet, items, isLoaded, limit }) {
+function Comments({ addCommnet, items, isLoaded, limit, postId, onUpdate }) {
   const [commentText, setCommentText] = useState("");
   const { data: userData, isLoaded: isLoadedDataUser } = useSelector((state) => state.auth);
 
@@ -23,7 +24,21 @@ function Comments({ addCommnet, items, isLoaded, limit }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(commentText);
+    if (postId) {
+      axios
+        .post(`/comments`, { text: commentText, postId })
+        .then((res) => {
+          // updateArticle(commentText);
+          setCommentText("");
+          onUpdate();
+        })
+        .catch((err) => {
+          console.warn(err);
+          alert("Помилка при відправленні коментаря");
+        });
+    } else {
+      alert("Неможливо відправити коментар");
+    }
   };
 
   return (
@@ -62,6 +77,7 @@ function Comments({ addCommnet, items, isLoaded, limit }) {
                 value={commentText}
                 onChange={handleChange}
                 fullWidth
+                autoComplete="off"
                 id="Comment"
                 placeholder="Add your comment..."
                 name="Comment"

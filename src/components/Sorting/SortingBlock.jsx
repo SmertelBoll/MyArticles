@@ -1,13 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import Search from "./Search";
 import { Box } from "@mui/material";
 import SecondaryButton from "../Buttons/SecondaryButton";
 
-const sortBy = ["New", "Popularity", "Search"];
-
-function SortingBlock() {
-  const [sortItem, setSortItem] = useState(sortBy[0]);
-
+function SortingBlock({ sortItem, setSortItem, sortBy, inputText, onChangeInput }) {
   return (
     <Box
       sx={{
@@ -18,28 +14,28 @@ function SortingBlock() {
       }}
     >
       <Box sx={{ py: 2, display: "flex" }}>
-        {sortBy.map((name) => (
+        {sortBy.map((obj) => (
           <Box
-            key={name}
+            key={obj.title}
             sx={{
               px: 1,
               borderRight: "1px solid #0C1618",
               "&:last-child": { borderRight: "none" },
             }}
           >
-            {name === sortItem ? (
-              <SecondaryButton onClick={() => setSortItem(name)} active="true">
-                {name}
+            {obj.title === sortItem.title ? (
+              <SecondaryButton onClick={() => setSortItem(obj)} active="true">
+                {obj.title}
               </SecondaryButton>
             ) : (
-              <SecondaryButton onClick={() => setSortItem(name)}>{name}</SecondaryButton>
+              <SecondaryButton onClick={() => setSortItem(obj)}>{obj.title}</SecondaryButton>
             )}
           </Box>
         ))}
       </Box>
-      {sortItem === "Search" && (
+      {sortItem.title === "Search" && (
         <Box sx={{ pb: 2, pt: { xs: 0, md: 2 }, width: "100%" }}>
-          <Search />
+          <Search inputText={inputText} onChangeInput={onChangeInput} />
         </Box>
       )}
     </Box>

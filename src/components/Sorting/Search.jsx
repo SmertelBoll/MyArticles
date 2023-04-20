@@ -1,23 +1,23 @@
-import { IconButton, TextField } from "@mui/material";
+import { IconButton } from "@mui/material";
 import React, { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
-import styled from "@emotion/styled";
 import TextFieldCustom from "../customMUI/TextFieldCustom";
 
 const SearchBox = TextFieldCustom("#E6E4DA");
 
-function Search() {
-  const [value, setValue] = useState("");
-
+function Search({ inputText, onChangeInput }) {
   const handleChange = (e) => {
-    setValue(e.target.value);
+    onChangeInput(e);
+  };
+  const handleClear = (e) => {
+    onChangeInput(e, true);
   };
   return (
     <SearchBox
       autoFocus
       label="Search"
-      value={value}
+      value={inputText}
       onChange={handleChange}
       sx={{
         width: "100%",
@@ -32,12 +32,7 @@ function Search() {
           </IconButton>
         ),
         endAdornment: (
-          <IconButton
-            sx={{ visibility: value ? "visible" : "hidden" }}
-            onClick={() => {
-              setValue("");
-            }}
-          >
+          <IconButton sx={{ visibility: inputText ? "visible" : "hidden" }} onClick={handleClear}>
             <ClearIcon />
           </IconButton>
         ),

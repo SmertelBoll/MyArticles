@@ -11,9 +11,19 @@ function FullArticle() {
   const [isLoadedPosts, setIsLoadedPosts] = useState(false);
   const [comments, setComments] = useState(null);
   const [isLoadedComments, setIsLoadedComments] = useState(false);
+  const [countNewComments, setCountNewComments] = useState(0);
 
   const { id } = useParams();
 
+  const handleUpdate = () => {
+    setCountNewComments((prev) => prev + 1);
+  };
+
+  useEffect(() => {
+    console.log(countNewComments);
+  }, [countNewComments]);
+
+  // posts
   useEffect(() => {
     axios
       .get(`/posts/${id}`)
@@ -27,6 +37,7 @@ function FullArticle() {
       });
   }, []);
 
+  // comments
   useEffect(() => {
     axios
       .get(`/comments/${id}`)
@@ -38,7 +49,7 @@ function FullArticle() {
         console.warn(err);
         alert("Помилка при отриманні коментарів");
       });
-  }, []);
+  }, [countNewComments]);
 
   return (
     <ContainerCustom paddingY sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -62,7 +73,7 @@ function FullArticle() {
               date={post.updatedAt}
               user={post.user}
               viewsCount={post.viewsCount}
-              commentsCount={post.commentsCount}
+              commentsCount={post.commentsCount + countNewComments}
             />
           </>
         ) : (
@@ -70,7 +81,14 @@ function FullArticle() {
         )}
       </Box>
 
-      <Comments addCommnet items={comments} isLoaded={isLoadedComments} />
+      <Comments
+        addCommnet
+        items={comments}
+        isLoaded={isLoadedComments}
+        postId={id}
+        onUpdate={handleUpdate}
+        countNewComments={countNewComments}
+      />
     </ContainerCustom>
   );
 }
