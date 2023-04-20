@@ -4,6 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 import ArticleInfoBlock from "./ArticleInfoBlock";
+import axios from "../../axios";
 
 function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsCount, isOwner }) {
   const [isHovering, setIsHovering] = useState(false);
@@ -14,6 +15,20 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
 
   const handleMouseOut = () => {
     setIsHovering(false);
+  };
+
+  const handleDeleteArticle = () => {
+    if (window.confirm("Ви точно хочете видалити статтю?")) {
+      axios
+        .delete(`/posts/${_id}`)
+        .then((res) => {
+          alert("Стаття успішно видалена");
+        })
+        .catch((err) => {
+          console.warn(err);
+          alert("Не вдалося видалити статтю");
+        });
+    }
   };
 
   return (
@@ -79,7 +94,7 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
             </Link>
           </Tooltip>
           <Tooltip title={<Typography fontSize={16}>Delete</Typography>} placement="top">
-            <IconButton sx={{ color: "black" }}>
+            <IconButton sx={{ color: "black" }} onClick={handleDeleteArticle}>
               <CloseIcon />
             </IconButton>
           </Tooltip>

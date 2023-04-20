@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import ContainerCustom from "../components/customMUI/ContainerCustom";
 import ArticleInfoBlock from "../components/Article/ArticleInfoBlock";
 import Comments from "./Comments/Comments";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "../axios";
 
 function FullArticle() {
@@ -14,22 +14,25 @@ function FullArticle() {
   const [countNewComments, setCountNewComments] = useState(0);
 
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const handleUpdate = () => {
     setCountNewComments((prev) => prev + 1);
   };
-
-  useEffect(() => {
-    console.log(countNewComments);
-  }, [countNewComments]);
 
   // posts
   useEffect(() => {
     axios
       .get(`/posts/${id}`)
       .then((res) => {
-        setPost(res.data);
-        setIsLoadedPosts(true);
+        if (res.data) {
+          setPost(res.data);
+          setIsLoadedPosts(true);
+        } else {
+          // тут має бути сторінка 404
+          alert("Невдалося знайти статтю");
+          navigate("/");
+        }
       })
       .catch((err) => {
         console.warn(err);
