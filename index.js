@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import multer from "multer";
 import cors from "cors";
+import { v4 as uuidv4 } from "uuid";
+import * as fs from "fs";
 
 import { loginValidation, registerValidation } from "./validations/auth.js";
 import { checkValidationError } from "./utils/checkValidationError.js";
@@ -66,8 +68,21 @@ app.get("/auth/me", checkAuth, getMe);
 
 app.post("/upload", checkAuth, upload.single("image"), (req, res) => {
   try {
-    res.json({
-      url: `/uploads/${req.file.originalname}`,
+    const newFilename = uuidv4() + "." + req.file.originalname.split(".").pop();
+    const oldPath = req.file.path;
+    const newPath = req.file.destination + "/" + newFilename;
+
+    fs.rename(oldPath, newPath, (error) => {
+      if (error) {
+        console.log(error);
+        res.status(400).json({
+          message: "Невдалося перейменувати файл",
+        });
+      } else {
+        res.json({
+          url: `/uploads/${newFilename}`,
+        });
+      }
     });
   } catch (error) {
     console.log(error);
