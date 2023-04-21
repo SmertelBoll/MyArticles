@@ -12,6 +12,9 @@ function TagButton({ children, onClick }) {
           color: "black",
           cursor: "pointer",
         },
+        display: "-webkit-box",
+        wordWrap: "break-word",
+        wordBreak: "break-all",
       }}
     >
       {children}

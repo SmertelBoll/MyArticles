@@ -7,7 +7,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import axios from "../axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deletePost } from "../redux/slices/PostsSlice";
 import MainButton from "../components/Buttons/MainButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -22,6 +22,8 @@ function FullArticle() {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { data: userData, isLoaded: isLoadedDataUser } = useSelector((state) => state.auth);
 
   const handleUpdate = () => {
     setCountNewComments((prev) => prev + 1);
@@ -113,7 +115,7 @@ function FullArticle() {
           <div>loading...</div>
         )}
 
-        {isLoadedPosts && (
+        {isLoadedPosts && userData?.user?._id === post?.user?._id && (
           <Box
             sx={{
               position: "absolute",

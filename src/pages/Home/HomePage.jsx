@@ -1,12 +1,7 @@
-import { Box, debounce } from "@mui/material";
+import { debounce } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ContainerCustom from "../../components/customMUI/ContainerCustom";
-import SortingBlock from "../../components/Sorting/SortingBlock";
-import Article from "../../components/Article/Article";
-import Comments from "../Comments/Comments";
-import { Link } from "react-router-dom";
-import { fetchNewPosts, fetchPopularPosts, fetchPosts } from "../../redux/slices/PostsSlice";
+import { fetchNewPosts, fetchPopularPosts } from "../../redux/slices/PostsSlice";
 import { selectIsAuth } from "../../redux/slices/AuthSlice";
 import axios from "../../axios";
 import HomeBlock from "./HomeBlock";

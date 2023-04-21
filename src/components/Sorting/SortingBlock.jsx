@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Search from "./Search";
 import { Box } from "@mui/material";
 import SecondaryButton from "../Buttons/SecondaryButton";
 
 function SortingBlock({ sortItem, setSortItem, sortBy, inputText, onChangeInput }) {
+  useEffect(() => {
+    onChangeInput("", true);
+  }, [sortItem]);
+
   return (
     <Box
       sx={{
@@ -13,7 +17,7 @@ function SortingBlock({ sortItem, setSortItem, sortBy, inputText, onChangeInput 
         flexDirection: { xs: "column", md: "row" },
       }}
     >
-      <Box sx={{ py: 2, display: "flex" }}>
+      <Box sx={{ display: "flex" }}>
         {sortBy.map((obj) => (
           <Box
             key={obj.title}
@@ -34,7 +38,7 @@ function SortingBlock({ sortItem, setSortItem, sortBy, inputText, onChangeInput 
         ))}
       </Box>
       {sortItem.title === "Search" && (
-        <Box sx={{ pb: 2, pt: { xs: 0, md: 2 }, width: "100%" }}>
+        <Box sx={{ pt: { xs: 2, md: 0 }, width: "100%" }}>
           <Search inputText={inputText} onChangeInput={onChangeInput} />
         </Box>
       )}

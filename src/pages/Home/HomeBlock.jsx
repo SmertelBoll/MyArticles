@@ -5,6 +5,7 @@ import SortingBlock from "../../components/Sorting/SortingBlock";
 import Article from "../../components/Article/Article";
 import Comments from "../Comments/Comments";
 import { Link } from "react-router-dom";
+import ArticleSkeleton from "../../components/Article/ArticleSkeleton";
 
 function HomeBlock({
   items,
@@ -21,7 +22,7 @@ function HomeBlock({
   isLoadedComments,
 }) {
   return (
-    <ContainerCustom>
+    <ContainerCustom paddingY sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
       <SortingBlock
         sortItem={sortItem}
         setSortItem={setSortItem}
@@ -38,29 +39,33 @@ function HomeBlock({
             flexBasis: "66.67%",
             display: "flex",
             flexDirection: "column",
-            gap: 2,
+            gap: 3,
             mb: 2,
           }}
         >
           {isLoaded ? (
             <>
-              {items.map((obj) => (
-                <Article
-                  key={obj._id}
-                  _id={obj._id}
-                  title={obj.title}
-                  tags={obj.tags}
-                  imageUrl={obj.imageUrl}
-                  date={obj.updatedAt}
-                  user={obj.user}
-                  viewsCount={obj.viewsCount}
-                  commentsCount={obj.commentsCount}
-                  isOwner={isLoadedDataUser && isLoaded ? userData?.user?._id === obj?.user?._id : false}
-                />
-              ))}
+              {items.length ? (
+                items.map((obj) => (
+                  <Article
+                    key={obj._id}
+                    _id={obj._id}
+                    title={obj.title}
+                    tags={obj.tags}
+                    imageUrl={obj.imageUrl}
+                    date={obj.updatedAt}
+                    user={obj.user}
+                    viewsCount={obj.viewsCount}
+                    commentsCount={obj.commentsCount}
+                    isOwner={isLoadedDataUser && isLoaded ? userData?.user?._id === obj?.user?._id : false}
+                  />
+                ))
+              ) : (
+                <div>статей немає</div>
+              )}
             </>
           ) : (
-            <div>loading</div>
+            <ArticleSkeleton count={10} />
           )}
         </Box>
 
@@ -74,8 +79,13 @@ function HomeBlock({
           >
             {/* comments */}
             <Link style={{ width: "100%" }} to="/comments">
-              <Box sx={{ borderRadius: 2, "&:hover": { outline: "1px solid black" } }}>
-                <Comments items={commentItems} isLoaded={isLoadedComments} limit={5} />
+              <Box
+                sx={{
+                  borderRadius: 2,
+                  "&:hover": { outline: (theme) => `1px solid ${theme.palette.grey.dark}` },
+                }}
+              >
+                <Comments items={commentItems} isLoaded={isLoadedComments} limit={5} smallComment />
               </Box>
             </Link>
           </Box>

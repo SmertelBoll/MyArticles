@@ -13,7 +13,6 @@ function Header() {
   const isAuth = useSelector(selectIsAuth);
 
   const onClickLogout = () => {
-    console.log(11);
     if (window.confirm("Вийти?")) {
       window.localStorage.removeItem("token");
       dispatch(logout());

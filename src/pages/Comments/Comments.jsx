@@ -6,10 +6,11 @@ import MainButton from "../../components/Buttons/MainButton";
 import CommentBlock from "./CommentBlock";
 import { useSelector } from "react-redux";
 import axios from "../../axios";
+import CommentSkeleton from "./CommentSkeleton";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
-function Comments({ addCommnet, items, isLoaded, limit, postId, onUpdate }) {
+function Comments({ addCommnet, items, isLoaded, limit, postId, onUpdate, smallComment }) {
   const [commentText, setCommentText] = useState("");
   const { data: userData, isLoaded: isLoadedDataUser } = useSelector((state) => state.auth);
 
@@ -92,20 +93,24 @@ function Comments({ addCommnet, items, isLoaded, limit, postId, onUpdate }) {
         )}
         {isLoaded ? (
           <>
-            {items &&
+            {items.length ? (
               items.map((obj) => (
                 <CommentBlock
                   key={obj._id}
                   text={obj.text}
                   avatarUrl={obj.user.avatarUrl}
                   fullname={obj.user.fullName}
+                  smallComment={smallComment}
                 />
-              ))}
+              ))
+            ) : (
+              <div>нема коментарів</div>
+            )}
           </>
         ) : (
-          <div>loading...</div>
+          <CommentSkeleton count={5} />
         )}
-        {isPoints && (
+        {isPoints && isLoaded && (
           <Box sx={{ textAlign: "center" }}>
             <Typography variant="p" sx={{ color: "grey.dark" }}>
               ...

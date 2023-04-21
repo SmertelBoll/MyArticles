@@ -5,11 +5,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
 import ArticleInfoBlock from "./ArticleInfoBlock";
 import axios from "../../axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deletePost } from "../../redux/slices/PostsSlice";
+import { selectIsAuth } from "../../redux/slices/AuthSlice";
 
 function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsCount, isOwner }) {
   const dispatch = useDispatch();
+  const isAuth = useSelector(selectIsAuth);
   const [isHovering, setIsHovering] = useState(false);
 
   const handleMouseOver = () => {
@@ -39,20 +41,19 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
     <Box
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}
-      sx={{ position: "relative", boxShadow: 0 }}
+      sx={{
+        position: "relative",
+        boxShadow: 0,
+        borderRadius: 2,
+        overflow: "hidden",
+        "&:hover": { outline: (theme) => `1px solid ${theme.palette.grey.dark}` },
+      }}
     >
       <Link to={`/article/${_id}`}>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            borderRadius: 2,
-            overflow: "hidden",
-
-            "&:hover": {
-              outline: "1px solid",
-              outlineColor: (theme) => theme.palette.black,
-            },
           }}
         >
           {/* image */}
@@ -61,7 +62,7 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
               component="img"
               sx={{
                 width: "100%",
-                maxHeight: "50vh",
+                maxHeight: isAuth ? "40vh" : "50vh",
                 objectFit: "cover",
               }}
               src={imageUrl}
@@ -76,6 +77,7 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
             user={user}
             viewsCount={viewsCount}
             commentsCount={commentsCount}
+            isAuth={isAuth}
           />
         </Box>
       </Link>
@@ -94,13 +96,14 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
             transition: "opacity 0.2s ease-in-out",
           }}
         >
-          <Tooltip title={<Typography fontSize={16}>Edit</Typography>} placement="top">
-            <Link to={`/update/${_id}`}>
+          <Link to={`/update/${_id}`}>
+            <Tooltip title={<Typography fontSize={16}>Edit</Typography>} placement="top">
               <IconButton sx={{ color: "black" }}>
                 <EditIcon />
               </IconButton>
-            </Link>
-          </Tooltip>
+            </Tooltip>
+          </Link>
+
           <Tooltip title={<Typography fontSize={16}>Delete</Typography>} placement="top">
             <IconButton sx={{ color: "black" }} onClick={handleDeleteArticle}>
               <CloseIcon />

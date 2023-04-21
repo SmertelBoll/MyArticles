@@ -174,6 +174,7 @@ function CreateArticle({ update }) {
         .post(`/posts`, formData)
         .then((res) => {
           alert("Стаття успішно створена");
+          window.localStorage.removeItem("inputData");
           navigate("/");
         })
         .catch((err) => {

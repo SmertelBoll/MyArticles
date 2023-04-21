@@ -4,9 +4,8 @@ import TagButton from "../Buttons/TagButton";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import { Link } from "react-router-dom";
 
-function ArticleInfoBlock({ title, text, tags, date, user, viewsCount, commentsCount }) {
+function ArticleInfoBlock({ title, text, tags, date, user, viewsCount, commentsCount, isAuth }) {
   const yearMonthDay = date.split("T")[0];
   return (
     <Box sx={{ backgroundColor: "white", p: { xs: 2, sm: 3 } }}>
@@ -15,7 +14,18 @@ function ArticleInfoBlock({ title, text, tags, date, user, viewsCount, commentsC
         <Avatar src={user.avatarUrl || ""} sx={{ mr: 2 }} />
 
         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          <Typography variant="desc1" sx={{ color: "black" }}>
+          <Typography
+            variant="desc1"
+            sx={{
+              color: "black",
+              display: "-webkit-box",
+              wordWrap: "break-word",
+              wordBreak: "break-all",
+              overflow: "hidden",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 1,
+            }}
+          >
             {user.fullName}
           </Typography>
 
@@ -25,14 +35,41 @@ function ArticleInfoBlock({ title, text, tags, date, user, viewsCount, commentsC
         </Box>
       </Box>
 
-      <Box sx={{ ml: "56px", display: "flex", flexDirection: "column", gap: 1 }}>
+      <Box
+        sx={{
+          ml: { xs: 0, sm: "56px" },
+          mt: { xs: 1, sm: 0 },
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,
+        }}
+      >
         {/* title */}
-        <Typography variant="h2" sx={{ color: "black" }}>
+        <Typography
+          variant="h2"
+          sx={{
+            color: "black",
+            display: "-webkit-box",
+            wordWrap: "break-word",
+            wordBreak: "break-all",
+            overflow: "hidden",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp: text ? "auto" : isAuth ? 2 : { xs: 2, md: 1 },
+          }}
+        >
           {title}
+          {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates excepturi iste ipsa quod omnis */}
+          {/* voluptatem consequuntur, veniam odio harum fugiat. */}
         </Typography>
 
         {/* tags */}
-        <Box sx={{ display: "flex", gap: "0 16px", flexWrap: "wrap" }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: "0 16px",
+            flexWrap: "wrap",
+          }}
+        >
           {tags.map((name, id) => (
             <TagButton key={`${id}_${name}`}>#{name}</TagButton>
           ))}

@@ -57,12 +57,20 @@ function InputTags({ formData, setFormData }) {
                 display: "flex",
                 alignItems: "center",
                 bgcolor: "black",
-                color: "white",
                 pl: 2,
                 borderRadius: "12px",
               }}
             >
-              <Typography>{name}</Typography>
+              <Typography
+                sx={{
+                  color: "white",
+                  display: "-webkit-box",
+                  wordWrap: "break-word",
+                  wordBreak: "break-all",
+                }}
+              >
+                {name}
+              </Typography>
               <IconButton
                 onClick={() => {
                   handleDeleteTag(name);

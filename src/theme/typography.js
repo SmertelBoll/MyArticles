@@ -20,9 +20,9 @@ const typography = {
     fontWeight: 600,
   },
   h2: {
-    fontSize: smallFormula(20, 36),
+    fontSize: smallFormula(24, 36),
     "@media (min-width:767px)": {
-      fontSize: largeFormula(20, 36),
+      fontSize: largeFormula(24, 36),
     },
     fontWeight: 600,
   },
