@@ -16,27 +16,30 @@ const InputBox = TextFieldCustom("#FAF8FF");
 
 function CreateArticle({ update }) {
   const [imageUrl, setImageUrl] = useState("");
-  const [formData, setFormData] = useState({
+  const [data, setData] = useState({
     title: "",
     text: "",
     tags: [],
-    imageUrl: "",
+    image: null,
   });
 
   const { id } = useParams();
   const navigate = useNavigate();
+  const uploadRef = useRef(null);
 
+  // data for update
   useEffect(() => {
     if (update) {
       axios
         .get(`/posts/${id}`)
         .then((res) => {
-          setFormData({
+          setData({
             title: res.data.title,
             text: res.data.text,
             tags: res.data.tags,
-            imageUrl: res.data.imageUrl,
+            image: res.data.imageUrl,
           });
+          setImageUrl(res.data.imageUrl);
         })
         .catch((err) => {
           console.log(err);
@@ -47,19 +50,20 @@ function CreateArticle({ update }) {
   }, []);
 
   const onChangeTitle = (e) => {
-    setFormData((prevData) => ({
+    setData((prevData) => ({
       ...prevData,
       title: e.target.value,
     }));
   };
 
   const onChangeText = useCallback((text) => {
-    setFormData((prevData) => ({
+    setData((prevData) => ({
       ...prevData,
       text: text,
     }));
   }, []);
 
+  //textArea
   const options = useMemo(
     () => ({
       spellChecker: false,
@@ -79,36 +83,86 @@ function CreateArticle({ update }) {
     []
   );
 
+  // upload image
+  // const handleFileInputChange = async (event) => {
+  //   try {
+  //     const file = event.target.files[0];
+  //     event.target.value = null; // щоб можна було двічі загружати один і той же файл (корисно при випадковом видаленні)
+
+  //     if (file && file.type.startsWith("image/")) {
+  //       const formDataImg = new FormData();
+  //       formDataImg.append("image", file);
+  //       const { data } = await axios.post("/upload", formDataImg);
+
+  //       setFormData((prevData) => ({
+  //         ...prevData,
+  //         imageUrl: data.url,
+  //       }));
+  //     }
+  //   } catch (error) {
+  //     console.warn(error);
+  //     alert("Помилка при загрузці файлу");
+  //   }
+  // };
+
   const handleFileInputChange = (event) => {
     const file = event.target.files[0];
+    event.target.value = null; // щоб можна було двічі загружати один і той же файл (корисно при випадковом видаленні)
 
     if (file && file.type.startsWith("image/")) {
-      const imageUrl = URL.createObjectURL(file);
+      const image = URL.createObjectURL(file);
 
-      setFormData((prevData) => ({
+      setData((prevData) => ({
         ...prevData,
-        imageUrl: file,
+        image: file,
       }));
-      setImageUrl(imageUrl);
+      setImageUrl(image);
     }
   };
 
+  // upload image to DB
+  const uploadFileToDB = async () => {
+    try {
+      if (data.image && typeof data.image === "string") return data.image;
+
+      const formDataImg = new FormData();
+      formDataImg.append("image", data.image);
+
+      const { data: dataUrl } = await axios.post("/upload", formDataImg);
+
+      return `http://localhost:4444${dataUrl.url}`;
+    } catch (error) {
+      console.warn(error);
+      alert("Помилка при загрузці файлу");
+    }
+  };
+
+  //remove image
   const handleDeleteImage = () => {
-    setFormData((prevData) => ({
+    setData((prevData) => ({
       ...prevData,
-      imageUrl: null,
+      image: null,
     }));
     setImageUrl("");
   };
 
-  const uploadRef = useRef(null);
-
-  const handleUploadClick = () => {
-    uploadRef.current.click();
-  };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
+    let imgUrl = "";
+    console.log(data);
+    if (data.image) {
+      console.log(111);
+      imgUrl = await uploadFileToDB();
+    }
+
+    const formData = {
+      title: data.title,
+      text: data.text,
+      tags: data.tags,
+      imageUrl: imgUrl,
+    };
+
     if (update) {
       // редагування
       axios
@@ -124,10 +178,7 @@ function CreateArticle({ update }) {
     } else {
       // створення
       axios
-        .post(
-          `/posts`,
-          formData.imageUrl ? formData : { title: formData.title, text: formData.text, tags: formData.tags }
-        )
+        .post(`/posts`, formData)
         .then((res) => {
           alert("Стаття успішно створена");
           navigate("/");
@@ -164,18 +215,25 @@ function CreateArticle({ update }) {
               objectFit: "cover",
               borderRadius: "8px 8px 0 0",
             }}
-            src={imageUrl}
+            src={imageUrl ? imageUrl : data.image}
           />
         )}
         <Box sx={{ display: "flex", gap: 2 }}>
-          <MainButton onClick={handleUploadClick}>Upload preview image</MainButton>
-          <input type="file" onChange={handleFileInputChange} hidden ref={uploadRef} accept="image/*" />
+          <MainButton onClick={() => uploadRef.current.click()}>Upload preview image</MainButton>
+          <input
+            id="UploadWidgetId"
+            type="file"
+            onChange={handleFileInputChange}
+            hidden
+            ref={uploadRef}
+            accept="image/*"
+          />
           {imageUrl && <MainButton onClick={handleDeleteImage}>Delete image</MainButton>}
         </Box>
 
         {/* title */}
         <InputBox
-          value={formData.title}
+          value={data.title}
           onChange={onChangeTitle}
           required
           fullWidth
@@ -189,10 +247,10 @@ function CreateArticle({ update }) {
         />
 
         {/* tags */}
-        <InputTags formData={formData} setFormData={setFormData} />
+        <InputTags formData={data} setFormData={setData} />
 
         {/* text */}
-        <SimpleMDE value={formData.text} onChange={onChangeText} options={options} />
+        <SimpleMDE value={data.text} onChange={onChangeText} options={options} />
 
         <MainButton type="submit">{update ? "Update the" : "Create an"} article</MainButton>
       </Box>
