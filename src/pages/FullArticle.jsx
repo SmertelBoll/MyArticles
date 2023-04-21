@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import ContainerCustom from "../components/customMUI/ContainerCustom";
 import ArticleInfoBlock from "../components/Article/ArticleInfoBlock";
 import Comments from "./Comments/Comments";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
 import axios from "../axios";
+import { useDispatch } from "react-redux";
+import { deletePost } from "../redux/slices/PostsSlice";
+import MainButton from "../components/Buttons/MainButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 function FullArticle() {
   const [post, setPost] = useState(null);
@@ -15,9 +21,14 @@ function FullArticle() {
 
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleUpdate = () => {
     setCountNewComments((prev) => prev + 1);
+  };
+
+  const handleBack = () => {
+    navigate(-1);
   };
 
   // posts
@@ -54,9 +65,28 @@ function FullArticle() {
       });
   }, [countNewComments]);
 
+  const handleDeleteArticle = () => {
+    if (window.confirm("Ви точно хочете видалити статтю?")) {
+      axios
+        .delete(`/posts/${id}`)
+        .then((res) => {
+          alert("Стаття успішно видалена");
+          dispatch(deletePost(id));
+          navigate("/");
+        })
+        .catch((err) => {
+          console.warn(err);
+          alert("Не вдалося видалити статтю");
+        });
+    }
+  };
+
   return (
     <ContainerCustom paddingY sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-      <Box sx={{ bgcolor: "white", borderRadius: 2, overflow: "hidden" }}>
+      <MainButton startIcon={<ArrowBackIcon />} onClick={handleBack} sx={{ alignSelf: "start" }}>
+        Back
+      </MainButton>
+      <Box sx={{ bgcolor: "white", borderRadius: 2, overflow: "hidden", position: "relative" }}>
         {isLoadedPosts ? (
           <>
             <Box
@@ -81,6 +111,32 @@ function FullArticle() {
           </>
         ) : (
           <div>loading...</div>
+        )}
+
+        {isLoadedPosts && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: 10,
+              right: 10,
+              bgcolor: "white",
+              p: "3px",
+              borderRadius: 2,
+            }}
+          >
+            <Tooltip title={<Typography fontSize={16}>Edit</Typography>} placement="top">
+              <Link to={`/update/${id}`}>
+                <IconButton sx={{ color: "black" }}>
+                  <EditIcon />
+                </IconButton>
+              </Link>
+            </Tooltip>
+            <Tooltip title={<Typography fontSize={16}>Delete</Typography>} placement="top">
+              <IconButton sx={{ color: "black" }} onClick={handleDeleteArticle}>
+                <CloseIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
         )}
       </Box>
 

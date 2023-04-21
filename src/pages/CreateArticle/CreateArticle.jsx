@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, debounce } from "@mui/material";
 import ContainerCustom from "../../components/customMUI/ContainerCustom";
 import SimpleMDE from "react-simplemde-editor";
 import ReactDOMServer from "react-dom/server";
@@ -8,6 +8,7 @@ import InputTags from "./InputTags";
 import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
 import MainButton from "../../components/Buttons/MainButton";
 import { useNavigate, useParams } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "../../axios";
 
 import "easymde/dist/easymde.min.css";
@@ -27,7 +28,7 @@ function CreateArticle({ update }) {
   const navigate = useNavigate();
   const uploadRef = useRef(null);
 
-  // data for update
+  // data
   useEffect(() => {
     if (update) {
       axios
@@ -46,6 +47,19 @@ function CreateArticle({ update }) {
           alert("Помилка при спробі редагування");
           navigate("/");
         });
+    } else {
+      const inputDataJSON = window.localStorage.getItem("inputData");
+
+      if (inputDataJSON !== null) {
+        const inputData = JSON.parse(inputDataJSON);
+
+        setData((prevData) => ({
+          ...prevData,
+          title: inputData.title,
+          text: inputData.text,
+          tags: inputData.tags,
+        }));
+      }
     }
   }, []);
 
@@ -84,27 +98,6 @@ function CreateArticle({ update }) {
   );
 
   // upload image
-  // const handleFileInputChange = async (event) => {
-  //   try {
-  //     const file = event.target.files[0];
-  //     event.target.value = null; // щоб можна було двічі загружати один і той же файл (корисно при випадковом видаленні)
-
-  //     if (file && file.type.startsWith("image/")) {
-  //       const formDataImg = new FormData();
-  //       formDataImg.append("image", file);
-  //       const { data } = await axios.post("/upload", formDataImg);
-
-  //       setFormData((prevData) => ({
-  //         ...prevData,
-  //         imageUrl: data.url,
-  //       }));
-  //     }
-  //   } catch (error) {
-  //     console.warn(error);
-  //     alert("Помилка при загрузці файлу");
-  //   }
-  // };
-
   const handleFileInputChange = (event) => {
     const file = event.target.files[0];
     event.target.value = null; // щоб можна було двічі загружати один і той же файл (корисно при випадковом видаленні)
@@ -190,8 +183,34 @@ function CreateArticle({ update }) {
     }
   };
 
+  const handleBack = () => {
+    if (window.confirm("Ви впевнені що хочете вийти? Ваші зміни не збережуться")) {
+      window.localStorage.removeItem("inputData");
+      navigate(-1);
+    }
+  };
+
+  const updateData = useCallback(
+    debounce((obj) => {
+      const inputData = {
+        title: obj.title,
+        text: obj.text,
+        tags: obj.tags,
+      };
+      window.localStorage.setItem("inputData", JSON.stringify(inputData));
+    }, 2000),
+    []
+  );
+
+  useEffect(() => {
+    if (!update) updateData(data);
+  }, [data]);
+
   return (
-    <ContainerCustom paddingY>
+    <ContainerCustom paddingY sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+      <MainButton startIcon={<ArrowBackIcon />} onClick={handleBack} sx={{ alignSelf: "start" }}>
+        Back
+      </MainButton>
       <Box
         component="form"
         onSubmit={handleSubmit}
