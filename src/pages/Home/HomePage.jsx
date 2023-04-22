@@ -34,7 +34,7 @@ function Home() {
   useEffect(() => {
     if (isAuth) {
       axios
-        .get(`/comments`)
+        .get(`/comments?limit=5`)
         .then((res) => {
           setCommentItems(res.data);
           setIsLoadedComments(true);

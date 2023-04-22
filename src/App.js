@@ -11,6 +11,7 @@ import FullArticle from "./pages/FullArticle";
 import { useDispatch } from "react-redux";
 import { fetchAuthMe } from "./redux/slices/AuthSlice";
 import UpdateArticle from "./pages/UpdateArticle";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ function App() {
           <Route path="/update/:id" element={<UpdateArticle />} />
           <Route path="/comments" element={<CommentsPage />} />
           <Route path="/article/:id" element={<FullArticle />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />

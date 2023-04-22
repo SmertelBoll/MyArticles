@@ -1,11 +1,13 @@
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import ContainerCustom from "../../components/customMUI/ContainerCustom";
 import SortingBlock from "../../components/Sorting/SortingBlock";
 import Article from "../../components/Article/Article";
 import Comments from "../Comments/Comments";
 import { Link } from "react-router-dom";
 import ArticleSkeleton from "../../components/Article/ArticleSkeleton";
+import MainButton from "../../components/Buttons/MainButton";
+import CreateIcon from "@mui/icons-material/Create";
 
 function HomeBlock({
   items,
@@ -45,7 +47,7 @@ function HomeBlock({
         >
           {isLoaded ? (
             <>
-              {items.length ? (
+              {Boolean(items?.length) ? (
                 items.map((obj) => (
                   <Article
                     key={obj._id}
@@ -61,15 +63,33 @@ function HomeBlock({
                   />
                 ))
               ) : (
-                <div>статей немає</div>
+                <Box
+                  sx={{
+                    height: "100%",
+                    minHeight: "45vh",
+                    p: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    textAlign: "center",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: 2,
+                  }}
+                >
+                  <Typography variant="h2">
+                    There are currently no articles available. Try it later, or write your own!
+                  </Typography>
+                  <Link to={isAuth ? "/create" : "/login"}>
+                    <MainButton startIcon={<CreateIcon />}>Create an article</MainButton>
+                  </Link>
+                </Box>
               )}
             </>
           ) : (
             <ArticleSkeleton count={10} />
           )}
         </Box>
-
-        {isAuth && (
+        {isAuth && Boolean(commentItems?.length) && (
           <Box
             sx={{
               flexGrow: "1",
@@ -85,11 +105,11 @@ function HomeBlock({
                   "&:hover": { outline: (theme) => `1px solid ${theme.palette.grey.dark}` },
                 }}
               >
-                <Comments items={commentItems} isLoaded={isLoadedComments} limit={5} smallComment />
+                <Comments items={commentItems} isLoaded={isLoadedComments} smallComment />
               </Box>
             </Link>
           </Box>
-        )}
+        )}{" "}
       </Box>
     </ContainerCustom>
   );

@@ -22,7 +22,7 @@ function Header() {
   return (
     <Box component="header" bgcolor="white" sx={{ boxShadow: 0 }}>
       <ContainerCustom sx={{ py: 1 }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Link to="/">
             <Logo />
           </Link>

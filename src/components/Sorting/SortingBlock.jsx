@@ -22,8 +22,8 @@ function SortingBlock({ sortItem, setSortItem, sortBy, inputText, onChangeInput 
           <Box
             key={obj.title}
             sx={{
-              px: 1,
-              borderRight: "1px solid #0C1618",
+              px: { xs: 0, sm: 1 },
+              borderRight: { xs: "auto", sm: "1px solid #0C1618" },
               "&:last-child": { borderRight: "none" },
             }}
           >

@@ -50,6 +50,7 @@ function FullArticle() {
       .catch((err) => {
         console.warn(err);
         alert("Помилка при отриманні статті");
+        navigate("/");
       });
   }, []);
 

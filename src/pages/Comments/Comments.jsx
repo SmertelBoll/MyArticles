@@ -10,14 +10,11 @@ import CommentSkeleton from "./CommentSkeleton";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
-function Comments({ addCommnet, items, isLoaded, limit, postId, onUpdate, smallComment }) {
+function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment }) {
   const [commentText, setCommentText] = useState("");
   const { data: userData, isLoaded: isLoadedDataUser } = useSelector((state) => state.auth);
 
-  const isPoints = limit < items?.length;
-  if (limit) {
-    items = items?.slice(0, limit);
-  }
+  const isPoints = items?.length >= 5;
 
   const handleChange = (e) => {
     setCommentText(e.target.value);
@@ -58,7 +55,7 @@ function Comments({ addCommnet, items, isLoaded, limit, postId, onUpdate, smallC
       }}
     >
       <Typography variant="p" sx={{ color: "black" }}>
-        Comments
+        {smallComment ? "Last comments" : "Comments"}
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
         {addCommnet && isLoadedDataUser && (
@@ -93,7 +90,7 @@ function Comments({ addCommnet, items, isLoaded, limit, postId, onUpdate, smallC
         )}
         {isLoaded ? (
           <>
-            {items.length ? (
+            {Boolean(items?.length) &&
               items.map((obj) => (
                 <CommentBlock
                   key={obj._id}
@@ -102,15 +99,12 @@ function Comments({ addCommnet, items, isLoaded, limit, postId, onUpdate, smallC
                   fullname={obj.user.fullName}
                   smallComment={smallComment}
                 />
-              ))
-            ) : (
-              <div>нема коментарів</div>
-            )}
+              ))}
           </>
         ) : (
           <CommentSkeleton count={5} />
         )}
-        {isPoints && isLoaded && (
+        {isPoints && isLoaded && smallComment && (
           <Box sx={{ textAlign: "center" }}>
             <Typography variant="p" sx={{ color: "grey.dark" }}>
               ...

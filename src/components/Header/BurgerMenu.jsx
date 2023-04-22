@@ -46,7 +46,16 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
-      <Button onClick={handleDrawerOpen} sx={{ alignSelf: "center", p: 2, color: "black" }}>
+      <Button
+        onClick={handleDrawerOpen}
+        sx={{
+          alignSelf: "center",
+          p: { xs: 1, sm: 2 },
+          color: "black",
+          display: "flex",
+          justifyContent: "flex-end",
+        }}
+      >
         <MenuIcon fontSize="large" />
       </Button>
       <Drawer
@@ -56,7 +65,7 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
         sx={{
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
-            width: "min(70vw, 300px)",
+            width: "min(80vw, 300px)",
             p: 2,
             minHeight: "100%",
             display: "flex",
@@ -68,7 +77,10 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
         {/* user */}
         {isAuth && isLoaded && (
           <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
-            <Avatar src={data?.user?.avatarUrl} sx={{ width: 75, height: 75, cursor: "pointer" }} />
+            <Avatar
+              src={data?.user?.avatarUrl}
+              sx={{ width: { xs: 50, sm: 75 }, height: { xs: 50, sm: 75 }, cursor: "pointer" }}
+            />
             <Typography
               sx={{
                 display: "-webkit-box",
