@@ -1,5 +1,5 @@
 import { Avatar, Box, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
 import TelegramIcon from "@mui/icons-material/Telegram";
 import MainButton from "../../components/Buttons/MainButton";
@@ -7,10 +7,11 @@ import CommentBlock from "./CommentBlock";
 import { useSelector } from "react-redux";
 import axios from "../../axios";
 import CommentSkeleton from "./CommentSkeleton";
+import CircularProgressCustom from "../../components/customMUI/CircularProgressCustom";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
-function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment }) {
+function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment, hasMore }) {
   const [commentText, setCommentText] = useState("");
   const { data: userData, isLoaded: isLoadedDataUser } = useSelector((state) => state.auth);
 
@@ -54,9 +55,12 @@ function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment 
         boxShadow: 0,
       }}
     >
-      <Typography variant="p" sx={{ color: "black" }}>
-        {smallComment ? "Last comments" : "Comments"}
-      </Typography>
+      {(smallComment || Boolean(items?.length)) && (
+        <Typography variant="p" sx={{ color: "black" }}>
+          {smallComment ? "Last comments" : "Comments"}
+        </Typography>
+      )}
+
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
         {addCommnet && isLoadedDataUser && (
           <Box sx={{ display: "flex", gap: 2, mb: 2, width: "100%" }}>
@@ -90,7 +94,7 @@ function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment 
         )}
         {isLoaded ? (
           <>
-            {Boolean(items?.length) &&
+            {Boolean(items?.length) ? (
               items.map((obj) => (
                 <CommentBlock
                   key={obj._id}
@@ -99,10 +103,34 @@ function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment 
                   fullname={obj.user.fullName}
                   smallComment={smallComment}
                 />
-              ))}
+              ))
+            ) : (
+              <Box
+                sx={{
+                  height: "100%",
+                  minHeight: "40vh",
+                  p: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  textAlign: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 2,
+                }}
+              >
+                <Typography variant="h2">
+                  You have no comments. Keep writing more great articles and they will be coming soon!
+                </Typography>
+              </Box>
+            )}
           </>
         ) : (
           <CommentSkeleton count={5} />
+        )}
+        {hasMore && (
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <CircularProgressCustom />
+          </Box>
         )}
         {isPoints && isLoaded && smallComment && (
           <Box sx={{ textAlign: "center" }}>

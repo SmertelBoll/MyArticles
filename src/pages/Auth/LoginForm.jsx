@@ -26,7 +26,7 @@ function LoginForm() {
   const [openDialog, setOpenDialog] = useState(false);
   const [formData, setFormData] = useState({
     email: "sholop@gmail.com",
-    password: "1234",
+    password: "12345",
   });
 
   const handleClickOpen = () => {

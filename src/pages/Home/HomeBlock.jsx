@@ -89,6 +89,7 @@ function HomeBlock({
             <ArticleSkeleton count={10} />
           )}
         </Box>
+        {/* comments */}
         {isAuth && Boolean(commentItems?.length) && (
           <Box
             sx={{

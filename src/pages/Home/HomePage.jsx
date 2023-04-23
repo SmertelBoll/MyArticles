@@ -1,5 +1,5 @@
 import { debounce } from "@mui/material";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchNewPosts, fetchPopularPosts } from "../../redux/slices/PostsSlice";
 import { selectIsAuth } from "../../redux/slices/AuthSlice";
@@ -18,6 +18,7 @@ function Home() {
   const { items: popularPostItems, isLoaded: isLoadedPopularPosts } = useSelector(
     (state) => state.posts.popular
   );
+
   const { data: userData, isLoaded: isLoadedDataUser } = useSelector((state) => state.auth);
   const isAuth = useSelector(selectIsAuth);
 
@@ -26,6 +27,7 @@ function Home() {
 
   const [commentItems, setCommentItems] = useState(null); // коментарі
   const [isLoadedComments, setIsLoadedComments] = useState(false); // чи загружені коментарі
+
   const [sortItem, setSortItem] = useState(sortBy[0]); // сортування
   const [inputText, setInputText] = useState(""); // відповідає за відображення тексту в input
   const [searchValue, setSearchValue] = useState(""); // загружається кінцеве значення після debounce для запроса
