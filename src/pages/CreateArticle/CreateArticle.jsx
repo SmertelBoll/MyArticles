@@ -129,6 +129,7 @@ function CreateArticle({ update }) {
     } catch (error) {
       console.warn(error);
       alert("Помилка при загрузці файлу");
+      return null;
     }
   };
 
@@ -145,11 +146,11 @@ function CreateArticle({ update }) {
     event.preventDefault();
 
     let imgUrl = "";
-    console.log(data);
     if (data.image) {
-      console.log(111);
       imgUrl = await uploadFileToDB();
     }
+
+    if (imgUrl === null) return;
 
     const formData = {
       title: data.title,

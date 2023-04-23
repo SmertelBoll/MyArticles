@@ -1,19 +1,22 @@
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "../../axios";
+
+import { fetchRegister, selectIsAuth } from "../../redux/slices/AuthSlice";
 import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
 import ContainerCustom from "../../components/customMUI/ContainerCustom";
 import MainButton from "../../components/Buttons/MainButton";
+
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchRegister, selectIsAuth } from "../../redux/slices/AuthSlice";
-import { Navigate } from "react-router-dom";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
 function RegistrationForm() {
   const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
-  const [formData, setFormData] = useState({
+  const [data, setData] = useState({
     fullName: "",
     email: "",
     password: "",
@@ -23,7 +26,7 @@ function RegistrationForm() {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setFormData((prevData) => ({
+    setData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -32,11 +35,12 @@ function RegistrationForm() {
   // Обробка завантаженого аватару
   const handleFileInputChange = (event) => {
     const file = event.target.files[0];
+    event.target.value = null;
 
     if (file && file.type.startsWith("image/")) {
       const imageUrl = URL.createObjectURL(file);
 
-      setFormData((prevData) => ({
+      setData((prevData) => ({
         ...prevData,
         avatar: file,
       }));
@@ -44,8 +48,28 @@ function RegistrationForm() {
     }
   };
 
+  // upload image to DB
+  const uploadFileToDB = async () => {
+    try {
+      if (data.avatar && typeof data.avatar === "string") return data.avatar;
+
+      console.log(data.avatar);
+      const formDataImg = new FormData();
+      formDataImg.append("image", data.avatar);
+      console.log(formDataImg);
+
+      const { data: dataUrl } = await axios.post("/upload", formDataImg);
+
+      return `http://localhost:4444${dataUrl.url}`;
+    } catch (error) {
+      console.warn(error);
+      alert("Помилка при загрузці файлу");
+      return null;
+    }
+  };
+
   const handleDeleteAvatar = () => {
-    setFormData((prevData) => ({
+    setData((prevData) => ({
       ...prevData,
       avatar: null,
     }));
@@ -60,10 +84,27 @@ function RegistrationForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = await dispatch(fetchRegister(formData));
 
-    if (data?.payload?.token) {
-      window.localStorage.setItem("token", data.payload.token);
+    let avaUrl = "";
+    if (data.avatar) {
+      avaUrl = await uploadFileToDB();
+    }
+
+    if (avaUrl === null) return;
+
+    const formData = {
+      fullName: data.fullName,
+      email: data.email,
+      password: data.password,
+      avatarUrl: avaUrl,
+    };
+
+    console.log(formData);
+
+    const resData = await dispatch(fetchRegister(formData));
+
+    if (resData?.payload?.token) {
+      window.localStorage.setItem("token", resData.payload.token);
     } else {
       alert("Не вдалося зареєструватися");
     }
@@ -84,7 +125,7 @@ function RegistrationForm() {
           bgcolor: "white",
           borderRadius: 2,
           my: 4,
-          p: 5,
+          p: { xs: 2, sm: 3, md: 5 },
           boxShadow: 0,
           display: "flex",
           flexDirection: "column",
@@ -120,7 +161,7 @@ function RegistrationForm() {
           </Box>
 
           <InputBox
-            value={formData.fullName}
+            value={data.fullName}
             onChange={handleInputChange}
             required
             fullWidth
@@ -130,7 +171,7 @@ function RegistrationForm() {
             autoFocus
           />
           <InputBox
-            value={formData.email}
+            value={data.email}
             onChange={handleInputChange}
             required
             fullWidth
@@ -139,7 +180,7 @@ function RegistrationForm() {
             name="email"
           />
           <InputBox
-            value={formData.password}
+            value={data.password}
             onChange={handleInputChange}
             required
             fullWidth

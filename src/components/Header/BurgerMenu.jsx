@@ -41,10 +41,6 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
     setOpen(true);
   };
 
-  React.useEffect(() => {
-    console.log(isLoaded, data);
-  }, [isLoaded]);
-
   const handleDrawerClose = () => {
     setOpen(false);
   };

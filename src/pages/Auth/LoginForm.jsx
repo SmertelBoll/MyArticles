@@ -73,7 +73,7 @@ function LoginForm() {
           bgcolor: "white",
           borderRadius: 2,
           my: 4,
-          p: 5,
+          p: { xs: 2, sm: 3, md: 5 },
           boxShadow: 0,
           display: "flex",
           flexDirection: "column",
@@ -81,7 +81,9 @@ function LoginForm() {
           position: "relative",
         }}
       >
-        <Typography variant="h2">Welcome</Typography>
+        <Typography variant="h2" sx={{ mt: 2 }}>
+          Welcome
+        </Typography>
 
         <Box
           component="form"

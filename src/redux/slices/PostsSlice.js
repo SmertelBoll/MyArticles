@@ -46,7 +46,7 @@ const postsSlice = createSlice({
       state.new.status = "error";
     },
     [fetchPopularPosts.pending]: (state) => {
-      state.new.items = [];
+      state.popular.items = [];
       state.popular.isLoaded = false;
     },
     [fetchPopularPosts.fulfilled]: (state, action) => {
