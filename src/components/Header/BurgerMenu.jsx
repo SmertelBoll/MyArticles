@@ -1,21 +1,21 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import Button from "@mui/material/Button";
-import MenuIcon from "@mui/icons-material/Menu";
-import MainButton from "../Buttons/MainButton";
+import { Box, Drawer, Button, Avatar, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { Avatar, Typography } from "@mui/material";
+import { useSelector } from "react-redux";
+import { selectIsAuth } from "../../redux/slices/AuthSlice";
 
+import MainButton from "../Buttons/MainButton";
+import SecondaryButton from "../Buttons/SecondaryButton";
+import ChangeAvatar from "../ChangeAvatar";
+
+import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LogoutIcon from "@mui/icons-material/Logout";
 import CreateIcon from "@mui/icons-material/Create";
-import SecondaryButton from "../Buttons/SecondaryButton";
+import PersonIcon from "@mui/icons-material/Person";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
-import { useSelector } from "react-redux";
-import { selectIsAuth } from "../../redux/slices/AuthSlice";
 
 const BurgerMenu = ({ sx, onClickLogout }) => {
   // auth: show information to
@@ -24,24 +24,33 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
   //  -1 - all users
   const navLinks = [
     { title: "Home", link: "/", auth: -1, icon: <HomeIcon />, func: null },
+    // { title: "Profile", link: "/profile", auth: -1, icon: <PersonIcon />, func: null },
     { title: "Log in", link: "/login", auth: 0, icon: <LoginIcon />, func: null },
     { title: "Sing up", link: "/register", auth: 0, icon: <PersonAddIcon />, func: null },
     { title: "Write an article", link: "/create", auth: 1, icon: <CreateIcon />, func: null },
     { title: "Comments", link: "/comments", auth: 1, icon: <CommentOutlinedIcon />, func: null },
-    // { title: "", link: "/", auth: -1, icon: </>, func: null },
-    { title: "Log out", auth: 1, icon: <LogoutIcon />, func: onClickLogout },
+    { title: "Log out", link: "", auth: 1, icon: <LogoutIcon />, func: onClickLogout },
   ];
 
   const isAuth = useSelector(selectIsAuth);
   const { data, isLoaded } = useSelector((state) => state.auth);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // drawer
+  const [isOpenChangeAvatar, setIsOpenChangeAvatar] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
+  React.useEffect(() => {
+    console.log(isLoaded, data);
+  }, [isLoaded]);
+
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const handleDialogClose = () => {
+    setIsOpenChangeAvatar(false);
   };
 
   return (
@@ -75,12 +84,14 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
         }}
       >
         {/* user */}
-        {isAuth && isLoaded && (
+        {isAuth && (
           <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
             <Avatar
-              src={data?.user?.avatarUrl}
+              src={data?.avatarUrl}
+              onClick={() => setIsOpenChangeAvatar(true)}
               sx={{ width: { xs: 50, sm: 75 }, height: { xs: 50, sm: 75 }, cursor: "pointer" }}
             />
+            <ChangeAvatar onClose={handleDialogClose} open={isOpenChangeAvatar} />
             <Typography
               sx={{
                 display: "-webkit-box",
@@ -92,7 +103,7 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
                 fontSize: "24px",
               }}
             >
-              {data?.user?.fullName}
+              {data?.fullName}
             </Typography>
           </Box>
         )}

@@ -1,9 +1,11 @@
 import { Avatar, Box, Divider, Typography } from "@mui/material";
 import React from "react";
-import TagButton from "../Buttons/TagButton";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+
+import TagButton from "../Buttons/TagButton";
+
+import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
 function ArticleInfoBlock({ title, text, tags, date, user, viewsCount, commentsCount, isAuth }) {
   const yearMonthDay = date.split("T")[0];

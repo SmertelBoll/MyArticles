@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "../axios";
+
+import { deletePost } from "../redux/slices/PostsSlice";
 import ContainerCustom from "../components/customMUI/ContainerCustom";
 import ArticleInfoBlock from "../components/Article/ArticleInfoBlock";
 import Comments from "./Comments/Comments";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import MainButton from "../components/Buttons/MainButton";
+import CircularProgressCustom from "../components/customMUI/CircularProgressCustom";
+
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
-import axios from "../axios";
-import { useDispatch, useSelector } from "react-redux";
-import { deletePost } from "../redux/slices/PostsSlice";
-import MainButton from "../components/Buttons/MainButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 function FullArticle() {
@@ -113,10 +116,12 @@ function FullArticle() {
             />
           </>
         ) : (
-          <div>loading...</div>
+          <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
+            <CircularProgressCustom />
+          </Box>
         )}
 
-        {isLoadedPosts && userData?.user?._id === post?.user?._id && (
+        {isLoadedPosts && userData?._id === post?.user?._id && (
           <Box
             sx={{
               position: "absolute",
@@ -150,6 +155,7 @@ function FullArticle() {
         postId={id}
         onUpdate={handleUpdate}
         countNewComments={countNewComments}
+        ownArticle={userData?._id === post?.user?._id}
       />
     </ContainerCustom>
   );

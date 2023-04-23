@@ -1,9 +1,10 @@
 import { debounce } from "@mui/material";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "../../axios";
+
 import { fetchNewPosts, fetchPopularPosts } from "../../redux/slices/PostsSlice";
 import { selectIsAuth } from "../../redux/slices/AuthSlice";
-import axios from "../../axios";
 import HomeBlock from "./HomeBlock";
 
 const sortBy = [

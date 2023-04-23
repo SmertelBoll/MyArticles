@@ -9,14 +9,16 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import { fetchAuth, selectIsAuth } from "../../redux/slices/AuthSlice";
 import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
 import ContainerCustom from "../../components/customMUI/ContainerCustom";
 import MainButton from "../../components/Buttons/MainButton";
 import SecondaryButton from "../../components/Buttons/SecondaryButton";
+
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchAuth, selectIsAuth } from "../../redux/slices/AuthSlice";
-import { Navigate } from "react-router-dom";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
@@ -25,8 +27,8 @@ function LoginForm() {
   const isAuth = useSelector(selectIsAuth);
   const [openDialog, setOpenDialog] = useState(false);
   const [formData, setFormData] = useState({
-    email: "sholop@gmail.com",
-    password: "12345",
+    email: "",
+    password: "",
   });
 
   const handleClickOpen = () => {

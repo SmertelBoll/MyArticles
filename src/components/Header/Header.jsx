@@ -1,12 +1,13 @@
 import { Box } from "@mui/material";
-import React, { useEffect } from "react";
-import ContainerCustom from "../customMUI/ContainerCustom";
-import Logo from "./Logo";
-import MainButton from "../Buttons/MainButton";
+import React from "react";
 import { Link } from "react-router-dom";
-import BurgerMenu from "./BurgerMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectIsAuth } from "../../redux/slices/AuthSlice";
+
+import Logo from "./Logo";
+import ContainerCustom from "../customMUI/ContainerCustom";
+import MainButton from "../Buttons/MainButton";
+import BurgerMenu from "./BurgerMenu";
 
 function Header() {
   const dispatch = useDispatch();

@@ -1,12 +1,14 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+
 import ContainerCustom from "../../components/customMUI/ContainerCustom";
 import SortingBlock from "../../components/Sorting/SortingBlock";
 import Article from "../../components/Article/Article";
 import Comments from "../Comments/Comments";
-import { Link } from "react-router-dom";
 import ArticleSkeleton from "../../components/Article/ArticleSkeleton";
 import MainButton from "../../components/Buttons/MainButton";
+
 import CreateIcon from "@mui/icons-material/Create";
 
 function HomeBlock({
@@ -59,7 +61,7 @@ function HomeBlock({
                     user={obj.user}
                     viewsCount={obj.viewsCount}
                     commentsCount={obj.commentsCount}
-                    isOwner={isLoadedDataUser && isLoaded ? userData?.user?._id === obj?.user?._id : false}
+                    isOwner={isLoadedDataUser && isLoaded ? userData?._id === obj?.user?._id : false}
                   />
                 ))
               ) : (

@@ -1,17 +1,19 @@
 import { Avatar, Box, Typography } from "@mui/material";
 import React, { useState } from "react";
-import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
-import TelegramIcon from "@mui/icons-material/Telegram";
-import MainButton from "../../components/Buttons/MainButton";
-import CommentBlock from "./CommentBlock";
 import { useSelector } from "react-redux";
 import axios from "../../axios";
+
+import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
+import MainButton from "../../components/Buttons/MainButton";
+import CommentBlock from "./CommentBlock";
 import CommentSkeleton from "./CommentSkeleton";
 import CircularProgressCustom from "../../components/customMUI/CircularProgressCustom";
 
+import TelegramIcon from "@mui/icons-material/Telegram";
+
 const InputBox = TextFieldCustom("#FAF8FF");
 
-function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment, hasMore }) {
+function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment, hasMore, ownArticle }) {
   const [commentText, setCommentText] = useState("");
   const { data: userData, isLoaded: isLoadedDataUser } = useSelector((state) => state.auth);
 
@@ -62,9 +64,9 @@ function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment,
       )}
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
-        {addCommnet && isLoadedDataUser && (
+        {addCommnet && isLoadedDataUser && !ownArticle && (
           <Box sx={{ display: "flex", gap: 2, mb: 2, width: "100%" }}>
-            <Avatar src={userData?.user?.avatarUrl} />
+            <Avatar src={userData?.avatarUrl} sx={{ display: { xs: "none", sm: "flex" } }} />
 
             <Box
               component="form"
@@ -105,23 +107,27 @@ function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment,
                 />
               ))
             ) : (
-              <Box
-                sx={{
-                  height: "100%",
-                  minHeight: "40vh",
-                  p: 2,
-                  display: "flex",
-                  flexDirection: "column",
-                  textAlign: "center",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: 2,
-                }}
-              >
-                <Typography variant="h2">
-                  You have no comments. Keep writing more great articles and they will be coming soon!
-                </Typography>
-              </Box>
+              <>
+                {ownArticle && (
+                  <Box
+                    sx={{
+                      height: "100%",
+                      minHeight: "40vh",
+                      p: 2,
+                      display: "flex",
+                      flexDirection: "column",
+                      textAlign: "center",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: 2,
+                    }}
+                  >
+                    <Typography variant="h2">
+                      You have no comments. Keep writing more great articles and they will be coming soon!
+                    </Typography>
+                  </Box>
+                )}
+              </>
             )}
           </>
         ) : (

@@ -1,8 +1,10 @@
 import { IconButton } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
+
+import TextFieldCustom from "../customMUI/TextFieldCustom";
+
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
-import TextFieldCustom from "../customMUI/TextFieldCustom";
 
 const SearchBox = TextFieldCustom("#E6E4DA");
 

@@ -1,13 +1,15 @@
 import { Box, IconButton, Tooltip, Typography } from "@mui/material";
 import React, { useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
-import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
-import ArticleInfoBlock from "./ArticleInfoBlock";
-import axios from "../../axios";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "../../axios";
+
 import { deletePost } from "../../redux/slices/PostsSlice";
 import { selectIsAuth } from "../../redux/slices/AuthSlice";
+import ArticleInfoBlock from "./ArticleInfoBlock";
+
+import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
 
 function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsCount, isOwner }) {
   const dispatch = useDispatch();

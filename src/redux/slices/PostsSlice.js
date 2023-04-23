@@ -34,6 +34,7 @@ const postsSlice = createSlice({
   },
   extraReducers: {
     [fetchNewPosts.pending]: (state) => {
+      state.new.items = [];
       state.new.isLoaded = false;
     },
     [fetchNewPosts.fulfilled]: (state, action) => {
@@ -45,6 +46,7 @@ const postsSlice = createSlice({
       state.new.status = "error";
     },
     [fetchPopularPosts.pending]: (state) => {
+      state.new.items = [];
       state.popular.isLoaded = false;
     },
     [fetchPopularPosts.fulfilled]: (state, action) => {

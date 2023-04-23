@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import Search from "./Search";
 import { Box } from "@mui/material";
+
 import SecondaryButton from "../Buttons/SecondaryButton";
+import Search from "./Search";
 
 function SortingBlock({ sortItem, setSortItem, sortBy, inputText, onChangeInput }) {
   useEffect(() => {
