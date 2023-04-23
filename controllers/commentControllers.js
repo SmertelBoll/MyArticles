@@ -22,15 +22,39 @@ export const getAllCommentsByPost = async (req, res) => {
 export const getAllCommentsByUser = async (req, res) => {
   try {
     const userId = req.userId;
+    const limitOfComments = req.query.limit;
+    const skipOfComments = req.query.skip;
 
     const postsByUser = await PostSchema.find({ user: userId }).exec();
 
     const postsId = postsByUser.map((obj) => obj._id);
 
-    let comments = await CommentSchema.find({ post: { $in: postsId } })
-      .sort({ createdAt: -1 })
-      .populate("user")
-      .exec();
+    let comments = [];
+
+    if (limitOfComments && skipOfComments) {
+      console.log("yes");
+      comments = await CommentSchema.find({ post: { $in: postsId } })
+        .sort({ createdAt: -1 })
+        .skip(parseInt(skipOfComments))
+        .limit(parseInt(limitOfComments))
+        .populate("user")
+        .exec();
+    } else {
+      if (limitOfComments) {
+        comments = await CommentSchema.find({ post: { $in: postsId } })
+          .sort({ createdAt: -1 })
+          .limit(parseInt(limitOfComments))
+          .populate("user")
+          .exec();
+      } else {
+        comments = await CommentSchema.find({ post: { $in: postsId } })
+          .sort({ createdAt: -1 })
+          .populate("user")
+          .exec();
+      }
+    }
+
+    console.log(comments);
 
     res.send(comments);
   } catch (error) {
