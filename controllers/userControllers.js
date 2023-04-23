@@ -94,7 +94,7 @@ export const getMe = async (req, res) => {
     }
 
     res.json({
-      user,
+      ...user._doc,
     });
   } catch (error) {
     console.log(error);
