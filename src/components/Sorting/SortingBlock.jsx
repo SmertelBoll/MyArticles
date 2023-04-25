@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Box } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 import SecondaryButton from "../Buttons/SecondaryButton";
 import Search from "./Search";
@@ -8,6 +9,8 @@ function SortingBlock({ sortItem, setSortItem, sortBy, inputText, onChangeInput 
   useEffect(() => {
     onChangeInput("", true);
   }, [sortItem]);
+
+  const theme = useTheme();
 
   return (
     <Box
@@ -24,7 +27,7 @@ function SortingBlock({ sortItem, setSortItem, sortBy, inputText, onChangeInput 
             key={obj.title}
             sx={{
               px: { xs: 0, sm: 1 },
-              borderRight: { xs: "auto", sm: "1px solid #0C1618" },
+              borderRight: { xs: "auto", sm: `1px solid ${theme.palette.text.main}` },
               "&:last-child": { borderRight: "none" },
             }}
           >

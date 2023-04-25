@@ -51,7 +51,7 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
         boxShadow: 0,
         borderRadius: 2,
         overflow: "hidden",
-        "&:hover": { outline: (theme) => `1px solid ${theme.palette.grey.dark}` },
+        "&:hover": { outline: (theme) => `1px solid ${theme.palette.text.second}` },
       }}
     >
       <Link to={`/article/${_id}`}>
@@ -94,7 +94,7 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
             position: "absolute",
             top: 10,
             right: 10,
-            bgcolor: "white",
+            bgcolor: "bg.second",
             p: "3px",
             borderRadius: 2,
             opacity: isHovering ? 1 : 0,
@@ -103,14 +103,14 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
         >
           <Link to={`/update/${_id}`}>
             <Tooltip title={<Typography fontSize={16}>Edit</Typography>} placement="top">
-              <IconButton sx={{ color: "black" }}>
+              <IconButton sx={{ color: "text.main" }}>
                 <EditIcon />
               </IconButton>
             </Tooltip>
           </Link>
 
           <Tooltip title={<Typography fontSize={16}>Delete</Typography>} placement="top">
-            <IconButton sx={{ color: "black" }} onClick={handleDeleteArticle}>
+            <IconButton sx={{ color: "text.main" }} onClick={handleDeleteArticle}>
               <CloseIcon />
             </IconButton>
           </Tooltip>

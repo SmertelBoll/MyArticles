@@ -10,7 +10,7 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 function ArticleInfoBlock({ title, text, tags, date, user, viewsCount, commentsCount, isAuth }) {
   const yearMonthDay = date.split("T")[0];
   return (
-    <Box sx={{ backgroundColor: "white", p: { xs: 2, sm: 3 } }}>
+    <Box sx={{ bgcolor: "bg.second", p: { xs: 2, sm: 3 } }}>
       {/* user */}
       <Box sx={{ display: "flex" }}>
         <Avatar src={user.avatarUrl || ""} sx={{ mr: 2 }} />
@@ -19,7 +19,7 @@ function ArticleInfoBlock({ title, text, tags, date, user, viewsCount, commentsC
           <Typography
             variant="desc1"
             sx={{
-              color: "black",
+              color: "text.main",
               display: "-webkit-box",
               wordWrap: "break-word",
               wordBreak: "break-all",
@@ -31,7 +31,7 @@ function ArticleInfoBlock({ title, text, tags, date, user, viewsCount, commentsC
             {user.fullName}
           </Typography>
 
-          <Typography variant="desc2" sx={{ color: "grey.dark" }}>
+          <Typography variant="desc2" color="text.second">
             {yearMonthDay}
           </Typography>
         </Box>
@@ -50,7 +50,7 @@ function ArticleInfoBlock({ title, text, tags, date, user, viewsCount, commentsC
         <Typography
           variant="h2"
           sx={{
-            color: "black",
+            color: "text.main",
             display: "-webkit-box",
             wordWrap: "break-word",
             wordBreak: "break-all",
@@ -60,8 +60,6 @@ function ArticleInfoBlock({ title, text, tags, date, user, viewsCount, commentsC
           }}
         >
           {title}
-          {/* Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates excepturi iste ipsa quod omnis */}
-          {/* voluptatem consequuntur, veniam odio harum fugiat. */}
         </Typography>
 
         {/* tags */}
@@ -81,7 +79,7 @@ function ArticleInfoBlock({ title, text, tags, date, user, viewsCount, commentsC
         {text && (
           <>
             <Divider />
-            <Box sx={{ py: 2 }}>
+            <Box sx={{ py: 2, color: "text.main" }}>
               <ReactMarkdown children={text} />
             </Box>
           </>
@@ -89,11 +87,11 @@ function ArticleInfoBlock({ title, text, tags, date, user, viewsCount, commentsC
 
         {/* views and comments */}
         <Box sx={{ display: "flex", gap: 3 }}>
-          <Box sx={{ display: "flex", gap: 1, alignItems: "center", color: "grey.dark" }}>
+          <Box sx={{ display: "flex", gap: 1, alignItems: "center", color: "text.second" }}>
             <VisibilityOutlinedIcon />
             <Typography>{viewsCount}</Typography>
           </Box>
-          <Box sx={{ display: "flex", gap: 1, alignItems: "center", color: "grey.dark" }}>
+          <Box sx={{ display: "flex", gap: 1, alignItems: "center", color: "text.second" }}>
             <CommentOutlinedIcon />
             <Typography>{commentsCount}</Typography>
           </Box>

@@ -4,10 +4,12 @@ import ContainerCustom from "./customMUI/ContainerCustom";
 
 function Footer() {
   return (
-    <Box component="footer" bgcolor="white" sx={{ boxShadow: 0 }}>
+    <Box component="footer" bgcolor="bg.second" sx={{ boxShadow: 0 }}>
       <ContainerCustom>
         <Box sx={{ textAlign: "center", py: 3 }}>
-          <Typography variant="p">© 2023 Lyubomyr Sholop</Typography>
+          <Typography variant="p" color="text.main">
+            © 2023 Lyubomyr Sholop
+          </Typography>
         </Box>
       </ContainerCustom>
     </Box>

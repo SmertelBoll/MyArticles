@@ -8,9 +8,10 @@ import {
   DialogTitle,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useTheme } from "@mui/material/styles";
 
 import { alertError } from "../../alerts";
 import { fetchAuth, selectIsAuth } from "../../redux/slices/AuthSlice";
@@ -21,9 +22,13 @@ import SecondaryButton from "../../components/Buttons/SecondaryButton";
 
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
-const InputBox = TextFieldCustom("#FAF8FF");
-
 function LoginForm() {
+  const theme = useTheme();
+  const InputBox = useMemo(
+    () => TextFieldCustom(theme.palette.bg.second, theme.palette.text.main),
+    [theme.palette.mode]
+  );
+
   const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
   const [openDialog, setOpenDialog] = useState(false);
@@ -71,7 +76,7 @@ function LoginForm() {
           width: "100%",
           boxSizing: "border-box",
           textAlign: "center",
-          bgcolor: "white",
+          bgcolor: "bg.second",
           borderRadius: 2,
           my: 4,
           p: { xs: 2, sm: 3, md: 5 },
@@ -82,7 +87,7 @@ function LoginForm() {
           position: "relative",
         }}
       >
-        <Typography variant="h2" sx={{ mt: 2 }}>
+        <Typography variant="h2" color="text.main" sx={{ mt: 2 }}>
           Welcome
         </Typography>
 
@@ -121,26 +126,34 @@ function LoginForm() {
           onClick={handleClickOpen}
           sx={{
             alignSelf: "center",
-            color: "grey.main",
+            color: "text.second",
             position: "absolute",
             top: 2,
             right: 5,
-            "&:hover": { bgcolor: "transparent", color: "grey.dark" },
+            "&:hover": { bgcolor: "transparent", color: "text.main" },
           }}
         >
           <InfoOutlinedIcon />
           <Typography sx={{ ml: "2px" }}>test account</Typography>
         </Button>
 
-        <Dialog open={openDialog} onClose={handleClose}>
-          <DialogTitle variant="p" sx={{ color: "black" }}>
+        <Dialog
+          open={openDialog}
+          onClose={handleClose}
+          PaperProps={{
+            style: {
+              backgroundColor: theme.palette.bg.main,
+            },
+          }}
+        >
+          <DialogTitle variant="p" sx={{ color: "text.main" }}>
             Test account
           </DialogTitle>
           <DialogContent>
-            <DialogContentText variant="p" sx={{ color: "grey.dark" }}>
+            <DialogContentText variant="p" sx={{ color: "text.main" }}>
               login: xxxxxxxx@xx.x
             </DialogContentText>
-            <DialogContentText variant="p" sx={{ color: "grey.dark" }}>
+            <DialogContentText variant="p" sx={{ color: "text.main" }}>
               password: 12345
             </DialogContentText>
           </DialogContent>

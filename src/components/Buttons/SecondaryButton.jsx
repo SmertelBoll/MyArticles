@@ -8,13 +8,14 @@ function SecondaryButton(props) {
       {...props}
       sx={{
         backgroundColor: active ? "yellow.main" : "",
-        color: "black",
+        color: active ? "text.dark" : "text.main",
         px: 2,
         alignSelf: "center",
         borderRadius: 2,
 
         ":hover": {
           backgroundColor: "yellow.main",
+          color: "text.dark",
         },
         ...sx,
       }}

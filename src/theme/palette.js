@@ -1,14 +1,38 @@
-const palette = {
-  white: "#FAF8FF",
-  black: "#0C1618",
-  grey: {
-    main: "#A9A9A9",
-    dark: "#696969",
-  },
-  yellow: {
-    main: "#F9F919",
-    dark: "#F2DB0B",
-  },
+const palette = (mode) => {
+  if (mode === "light")
+    return {
+      mode: "light",
+      bg: {
+        main: "#e6e4da",
+        second: "#FAF8FF",
+      },
+      text: {
+        main: "#0C1618",
+        second: "#696969",
+        dark: "#0C1618",
+      },
+      yellow: {
+        main: "#F9F919",
+        dark: "#F2DB0B",
+      },
+    };
+
+  return {
+    mode: "dark",
+    bg: {
+      main: "#363636",
+      second: "#171717",
+    },
+    text: {
+      main: "#FAF8FF",
+      second: "#999999",
+      dark: "#0C1618",
+    },
+    yellow: {
+      main: "#F9F919",
+      dark: "#F2DB0B",
+    },
+  };
 };
 
 export default palette;

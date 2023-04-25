@@ -94,7 +94,7 @@ function FullArticle() {
       <MainButton startIcon={<ArrowBackIcon />} onClick={handleBack} sx={{ alignSelf: "start" }}>
         Back
       </MainButton>
-      <Box sx={{ bgcolor: "white", borderRadius: 2, overflow: "hidden", position: "relative" }}>
+      <Box sx={{ bgcolor: "bg.second", borderRadius: 2, overflow: "hidden", position: "relative" }}>
         {isLoadedPosts ? (
           <>
             <Box
@@ -129,20 +129,20 @@ function FullArticle() {
               position: "absolute",
               top: 10,
               right: 10,
-              bgcolor: "white",
+              bgcolor: "bg.second",
               p: "3px",
               borderRadius: 2,
             }}
           >
             <Tooltip title={<Typography fontSize={16}>Edit</Typography>} placement="top">
               <Link to={`/update/${id}`}>
-                <IconButton sx={{ color: "black" }}>
+                <IconButton sx={{ color: "text.main" }}>
                   <EditIcon />
                 </IconButton>
               </Link>
             </Tooltip>
             <Tooltip title={<Typography fontSize={16}>Delete</Typography>} placement="top">
-              <IconButton sx={{ color: "black" }} onClick={handleDeleteArticle}>
+              <IconButton sx={{ color: "text.main" }} onClick={handleDeleteArticle}>
                 <CloseIcon />
               </IconButton>
             </Tooltip>

@@ -10,7 +10,7 @@ function CommentBlock({ text, avatarUrl, fullname, smallComment }) {
         <Typography
           variant="desc1"
           sx={{
-            color: "grey.dark",
+            color: "text.main",
             display: "-webkit-box",
             wordWrap: "break-word",
             wordBreak: "break-all",
@@ -24,7 +24,7 @@ function CommentBlock({ text, avatarUrl, fullname, smallComment }) {
         <Typography
           variant="desc2"
           sx={{
-            color: "grey.dark",
+            color: "text.second",
             display: "-webkit-box",
             wordWrap: "break-word",
             wordBreak: "break-all",

@@ -7,9 +7,9 @@ function TagButton({ children, onClick }) {
       variant="disc2"
       onClick={onClick}
       sx={{
-        color: "grey.dark",
+        color: "text.second",
         ":hover": {
-          color: "black",
+          color: "text.main",
           cursor: "pointer",
         },
         display: "-webkit-box",

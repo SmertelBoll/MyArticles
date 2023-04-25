@@ -8,7 +8,7 @@ function MainButton(props) {
       {...rest}
       sx={{
         backgroundColor: "yellow.main",
-        color: "black",
+        color: "text.dark",
         borderRadius: 4,
         px: 5,
         alignSelf: "center",

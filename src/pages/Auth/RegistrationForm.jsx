@@ -1,8 +1,9 @@
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../../axios";
+import { useTheme } from "@mui/material/styles";
 
 import { fetchRegister, selectIsAuth } from "../../redux/slices/AuthSlice";
 import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
@@ -12,9 +13,13 @@ import MainButton from "../../components/Buttons/MainButton";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { alertError } from "../../alerts";
 
-const InputBox = TextFieldCustom("#FAF8FF");
-
 function RegistrationForm() {
+  const theme = useTheme();
+  const InputBox = useMemo(
+    () => TextFieldCustom(theme.palette.bg.second, theme.palette.text.main),
+    [theme.palette.mode]
+  );
+
   const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
   const [data, setData] = useState({
@@ -119,7 +124,7 @@ function RegistrationForm() {
           width: "100%",
           boxSizing: "border-box",
           textAlign: "center",
-          bgcolor: "white",
+          bgcolor: "bg.second",
           borderRadius: 2,
           my: 4,
           p: { xs: 2, sm: 3, md: 5 },
@@ -129,7 +134,9 @@ function RegistrationForm() {
           gap: 3,
         }}
       >
-        <Typography variant="h2">Create your account</Typography>
+        <Typography color="text.main" variant="h2">
+          Create your account
+        </Typography>
 
         <Box
           component="form"
@@ -151,7 +158,7 @@ function RegistrationForm() {
             />
 
             {avatarUrl && (
-              <IconButton sx={{ position: "absolute", top: -25, right: -25, color: "black" }}>
+              <IconButton sx={{ position: "absolute", top: -25, right: -25, color: "text.main" }}>
                 <HighlightOffIcon fontSize="large" onClick={handleDeleteAvatar} />
               </IconButton>
             )}

@@ -1,14 +1,16 @@
 import { Box, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import React from "react";
 
 const styles = {
   textTransform: "uppercase",
   fontFamily: "Bungee",
-  color: "black",
+  color: "text.main",
   lineHeight: 1,
 };
 
 function Logo() {
+  const theme = useTheme();
   return (
     <Box>
       <Typography
@@ -16,8 +18,8 @@ function Logo() {
         sx={{
           ...styles,
           color: "yellow.main",
-          WebkitTextStrokeWidth: "2px",
-          WebkitTextStrokeColor: "black",
+          WebkitTextStrokeWidth: "1px",
+          WebkitTextStrokeColor: theme.palette.text.dark,
         }}
       >
         my

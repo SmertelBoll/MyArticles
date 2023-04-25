@@ -12,6 +12,8 @@ import { useDispatch } from "react-redux";
 import { fetchAuthMe } from "./redux/slices/AuthSlice";
 import UpdateArticle from "./pages/UpdateArticle";
 import NotFound from "./pages/NotFound";
+import { ThemeProvider } from "@mui/material";
+import { getTheme } from "./theme/theme";
 
 function App() {
   const dispatch = useDispatch();
@@ -20,23 +22,37 @@ function App() {
     dispatch(fetchAuthMe());
   }, []);
 
+  const [mode, setMode] = React.useState("dark");
+  const colorMode = React.useMemo(
+    () => ({
+      // The dark mode switch would invoke this method
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+      },
+    }),
+    []
+  );
+  const theme = React.useMemo(() => getTheme(mode), [mode]);
+
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      <Header />
-      <main style={{ flex: "1 1 auto" }}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<RegistrationForm />} />
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/create" element={<CreateArticle />} />
-          <Route path="/update/:id" element={<UpdateArticle />} />
-          <Route path="/comments" element={<CommentsPage />} />
-          <Route path="/article/:id" element={<FullArticle />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-      <Footer />
-    </div>
+    <ThemeProvider theme={theme}>
+      <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        <Header colorMode={colorMode} mode={mode} />
+        <main style={{ flex: "1 1 auto", backgroundColor: theme.palette.bg.main }}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/register" element={<RegistrationForm />} />
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/create" element={<CreateArticle />} />
+            <Route path="/update/:id" element={<UpdateArticle />} />
+            <Route path="/comments" element={<CommentsPage />} />
+            <Route path="/article/:id" element={<FullArticle />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </ThemeProvider>
   );
 }
 

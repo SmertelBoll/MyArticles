@@ -4,6 +4,7 @@ import ReactDOMServer from "react-dom/server";
 import { useNavigate, useParams } from "react-router-dom";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import SimpleMDE from "react-simplemde-editor";
+import { useTheme } from "@mui/material/styles";
 import axios from "../../axios";
 
 import { alertSuccess, alertError, alertConfirm } from "../../alerts";
@@ -16,9 +17,13 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import "easymde/dist/easymde.min.css";
 
-const InputBox = TextFieldCustom("#FAF8FF");
-
 function CreateArticle({ update }) {
+  const theme = useTheme();
+  const InputBox = useMemo(
+    () => TextFieldCustom(theme.palette.bg.second, theme.palette.text.main),
+    [theme.palette.mode]
+  );
+
   const [imageUrl, setImageUrl] = useState("");
   const [data, setData] = useState({
     title: "",
@@ -222,7 +227,7 @@ function CreateArticle({ update }) {
         component="form"
         onSubmit={handleSubmit}
         sx={{
-          bgcolor: "white",
+          bgcolor: "bg.second",
           p: 3,
           borderRadius: "16px",
           display: "flex",

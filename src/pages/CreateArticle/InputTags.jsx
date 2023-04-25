@@ -1,11 +1,16 @@
 import { Box, IconButton, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
 import CloseIcon from "@mui/icons-material/Close";
-
-const InputBox = TextFieldCustom("#FAF8FF");
+import { useTheme } from "@mui/material/styles";
 
 function InputTags({ formData, setFormData }) {
+  const theme = useTheme();
+  const InputBox = useMemo(
+    () => TextFieldCustom(theme.palette.bg.second, theme.palette.text.main),
+    [theme.palette.mode]
+  );
+
   const [value, setValue] = useState("");
 
   const onChangeTags = (e) => {
@@ -56,14 +61,14 @@ function InputTags({ formData, setFormData }) {
               sx={{
                 display: "flex",
                 alignItems: "center",
-                bgcolor: "black",
+                bgcolor: "text.main",
                 pl: 2,
                 borderRadius: "12px",
               }}
             >
               <Typography
                 sx={{
-                  color: "white",
+                  color: "bg.second",
                   display: "-webkit-box",
                   wordWrap: "break-word",
                   wordBreak: "break-all",
@@ -76,7 +81,7 @@ function InputTags({ formData, setFormData }) {
                   handleDeleteTag(name);
                 }}
               >
-                <CloseIcon fontSize="small" sx={{ color: "white" }} />
+                <CloseIcon fontSize="small" sx={{ color: "bg.second" }} />
               </IconButton>
             </Box>
           ))}

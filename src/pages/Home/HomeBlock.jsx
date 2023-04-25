@@ -78,7 +78,7 @@ function HomeBlock({
                     gap: 2,
                   }}
                 >
-                  <Typography variant="h2">
+                  <Typography variant="h2" color="text.main">
                     There are currently no articles available. Try it later, or write your own!
                   </Typography>
                   <Link to={isAuth ? "/create" : "/login"}>
@@ -105,7 +105,7 @@ function HomeBlock({
               <Box
                 sx={{
                   borderRadius: 2,
-                  "&:hover": { outline: (theme) => `1px solid ${theme.palette.grey.dark}` },
+                  "&:hover": { outline: (theme) => `1px solid ${theme.palette.text.second}` },
                 }}
               >
                 <Comments items={commentItems} isLoaded={isLoadedComments} smallComment />

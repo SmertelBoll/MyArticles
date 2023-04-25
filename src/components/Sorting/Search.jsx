@@ -1,14 +1,16 @@
 import { IconButton } from "@mui/material";
-import React from "react";
+import React, { useMemo } from "react";
+import { useTheme } from "@mui/material/styles";
 
 import TextFieldCustom from "../customMUI/TextFieldCustom";
 
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 
-const SearchBox = TextFieldCustom("#E6E4DA");
-
 function Search({ inputText, onChangeInput }) {
+  const theme = useTheme();
+  const SearchBox = useMemo(() => TextFieldCustom("bg.main", theme.palette.text.main), [theme.palette.mode]);
+
   const handleChange = (e) => {
     onChangeInput(e);
   };
@@ -24,7 +26,7 @@ function Search({ inputText, onChangeInput }) {
       sx={{
         width: "100%",
         maxWidth: { xs: "auto", md: "35vw" },
-        "& .Mui-focused .MuiIconButton-root": { color: "black" },
+        "& .Mui-focused .MuiIconButton-root": { color: "text.main" },
         "& .MuiOutlinedInput-notchedOutline": { borderRadius: "30px" },
       }}
       InputProps={{

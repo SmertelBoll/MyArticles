@@ -56,7 +56,7 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
         sx={{
           alignSelf: "center",
           p: { xs: 1, sm: 2 },
-          color: "black",
+          color: "text.main",
           display: "flex",
           justifyContent: "flex-end",
         }}
@@ -76,6 +76,7 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
             display: "flex",
             flexDirection: "column",
             gap: 3,
+            bgcolor: "bg.second",
           },
         }}
       >
@@ -97,6 +98,7 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
                 WebkitLineClamp: 2,
                 whiteSpace: "pre-line",
                 fontSize: "24px",
+                color: "text.main",
               }}
             >
               {data?.fullName}

@@ -1,7 +1,8 @@
 import { Avatar, Box, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "../../axios";
+import { useTheme } from "@mui/material/styles";
 
 import { alertError } from "../../alerts";
 import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
@@ -12,9 +13,13 @@ import CircularProgressCustom from "../../components/customMUI/CircularProgressC
 
 import TelegramIcon from "@mui/icons-material/Telegram";
 
-const InputBox = TextFieldCustom("#FAF8FF");
-
 function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment, hasMore, ownArticle }) {
+  const theme = useTheme();
+  const InputBox = useMemo(
+    () => TextFieldCustom(theme.palette.bg.second, theme.palette.text.main),
+    [theme.palette.mode]
+  );
+
   const [commentText, setCommentText] = useState("");
   const { data: userData, isLoaded: isLoadedDataUser } = useSelector((state) => state.auth);
 
@@ -45,7 +50,7 @@ function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment,
   return (
     <Box
       sx={{
-        backgroundColor: "white",
+        backgroundColor: "bg.second",
         borderRadius: 2,
         p: 2,
         display: "flex",
@@ -58,7 +63,7 @@ function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment,
       }}
     >
       {(smallComment || Boolean(items?.length)) && (
-        <Typography variant="p" sx={{ color: "black" }}>
+        <Typography variant="p" sx={{ color: "text.main" }}>
           {smallComment ? "Last comments" : "Comments"}
         </Typography>
       )}
@@ -122,7 +127,7 @@ function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment,
                       gap: 2,
                     }}
                   >
-                    <Typography variant="h2">
+                    <Typography variant="h2" color="text.main">
                       You have no comments. Keep writing more great articles and they will be coming soon!
                     </Typography>
                   </Box>
@@ -140,7 +145,7 @@ function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment,
         )}
         {isPoints && isLoaded && smallComment && (
           <Box sx={{ textAlign: "center" }}>
-            <Typography variant="p" sx={{ color: "grey.dark" }}>
+            <Typography variant="p" sx={{ color: "text.second" }}>
               ...
             </Typography>
           </Box>

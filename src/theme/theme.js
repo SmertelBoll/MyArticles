@@ -3,11 +3,12 @@ import palette from "./palette.js";
 import spacing from "./spacing.js";
 import typography from "./typography.js";
 
-export const theme = createTheme({
-  palette,
-  typography,
-  spacing,
-  shadows: [
-    ...createTheme({}).shadows.map((shadow, i) => (i === 0 ? "4px 4px 24px rgba(0, 0, 0, 0.25)" : shadow)),
-  ],
-});
+export const getTheme = (mode) =>
+  createTheme({
+    palette: palette(mode),
+    typography,
+    spacing,
+    shadows: [
+      ...createTheme({}).shadows.map((shadow, i) => (i === 0 ? "4px 4px 24px rgba(0, 0, 0, 0.25)" : shadow)),
+    ],
+  });
