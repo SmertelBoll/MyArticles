@@ -12,6 +12,7 @@ import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
+import { alertError } from "../../alerts";
 import { fetchAuth, selectIsAuth } from "../../redux/slices/AuthSlice";
 import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
 import ContainerCustom from "../../components/customMUI/ContainerCustom";
@@ -54,7 +55,7 @@ function LoginForm() {
     if (data?.payload?.token) {
       window.localStorage.setItem("token", data.payload.token);
     } else {
-      alert("Не вдалося аторизуватися");
+      alertError("Authorization error", "Incorrect login or password");
     }
   };
 

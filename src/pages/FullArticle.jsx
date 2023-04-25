@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../axios";
 
+import { alertConfirm, alertError, alertSuccess } from "../alerts";
 import { deletePost } from "../redux/slices/PostsSlice";
 import ContainerCustom from "../components/customMUI/ContainerCustom";
 import ArticleInfoBlock from "../components/Article/ArticleInfoBlock";
@@ -45,14 +46,13 @@ function FullArticle() {
           setPost(res.data);
           setIsLoadedPosts(true);
         } else {
-          // тут має бути сторінка 404
-          alert("Невдалося знайти статтю");
+          alertError("Article error", "Could not find article");
           navigate("/");
         }
       })
       .catch((err) => {
         console.warn(err);
-        alert("Помилка при отриманні статті");
+        alertError("Article error", "An error occurred while receiving the article");
         navigate("/");
       });
   }, []);
@@ -67,24 +67,26 @@ function FullArticle() {
       })
       .catch((err) => {
         console.warn(err);
-        alert("Помилка при отриманні коментарів");
+        alertError("Comments error", "Error getting comments");
       });
   }, [countNewComments]);
 
+  const deleteArticleFunc = () => {
+    axios
+      .delete(`/posts/${id}`)
+      .then((res) => {
+        alertSuccess("The article has been successfully deleted");
+        dispatch(deletePost(id));
+        navigate("/");
+      })
+      .catch((err) => {
+        console.warn(err);
+        alertError("Article error", "Failed to delete article");
+      });
+  };
+
   const handleDeleteArticle = () => {
-    if (window.confirm("Ви точно хочете видалити статтю?")) {
-      axios
-        .delete(`/posts/${id}`)
-        .then((res) => {
-          alert("Стаття успішно видалена");
-          dispatch(deletePost(id));
-          navigate("/");
-        })
-        .catch((err) => {
-          console.warn(err);
-          alert("Не вдалося видалити статтю");
-        });
-    }
+    alertConfirm("Are you sure you want to delete the article?", deleteArticleFunc);
   };
 
   return (

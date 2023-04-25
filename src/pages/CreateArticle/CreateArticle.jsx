@@ -6,6 +6,7 @@ import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import SimpleMDE from "react-simplemde-editor";
 import axios from "../../axios";
 
+import { alertSuccess, alertError, alertConfirm } from "../../alerts";
 import ContainerCustom from "../../components/customMUI/ContainerCustom";
 import InputTags from "./InputTags";
 import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
@@ -45,8 +46,8 @@ function CreateArticle({ update }) {
           setImageUrl(res.data.imageUrl);
         })
         .catch((err) => {
-          console.log(err);
-          alert("Помилка при спробі редагування");
+          console.warn(err);
+          alertError("Editing error", "");
           navigate("/");
         });
     } else {
@@ -128,7 +129,7 @@ function CreateArticle({ update }) {
       return `http://localhost:4444${dataUrl.url}`;
     } catch (error) {
       console.warn(error);
-      alert("Помилка при загрузці файлу");
+      alertError("Image error", "Error loading file");
       return null;
     }
   };
@@ -164,34 +165,36 @@ function CreateArticle({ update }) {
       axios
         .patch(`/posts/${id}`, formData)
         .then((res) => {
-          alert("Стаття успішно змінена");
+          alertSuccess("The article has been successfully modified");
           navigate("/");
         })
         .catch((err) => {
           console.warn(err);
-          alert("Помилка при редагуванні статті");
+          alertError("Editing error", "Error editing the article");
         });
     } else {
       // створення
       axios
         .post(`/posts`, formData)
         .then((res) => {
-          alert("Стаття успішно створена");
+          alertSuccess("Article successfully created");
           window.localStorage.removeItem("inputData");
           navigate("/");
         })
         .catch((err) => {
-          console.log(err);
-          alert("Помилка при створенні статті");
+          console.warn(err);
+          alertError("Article error", "Error creating the article");
         });
     }
   };
 
+  const backFunc = () => {
+    window.localStorage.removeItem("inputData");
+    navigate(-1);
+  };
+
   const handleBack = () => {
-    if (window.confirm("Ви впевнені що хочете вийти? Ваші зміни не збережуться")) {
-      window.localStorage.removeItem("inputData");
-      navigate(-1);
-    }
+    alertConfirm("Are you sure you want to log out? Your changes will not be saved", backFunc);
   };
 
   const updateData = useCallback(

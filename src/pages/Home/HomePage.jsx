@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../../axios";
 
+import { alertError } from "../../alerts";
 import { fetchNewPosts, fetchPopularPosts } from "../../redux/slices/PostsSlice";
 import { selectIsAuth } from "../../redux/slices/AuthSlice";
 import HomeBlock from "./HomeBlock";
@@ -44,7 +45,7 @@ function Home() {
         })
         .catch((err) => {
           console.warn(err);
-          alert("Помилка при отриманні коментарів");
+          alertError("Comments error", "Error receiving comments");
         });
     }
   }, [isAuth]);
@@ -71,7 +72,7 @@ function Home() {
       })
       .catch((err) => {
         console.warn(err);
-        alert("Невдалося завантажити статті");
+        alertError("Image error", "Failed to load articles");
       });
   }, [searchValue]);
 

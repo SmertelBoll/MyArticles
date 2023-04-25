@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../../axios";
 
+import { alertConfirm, alertError, alertSuccess } from "../../alerts";
 import { deletePost } from "../../redux/slices/PostsSlice";
 import { selectIsAuth } from "../../redux/slices/AuthSlice";
 import ArticleInfoBlock from "./ArticleInfoBlock";
@@ -24,19 +25,21 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
     setIsHovering(false);
   };
 
+  const deleteArticleFunc = () => {
+    axios
+      .delete(`/posts/${_id}`)
+      .then((res) => {
+        alertSuccess("The article has been successfully deleted");
+        dispatch(deletePost(_id));
+      })
+      .catch((err) => {
+        console.warn(err);
+        alertError("Deletion error", "Failed to delete article");
+      });
+  };
+
   const handleDeleteArticle = () => {
-    if (window.confirm("Ви точно хочете видалити статтю?")) {
-      axios
-        .delete(`/posts/${_id}`)
-        .then((res) => {
-          alert("Стаття успішно видалена");
-          dispatch(deletePost(_id));
-        })
-        .catch((err) => {
-          console.warn(err);
-          alert("Не вдалося видалити статтю");
-        });
-    }
+    alertConfirm("Are you sure you want to delete the article?", deleteArticleFunc);
   };
 
   return (

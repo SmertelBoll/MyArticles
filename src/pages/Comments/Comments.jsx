@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "../../axios";
 
+import { alertError } from "../../alerts";
 import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
 import MainButton from "../../components/Buttons/MainButton";
 import CommentBlock from "./CommentBlock";
@@ -29,16 +30,15 @@ function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment,
       axios
         .post(`/comments`, { text: commentText, postId })
         .then((res) => {
-          // updateArticle(commentText);
           setCommentText("");
           onUpdate();
         })
         .catch((err) => {
           console.warn(err);
-          alert("Помилка при відправленні коментаря");
+          alertError("Comment error", "Error sending comment");
         });
     } else {
-      alert("Неможливо відправити коментар");
+      alertError("Comment error", "Unable to send comment");
     }
   };
 

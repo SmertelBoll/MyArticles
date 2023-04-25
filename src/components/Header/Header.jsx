@@ -2,8 +2,9 @@ import { Box } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, selectIsAuth } from "../../redux/slices/AuthSlice";
 
+import { logout, selectIsAuth } from "../../redux/slices/AuthSlice";
+import { alertConfirm } from "../../alerts";
 import Logo from "./Logo";
 import ContainerCustom from "../customMUI/ContainerCustom";
 import MainButton from "../Buttons/MainButton";
@@ -13,11 +14,13 @@ function Header() {
   const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
 
+  const logOutFunc = () => {
+    window.localStorage.removeItem("token");
+    dispatch(logout());
+  };
+
   const onClickLogout = () => {
-    if (window.confirm("Вийти?")) {
-      window.localStorage.removeItem("token");
-      dispatch(logout());
-    }
+    alertConfirm("Are you sure?", logOutFunc);
   };
 
   return (

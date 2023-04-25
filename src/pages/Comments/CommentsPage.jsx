@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
 
+import { alertError } from "../../alerts";
 import Comments from "./Comments";
 import ContainerCustom from "../../components/customMUI/ContainerCustom";
 import MainButton from "../../components/Buttons/MainButton";
@@ -36,7 +37,7 @@ function CommentsPage() {
       })
       .catch((err) => {
         console.warn(err);
-        alert("Помилка при отриманні коментарів");
+        alertError("Comment error", "Error receiving comments");
       });
   };
 

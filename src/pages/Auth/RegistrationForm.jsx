@@ -10,6 +10,7 @@ import ContainerCustom from "../../components/customMUI/ContainerCustom";
 import MainButton from "../../components/Buttons/MainButton";
 
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import { alertError } from "../../alerts";
 
 const InputBox = TextFieldCustom("#FAF8FF");
 
@@ -53,17 +54,15 @@ function RegistrationForm() {
     try {
       if (data.avatar && typeof data.avatar === "string") return data.avatar;
 
-      console.log(data.avatar);
       const formDataImg = new FormData();
       formDataImg.append("image", data.avatar);
-      console.log(formDataImg);
 
       const { data: dataUrl } = await axios.post("/upload", formDataImg);
 
       return `http://localhost:4444${dataUrl.url}`;
     } catch (error) {
       console.warn(error);
-      alert("Помилка при загрузці файлу");
+      alertError("Image error", "Error loading file");
       return null;
     }
   };
@@ -99,14 +98,12 @@ function RegistrationForm() {
       avatarUrl: avaUrl,
     };
 
-    console.log(formData);
-
     const resData = await dispatch(fetchRegister(formData));
 
     if (resData?.payload?.token) {
       window.localStorage.setItem("token", resData.payload.token);
     } else {
-      alert("Не вдалося зареєструватися");
+      alertError("Authorization error", "You have entered incorrect data");
     }
   };
 

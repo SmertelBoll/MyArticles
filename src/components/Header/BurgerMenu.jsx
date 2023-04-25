@@ -117,7 +117,14 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
                       <SecondaryButton
                         startIcon={obj.icon}
                         fullWidth
-                        onClick={obj.func ? obj.func : handleDrawerClose}
+                        onClick={
+                          obj.func
+                            ? () => {
+                                handleDrawerClose();
+                                obj.func();
+                              }
+                            : handleDrawerClose
+                        }
                         sx={{ display: "flex", justifyContent: "flex-start" }}
                       >
                         {obj.title}
@@ -127,7 +134,14 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
                     <SecondaryButton
                       startIcon={obj.icon}
                       fullWidth
-                      onClick={obj.func ? obj.func : handleDrawerClose}
+                      onClick={
+                        obj.func
+                          ? () => {
+                              handleDrawerClose();
+                              obj.func();
+                            }
+                          : handleDrawerClose
+                      }
                       sx={{ display: "flex", justifyContent: "flex-start" }}
                     >
                       {obj.title}
