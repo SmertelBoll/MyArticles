@@ -32,7 +32,6 @@ export const getAllCommentsByUser = async (req, res) => {
     let comments = [];
 
     if (limitOfComments && skipOfComments) {
-      console.log("yes");
       comments = await CommentSchema.find({ post: { $in: postsId } })
         .sort({ createdAt: -1 })
         .skip(parseInt(skipOfComments))

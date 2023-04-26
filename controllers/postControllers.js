@@ -1,4 +1,5 @@
 import PostSchema from "../models/post.js";
+import UserSchema from "../models/user.js";
 
 export const getAllPosts = async (req, res) => {
   try {
@@ -81,6 +82,17 @@ export const createPost = async (req, res) => {
 export const removePost = async (req, res) => {
   try {
     const postId = req.params.id;
+    const currentUserId = req.userId;
+
+    const currentPost = await PostSchema.find({ _id: postId }).populate("user").exec();
+    const currentUser = await UserSchema.findById(currentUserId);
+
+    if (currentUserId !== currentPost[0].user._id.toString() && currentUser.accessLevel !== "admin") {
+      console.log("відмовлено в доступі");
+      return res.status(500).json({
+        message: "відмовлено в доступі",
+      });
+    }
 
     const post = await PostSchema.findOneAndDelete({
       _id: postId,
@@ -106,6 +118,17 @@ export const removePost = async (req, res) => {
 export const updatePost = async (req, res) => {
   try {
     const postId = req.params.id;
+    const currentUserId = req.userId;
+
+    const post = await PostSchema.find({ _id: postId }).populate("user").exec();
+    const currentUser = await UserSchema.findById(currentUserId);
+
+    if (currentUserId !== post[0].user._id.toString() && currentUser.accessLevel !== "admin") {
+      console.log("відмовлено в доступі");
+      return res.status(500).json({
+        message: "відмовлено в доступі",
+      });
+    }
 
     await PostSchema.updateOne(
       {
@@ -116,7 +139,7 @@ export const updatePost = async (req, res) => {
         text: req.body.text,
         tags: req.body.tags,
         imageUrl: req.body.imageUrl,
-        user: req.userId,
+        user: post[0].user._id,
       }
     );
 

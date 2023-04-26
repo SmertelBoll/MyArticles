@@ -66,8 +66,9 @@ app.post("/auth/register", registerValidation, checkValidationError, registerUse
 app.post("/auth/login", loginValidation, checkValidationError, loginUser);
 app.get("/auth/me", checkAuth, getMe);
 
-app.post("/upload", checkAuth, upload.single("image"), (req, res) => {
+app.post("/upload", upload.single("image"), (req, res) => {
   try {
+    console.log(req);
     const newFilename = uuidv4() + "." + req.file.originalname.split(".").pop();
     const oldPath = req.file.path;
     const newPath = req.file.destination + "/" + newFilename;

@@ -19,6 +19,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    accessLevel: {
+      type: String,
+      default: "ordinary",
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
