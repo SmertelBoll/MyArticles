@@ -8,6 +8,7 @@ import { useTheme } from "@mui/material/styles";
 import axios from "../../axios";
 
 import { alertSuccess, alertError, alertConfirm } from "../../alerts";
+import { useSelector } from "react-redux";
 import ContainerCustom from "../../components/customMUI/ContainerCustom";
 import InputTags from "./InputTags";
 import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
@@ -32,7 +33,8 @@ function CreateArticle({ update }) {
     image: null,
   });
 
-  const { id } = useParams();
+  const { id } = useParams(); // if update
+  const { data: userData } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const uploadRef = useRef(null);
 
@@ -42,6 +44,10 @@ function CreateArticle({ update }) {
       axios
         .get(`/posts/${id}`)
         .then((res) => {
+          if (res.data.user._id !== userData?._id && userData?.accessLevel !== "admin") {
+            navigate("/");
+          }
+
           setData({
             title: res.data.title,
             text: res.data.text,
@@ -69,7 +75,7 @@ function CreateArticle({ update }) {
         }));
       }
     }
-  }, []);
+  }, [userData]);
 
   const onChangeTitle = (e) => {
     setData((prevData) => ({

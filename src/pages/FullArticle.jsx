@@ -123,7 +123,8 @@ function FullArticle() {
           </Box>
         )}
 
-        {isLoadedPosts && userData?._id === post?.user?._id && (
+        {/* isLoaded and (admin or own post) */}
+        {isLoadedPosts && (userData?.accessLevel === "admin" || userData?._id === post?.user?._id) && (
           <Box
             sx={{
               position: "absolute",

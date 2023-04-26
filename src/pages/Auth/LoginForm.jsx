@@ -150,10 +150,22 @@ function LoginForm() {
             Test account
           </DialogTitle>
           <DialogContent>
-            <DialogContentText variant="p" sx={{ color: "text.main" }}>
-              login: xxxxxxxx@xx.x
+            <DialogTitle variant="p" sx={{ color: "text.main" }}>
+              ordinary user
+            </DialogTitle>
+            <DialogContentText variant="p" sx={{ color: "text.second" }}>
+              login: user@gmail.com
             </DialogContentText>
-            <DialogContentText variant="p" sx={{ color: "text.main" }}>
+            <DialogContentText variant="p" sx={{ color: "text.second" }}>
+              password: 12345
+            </DialogContentText>
+            <DialogTitle variant="p" sx={{ color: "text.main" }}>
+              admin user
+            </DialogTitle>
+            <DialogContentText variant="p" sx={{ color: "text.second" }}>
+              login: admin@gmail.com
+            </DialogContentText>
+            <DialogContentText variant="p" sx={{ color: "text.second" }}>
               password: 12345
             </DialogContentText>
           </DialogContent>

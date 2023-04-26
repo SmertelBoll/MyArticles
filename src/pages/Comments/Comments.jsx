@@ -13,7 +13,17 @@ import CircularProgressCustom from "../../components/customMUI/CircularProgressC
 
 import TelegramIcon from "@mui/icons-material/Telegram";
 
-function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment, hasMore, ownArticle }) {
+function Comments({
+  addCommnet,
+  items,
+  isLoaded,
+  postId,
+  onUpdate,
+  smallComment,
+  hasMore,
+  ownArticle,
+  commentPage,
+}) {
   const theme = useTheme();
   const InputBox = useMemo(
     () => TextFieldCustom(theme.palette.bg.second, theme.palette.text.main),
@@ -113,7 +123,7 @@ function Comments({ addCommnet, items, isLoaded, postId, onUpdate, smallComment,
               ))
             ) : (
               <>
-                {ownArticle && (
+                {(ownArticle || commentPage) && (
                   <Box
                     sx={{
                       height: "100%",

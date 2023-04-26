@@ -72,7 +72,7 @@ function CommentsPage() {
       <MainButton startIcon={<ArrowBackIcon />} onClick={handleBack} sx={{ alignSelf: "start" }}>
         Back
       </MainButton>
-      <Comments items={comments} isLoaded={isLoaded} hasMore={hasMore} />
+      <Comments items={comments} isLoaded={isLoaded} hasMore={hasMore} commentPage />
       <div ref={loader} disabled></div>
     </ContainerCustom>
   );

@@ -12,7 +12,7 @@ import ArticleInfoBlock from "./ArticleInfoBlock";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 
-function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsCount, isOwner }) {
+function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsCount, isOwner, isAdmin }) {
   const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
   const [isHovering, setIsHovering] = useState(false);
@@ -88,7 +88,7 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
       </Link>
 
       {/* update button */}
-      {isOwner && (
+      {(isOwner || isAdmin) && (
         <Box
           sx={{
             position: "absolute",

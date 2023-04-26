@@ -62,6 +62,7 @@ function HomeBlock({
                     viewsCount={obj.viewsCount}
                     commentsCount={obj.commentsCount}
                     isOwner={isLoadedDataUser && isLoaded ? userData?._id === obj?.user?._id : false}
+                    isAdmin={isLoadedDataUser && isLoaded ? userData?.accessLevel === "admin" : false}
                   />
                 ))
               ) : (
@@ -98,6 +99,7 @@ function HomeBlock({
               flexGrow: "1",
               flexBasis: "33.33%",
               display: { xs: "none", md: "flex" },
+              alignSelf: "start",
             }}
           >
             {/* comments */}

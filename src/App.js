@@ -22,7 +22,7 @@ function App() {
     dispatch(fetchAuthMe());
   }, []);
 
-  const [mode, setMode] = React.useState("dark");
+  const [mode, setMode] = React.useState("light");
   const colorMode = React.useMemo(
     () => ({
       // The dark mode switch would invoke this method
