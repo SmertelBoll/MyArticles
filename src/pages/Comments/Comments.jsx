@@ -36,7 +36,7 @@ function Comments({
   const [avatarUrl, setAvatarUrl] = useState("");
 
   React.useEffect(() => {
-    const url = getImageUrlFromBuffer(userData?.avatar?.contentType, userData?.avatar?.data?.data);
+    const url = getImageUrlFromBuffer(userData?.avatar);
     setAvatarUrl(url);
   }, [userData]);
 
@@ -57,7 +57,7 @@ function Comments({
         })
         .catch((err) => {
           console.warn(err);
-          alertError("Comment error", "Error sending comment");
+          alertError(err.response.data.title, err.response.data.message);
         });
     } else {
       alertError("Comment error", "Unable to send comment");
@@ -123,10 +123,7 @@ function Comments({
                 <CommentBlock
                   key={obj._id}
                   text={obj.text}
-                  avatarUrl={getImageUrlFromBuffer(
-                    obj?.user?.avatar?.contentType,
-                    obj?.user?.avatar?.data?.data
-                  )}
+                  avatarUrl={getImageUrlFromBuffer(obj?.user)}
                   fullname={obj.user.fullName}
                   smallComment={smallComment}
                 />

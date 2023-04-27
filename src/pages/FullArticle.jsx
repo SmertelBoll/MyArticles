@@ -15,6 +15,7 @@ import CircularProgressCustom from "../components/customMUI/CircularProgressCust
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { getImageUrlFromBuffer } from "../services/image";
 
 function FullArticle() {
   const [post, setPost] = useState(null);
@@ -52,7 +53,7 @@ function FullArticle() {
       })
       .catch((err) => {
         console.warn(err);
-        alertError("Article error", "An error occurred while receiving the article");
+        alertError(err.response.data.title, err.response.data.message);
         navigate("/");
       });
   }, []);
@@ -67,7 +68,7 @@ function FullArticle() {
       })
       .catch((err) => {
         console.warn(err);
-        alertError("Comments error", "Error getting comments");
+        // alertError(err.response.data.title, err.response.data.message);
       });
   }, [countNewComments]);
 
@@ -81,7 +82,7 @@ function FullArticle() {
       })
       .catch((err) => {
         console.warn(err);
-        alertError("Article error", "Failed to delete article");
+        alertError(err.response.data.title, err.response.data.message);
       });
   };
 
@@ -104,7 +105,7 @@ function FullArticle() {
                 maxHeight: "50vh",
                 objectFit: "cover",
               }}
-              src={post.imageUrl}
+              src={getImageUrlFromBuffer(post?.image)}
             />
 
             <ArticleInfoBlock
@@ -150,16 +151,17 @@ function FullArticle() {
           </Box>
         )}
       </Box>
-
-      <Comments
-        addCommnet
-        items={comments}
-        isLoaded={isLoadedComments}
-        postId={id}
-        onUpdate={handleUpdate}
-        countNewComments={countNewComments}
-        ownArticle={userData?._id === post?.user?._id}
-      />
+      {(comments?.length || userData) && (
+        <Comments
+          addCommnet
+          items={comments}
+          isLoaded={isLoadedComments}
+          postId={id}
+          onUpdate={handleUpdate}
+          countNewComments={countNewComments}
+          ownArticle={userData?._id === post?.user?._id}
+        />
+      )}
     </ContainerCustom>
   );
 }

@@ -37,7 +37,7 @@ function CommentsPage() {
       })
       .catch((err) => {
         console.warn(err);
-        alertError("Comment error", "Error receiving comments");
+        alertError(err.response.data.title, err.response.data.message);
       });
   };
 

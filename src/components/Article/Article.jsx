@@ -34,7 +34,7 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
       })
       .catch((err) => {
         console.warn(err);
-        alertError("Deletion error", "Failed to delete article");
+        alertError(err.response.data.title, err.response.data.message);
       });
   };
 

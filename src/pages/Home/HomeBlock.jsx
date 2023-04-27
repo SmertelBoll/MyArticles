@@ -10,6 +10,7 @@ import ArticleSkeleton from "../../components/Article/ArticleSkeleton";
 import MainButton from "../../components/Buttons/MainButton";
 
 import CreateIcon from "@mui/icons-material/Create";
+import { getImageUrlFromBuffer } from "../../services/image";
 
 function HomeBlock({
   items,
@@ -56,7 +57,7 @@ function HomeBlock({
                     _id={obj._id}
                     title={obj.title}
                     tags={obj.tags}
-                    imageUrl={obj.imageUrl}
+                    imageUrl={getImageUrlFromBuffer(obj?.image)}
                     date={obj.updatedAt}
                     user={obj.user}
                     viewsCount={obj.viewsCount}

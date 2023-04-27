@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Box, Drawer, Button, Avatar, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectIsAuth } from "../../redux/slices/AuthSlice";
 
+import { selectIsAuth } from "../../redux/slices/AuthSlice";
+import { getImageUrlFromBuffer } from "../../services/image";
 import MainButton from "../Buttons/MainButton";
 import SecondaryButton from "../Buttons/SecondaryButton";
 import ChangeAvatar from "../ChangeAvatar";
@@ -16,7 +17,6 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import CreateIcon from "@mui/icons-material/Create";
 import PersonIcon from "@mui/icons-material/Person";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
-import { getImageUrlFromBuffer } from "../../services/image";
 
 const BurgerMenu = ({ sx, onClickLogout }) => {
   // auth: show information to
@@ -51,25 +51,8 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
     setIsOpenChangeAvatar(false);
   };
 
-  // function ArrayBufferToBase64(buffer) {
-  //   let binary = "";
-  //   const bytes = new Uint8Array(buffer);
-  //   const len = bytes.byteLength;
-  //   for (let i = 0; i < len; i++) {
-  //     binary += String.fromCharCode(bytes[i]);
-  //   }
-  //   return window.btoa(binary);
-  // }
-
-  // const getImageUrlFromBuffer = (contentType, buffer) => {
-  //   if (contentType && buffer) {
-  //     const base64 = ArrayBufferToBase64(buffer);
-  //     setAvatarUrl(`data:${contentType};base64,${base64}`);
-  //   }
-  // };
-
   React.useEffect(() => {
-    const url = getImageUrlFromBuffer(data?.avatar?.contentType, data?.avatar?.data?.data);
+    const url = getImageUrlFromBuffer(data?.avatar);
     setAvatarUrl(url);
   }, [data]);
 

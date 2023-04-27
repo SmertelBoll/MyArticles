@@ -45,7 +45,7 @@ function Home() {
         })
         .catch((err) => {
           console.warn(err);
-          alertError("Comments error", "Error receiving comments");
+          alertError(err.response.data.title, err.response.data.message);
         });
     }
   }, [isAuth]);
@@ -72,7 +72,7 @@ function Home() {
       })
       .catch((err) => {
         console.warn(err);
-        alertError("Image error", "Failed to load articles");
+        alertError(err.response.data.title, err.response.data.message);
       });
   }, [searchValue]);
 

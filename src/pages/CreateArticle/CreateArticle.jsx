@@ -17,6 +17,7 @@ import MainButton from "../../components/Buttons/MainButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import "easymde/dist/easymde.min.css";
+import { getImageUrlFromBuffer } from "../../services/image";
 
 function CreateArticle({ update }) {
   const theme = useTheme();
@@ -26,7 +27,7 @@ function CreateArticle({ update }) {
   );
 
   const [imageUrl, setImageUrl] = useState("");
-  const [data, setData] = useState({
+  const [localData, setLocalData] = useState({
     title: "",
     text: "",
     tags: [],
@@ -48,17 +49,16 @@ function CreateArticle({ update }) {
             navigate("/");
           }
 
-          setData({
+          setLocalData({
             title: res.data.title,
             text: res.data.text,
             tags: res.data.tags,
-            image: res.data.imageUrl,
           });
-          setImageUrl(res.data.imageUrl);
+          setImageUrl(getImageUrlFromBuffer(res.data.image));
         })
         .catch((err) => {
           console.warn(err);
-          alertError("Editing error", "");
+          alertError(err.response.data.title, err.response.data.message);
           navigate("/");
         });
     } else {
@@ -67,7 +67,7 @@ function CreateArticle({ update }) {
       if (inputDataJSON !== null) {
         const inputData = JSON.parse(inputDataJSON);
 
-        setData((prevData) => ({
+        setLocalData((prevData) => ({
           ...prevData,
           title: inputData.title,
           text: inputData.text,
@@ -78,14 +78,14 @@ function CreateArticle({ update }) {
   }, [userData]);
 
   const onChangeTitle = (e) => {
-    setData((prevData) => ({
+    setLocalData((prevData) => ({
       ...prevData,
       title: e.target.value,
     }));
   };
 
   const onChangeText = useCallback((text) => {
-    setData((prevData) => ({
+    setLocalData((prevData) => ({
       ...prevData,
       text: text,
     }));
@@ -119,7 +119,7 @@ function CreateArticle({ update }) {
     if (file && file.type.startsWith("image/")) {
       const image = URL.createObjectURL(file);
 
-      setData((prevData) => ({
+      setLocalData((prevData) => ({
         ...prevData,
         image: file,
       }));
@@ -127,27 +127,9 @@ function CreateArticle({ update }) {
     }
   };
 
-  // upload image to DB
-  const uploadFileToDB = async () => {
-    try {
-      if (data.image && typeof data.image === "string") return data.image;
-
-      const formDataImg = new FormData();
-      formDataImg.append("image", data.image);
-
-      const { data: dataUrl } = await axios.post("/upload", formDataImg);
-
-      return `http://localhost:4444${dataUrl.url}`;
-    } catch (error) {
-      console.warn(error);
-      alertError("Image error", "Error loading file");
-      return null;
-    }
-  };
-
   //remove image
   const handleDeleteImage = () => {
-    setData((prevData) => ({
+    setLocalData((prevData) => ({
       ...prevData,
       image: null,
     }));
@@ -157,19 +139,30 @@ function CreateArticle({ update }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    let imgUrl = "";
-    if (data.image) {
-      imgUrl = await uploadFileToDB();
+    let imageId = null;
+    if (localData.image) {
+      console.log("image!!!");
+      try {
+        const formDataImg = new FormData();
+        formDataImg.append("image", localData.image);
+
+        const { data } = await axios.post("/upload", formDataImg);
+
+        imageId = data.id;
+      } catch (err) {
+        console.warn(err);
+        alertError(err.response.data.title, err.response.data.message);
+        return;
+      }
     }
 
-    if (imgUrl === null) return;
-
-    const formData = {
-      title: data.title,
-      text: data.text,
-      tags: data.tags,
-      imageUrl: imgUrl,
+    let formData = {
+      title: localData.title,
+      text: localData.text,
+      tags: localData.tags,
     };
+
+    if (imageId) formData["imageId"] = imageId;
 
     if (update) {
       // редагування
@@ -181,7 +174,7 @@ function CreateArticle({ update }) {
         })
         .catch((err) => {
           console.warn(err);
-          alertError("Editing error", "Error editing the article");
+          alertError("Article error", "failed to update the article");
         });
     } else {
       // створення
@@ -194,7 +187,7 @@ function CreateArticle({ update }) {
         })
         .catch((err) => {
           console.warn(err);
-          alertError("Article error", "Error creating the article");
+          alertError("Article error", "failed to create article");
         });
     }
   };
@@ -221,8 +214,8 @@ function CreateArticle({ update }) {
   );
 
   useEffect(() => {
-    if (!update) updateData(data);
-  }, [data]);
+    if (!update) updateData(localData);
+  }, [localData]);
 
   return (
     <ContainerCustom paddingY sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -252,7 +245,7 @@ function CreateArticle({ update }) {
               objectFit: "cover",
               borderRadius: "8px 8px 0 0",
             }}
-            src={imageUrl ? imageUrl : data.image}
+            src={imageUrl}
           />
         )}
         <Box sx={{ display: "flex", gap: 2 }}>
@@ -270,7 +263,7 @@ function CreateArticle({ update }) {
 
         {/* title */}
         <InputBox
-          value={data.title}
+          value={localData.title}
           onChange={onChangeTitle}
           required
           fullWidth
@@ -284,10 +277,10 @@ function CreateArticle({ update }) {
         />
 
         {/* tags */}
-        <InputTags formData={data} setFormData={setData} />
+        <InputTags formData={localData} setFormData={setLocalData} />
 
         {/* text */}
-        <SimpleMDE value={data.text} onChange={onChangeText} options={options} />
+        <SimpleMDE value={localData.text} onChange={onChangeText} options={options} />
 
         <MainButton type="submit">{update ? "Update the" : "Create an"} article</MainButton>
       </Box>

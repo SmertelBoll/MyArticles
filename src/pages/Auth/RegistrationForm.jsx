@@ -54,25 +54,6 @@ function RegistrationForm() {
     }
   };
 
-  // upload image to DB
-  const uploadFileToDB = async () => {
-    try {
-      const formDataImg = new FormData();
-      formDataImg.append("image", localData.avatar);
-
-      const image = await axios.post("/upload", formDataImg);
-
-      setLocalData((prevData) => ({
-        ...prevData,
-        avatar: image,
-      }));
-    } catch (error) {
-      console.warn(error);
-      alertError("Image error", "Error loading file");
-      return { err: true };
-    }
-  };
-
   const handleDeleteAvatar = () => {
     setLocalData((prevData) => ({
       ...prevData,
@@ -99,9 +80,9 @@ function RegistrationForm() {
         const { data } = await axios.post("/upload", formDataImg);
 
         avatarId = data.id;
-      } catch (error) {
-        console.warn(error);
-        alertError("Image error", "Error loading file");
+      } catch (err) {
+        console.warn(err);
+        alertError(err.response.data.title, err.response.data.message);
         return;
       }
     }

@@ -8,7 +8,10 @@ function ArrayBufferToBase64(buffer) {
   return window.btoa(binary);
 }
 
-export const getImageUrlFromBuffer = (contentType, buffer) => {
+export const getImageUrlFromBuffer = (obj) => {
+  const contentType = obj?.contentType;
+  const buffer = obj?.data?.data;
+
   if (contentType && buffer) {
     const base64 = ArrayBufferToBase64(buffer);
     return `data:${contentType};base64,${base64}`;

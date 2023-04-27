@@ -13,7 +13,7 @@ function ArticleInfoBlock({ title, text, tags, date, user, viewsCount, commentsC
   const [avatarUrl, setAvatarUrl] = useState("");
 
   React.useEffect(() => {
-    const url = getImageUrlFromBuffer(user?.avatar?.contentType, user?.avatar?.data?.data);
+    const url = getImageUrlFromBuffer(user?.avatar);
     setAvatarUrl(url);
   }, [user]);
 
