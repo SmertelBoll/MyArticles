@@ -17,6 +17,7 @@ function CommentsPage() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [firstLoaded, setFirstLoaded] = useState(false);
 
   const navigate = useNavigate();
 
@@ -34,6 +35,11 @@ function CommentsPage() {
 
         setIsLoaded(true);
         setIsLoading(false);
+
+        if (!firstLoaded) {
+          setFirstLoaded(true);
+          setSkip(limit);
+        }
       })
       .catch((err) => {
         console.warn(err);
@@ -42,7 +48,11 @@ function CommentsPage() {
   };
 
   useEffect(() => {
-    if (hasMore) {
+    handleLoadMore();
+  }, []);
+
+  useEffect(() => {
+    if (hasMore && firstLoaded) {
       setIsLoading(true);
       handleLoadMore();
     }
@@ -50,12 +60,15 @@ function CommentsPage() {
 
   const loader = useRef(null);
 
-  const handleObserver = useCallback((entries) => {
-    const target = entries[0];
-    if (target.isIntersecting && !isLoading) {
-      setSkip((prev) => prev + limit);
-    }
-  }, []);
+  const handleObserver = useCallback(
+    (entries) => {
+      const target = entries[0];
+      if (target.isIntersecting && !isLoading && firstLoaded && hasMore) {
+        setSkip((prev) => prev + limit);
+      }
+    },
+    [firstLoaded, hasMore]
+  );
 
   useEffect(() => {
     const option = {
@@ -72,7 +85,7 @@ function CommentsPage() {
       <MainButton startIcon={<ArrowBackIcon />} onClick={handleBack} sx={{ alignSelf: "start" }}>
         Back
       </MainButton>
-      <Comments items={comments} isLoaded={isLoaded} hasMore={hasMore} commentPage />
+      <Comments items={comments} isLoaded={isLoaded} hasMore={hasMore && firstLoaded} commentPage />
       <div ref={loader} disabled></div>
     </ContainerCustom>
   );

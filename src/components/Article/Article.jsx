@@ -12,6 +12,15 @@ import ArticleInfoBlock from "./ArticleInfoBlock";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 
+// these articles cannot be deleted, they are needed for a pleasant decoration of the site and display of its capabilities
+const ids = [
+  "644ace279845d0b6d7418ac5",
+  "644ad40d9845d0b6d7418bac",
+  "644ad55f9845d0b6d7418bfd",
+  "644ad7059845d0b6d7418c45",
+  "644aebf5ee0997d82086b51a",
+];
+
 function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsCount, isOwner, isAdmin }) {
   const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
@@ -88,7 +97,7 @@ function Article({ _id, title, tags, imageUrl, date, user, viewsCount, commentsC
       </Link>
 
       {/* update button */}
-      {(isOwner || isAdmin) && (
+      {(isOwner || isAdmin) && !ids.includes(_id) && (
         <Box
           sx={{
             position: "absolute",

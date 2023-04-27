@@ -17,16 +17,18 @@ import { getTheme } from "./theme/theme";
 
 function App() {
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(fetchAuthMe());
   }, []);
 
-  const [mode, setMode] = React.useState("light");
+  const savedMode = window.localStorage.getItem("mode");
+
+  const [mode, setMode] = React.useState(savedMode ? savedMode : "light");
   const colorMode = React.useMemo(
     () => ({
       // The dark mode switch would invoke this method
       toggleColorMode: () => {
+        window.localStorage.setItem("mode", mode === "light" ? "dark" : "light");
         setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
       },
     }),

@@ -123,7 +123,7 @@ function Comments({
                 <CommentBlock
                   key={obj._id}
                   text={obj.text}
-                  avatarUrl={getImageUrlFromBuffer(obj?.user)}
+                  avatarUrl={getImageUrlFromBuffer(obj?.user?.avatar)}
                   fullname={obj.user.fullName}
                   smallComment={smallComment}
                 />

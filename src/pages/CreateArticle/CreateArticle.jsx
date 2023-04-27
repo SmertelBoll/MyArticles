@@ -95,7 +95,7 @@ function CreateArticle({ update }) {
   const options = useMemo(
     () => ({
       spellChecker: false,
-      maxHeight: "85vh",
+      maxHeight: "75vh",
       autofocus: true,
       placeholder: "Enter text...",
       status: false,

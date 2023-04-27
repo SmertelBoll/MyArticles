@@ -5,13 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "../../axios";
 import { useTheme } from "@mui/material/styles";
 
+import { alertError } from "../../alerts";
 import { fetchRegister, selectIsAuth } from "../../redux/slices/AuthSlice";
 import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
 import ContainerCustom from "../../components/customMUI/ContainerCustom";
 import MainButton from "../../components/Buttons/MainButton";
 
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import { alertError } from "../../alerts";
 
 function RegistrationForm() {
   const theme = useTheme();
@@ -23,9 +23,9 @@ function RegistrationForm() {
   const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
   const [localData, setLocalData] = useState({
-    fullName: "lol lol",
-    email: "lol@lol.com",
-    password: "12345",
+    fullName: "",
+    email: "",
+    password: "",
     avatar: null,
   });
   const [avatarUrl, setAvatarUrl] = useState("");

@@ -17,6 +17,15 @@ import EditIcon from "@mui/icons-material/Edit";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { getImageUrlFromBuffer } from "../services/image";
 
+// these articles cannot be deleted, they are needed for a pleasant decoration of the site and display of its capabilities
+const ids = [
+  "644ace279845d0b6d7418ac5",
+  "644ad40d9845d0b6d7418bac",
+  "644ad55f9845d0b6d7418bfd",
+  "644ad7059845d0b6d7418c45",
+  "644aebf5ee0997d82086b51a",
+];
+
 function FullArticle() {
   const [post, setPost] = useState(null);
   const [isLoadedPosts, setIsLoadedPosts] = useState(false);
@@ -125,31 +134,33 @@ function FullArticle() {
         )}
 
         {/* isLoaded and (admin or own post) */}
-        {isLoadedPosts && (userData?.accessLevel === "admin" || userData?._id === post?.user?._id) && (
-          <Box
-            sx={{
-              position: "absolute",
-              top: 10,
-              right: 10,
-              bgcolor: "bg.second",
-              p: "3px",
-              borderRadius: 2,
-            }}
-          >
-            <Tooltip title={<Typography fontSize={16}>Edit</Typography>} placement="top">
-              <Link to={`/update/${id}`}>
-                <IconButton sx={{ color: "text.main" }}>
-                  <EditIcon />
+        {isLoadedPosts &&
+          (userData?.accessLevel === "admin" || userData?._id === post?.user?._id) &&
+          !ids.includes(id) && (
+            <Box
+              sx={{
+                position: "absolute",
+                top: 10,
+                right: 10,
+                bgcolor: "bg.second",
+                p: "3px",
+                borderRadius: 2,
+              }}
+            >
+              <Tooltip title={<Typography fontSize={16}>Edit</Typography>} placement="top">
+                <Link to={`/update/${id}`}>
+                  <IconButton sx={{ color: "text.main" }}>
+                    <EditIcon />
+                  </IconButton>
+                </Link>
+              </Tooltip>
+              <Tooltip title={<Typography fontSize={16}>Delete</Typography>} placement="top">
+                <IconButton sx={{ color: "text.main" }} onClick={handleDeleteArticle}>
+                  <CloseIcon />
                 </IconButton>
-              </Link>
-            </Tooltip>
-            <Tooltip title={<Typography fontSize={16}>Delete</Typography>} placement="top">
-              <IconButton sx={{ color: "text.main" }} onClick={handleDeleteArticle}>
-                <CloseIcon />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        )}
+              </Tooltip>
+            </Box>
+          )}
       </Box>
       {(comments?.length || userData) && (
         <Comments
