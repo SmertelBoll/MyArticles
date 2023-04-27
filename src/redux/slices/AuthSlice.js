@@ -41,7 +41,7 @@ const authSlice = createSlice({
     },
     [fetchAuth.rejected]: (state) => {
       state.data = null;
-      state.isLoaded = true;
+      state.isLoaded = false;
     },
     [fetchAuthMe.pending]: (state) => {
       state.data = null;
@@ -53,7 +53,7 @@ const authSlice = createSlice({
     },
     [fetchAuthMe.rejected]: (state) => {
       state.data = null;
-      state.isLoaded = true;
+      state.isLoaded = false;
     },
     [fetchRegister.pending]: (state) => {
       state.data = null;
@@ -65,7 +65,7 @@ const authSlice = createSlice({
     },
     [fetchRegister.rejected]: (state) => {
       state.data = null;
-      state.isLoaded = true;
+      state.isLoaded = false;
     },
   },
 });

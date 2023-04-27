@@ -1,6 +1,6 @@
 import { Box, IconButton } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useTheme } from "@mui/material/styles";
 
@@ -17,11 +17,13 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 function Header({ colorMode, mode }) {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const isAuth = useSelector(selectIsAuth);
 
   const logOutFunc = () => {
     window.localStorage.removeItem("token");
     dispatch(logout());
+    navigate("/");
   };
 
   const onClickLogout = () => {

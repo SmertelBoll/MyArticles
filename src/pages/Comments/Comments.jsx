@@ -12,6 +12,7 @@ import CommentSkeleton from "./CommentSkeleton";
 import CircularProgressCustom from "../../components/customMUI/CircularProgressCustom";
 
 import TelegramIcon from "@mui/icons-material/Telegram";
+import { getImageUrlFromBuffer } from "../../services/image";
 
 function Comments({
   addCommnet,
@@ -30,8 +31,14 @@ function Comments({
     [theme.palette.mode]
   );
 
-  const [commentText, setCommentText] = useState("");
   const { data: userData, isLoaded: isLoadedDataUser } = useSelector((state) => state.auth);
+  const [commentText, setCommentText] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
+
+  React.useEffect(() => {
+    const url = getImageUrlFromBuffer(userData?.avatar?.contentType, userData?.avatar?.data?.data);
+    setAvatarUrl(url);
+  }, [userData]);
 
   const isPoints = items?.length >= 5;
 
@@ -79,9 +86,9 @@ function Comments({
       )}
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
-        {addCommnet && isLoadedDataUser && !ownArticle && (
+        {addCommnet && isLoadedDataUser && !ownArticle && isLoaded && (
           <Box sx={{ display: "flex", gap: 2, mb: 2, width: "100%" }}>
-            <Avatar src={userData?.avatarUrl} sx={{ display: { xs: "none", sm: "flex" } }} />
+            <Avatar src={avatarUrl || ""} sx={{ display: { xs: "none", sm: "flex" } }} />
 
             <Box
               component="form"
@@ -116,7 +123,10 @@ function Comments({
                 <CommentBlock
                   key={obj._id}
                   text={obj.text}
-                  avatarUrl={obj.user.avatarUrl}
+                  avatarUrl={getImageUrlFromBuffer(
+                    obj?.user?.avatar?.contentType,
+                    obj?.user?.avatar?.data?.data
+                  )}
                   fullname={obj.user.fullName}
                   smallComment={smallComment}
                 />

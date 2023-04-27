@@ -22,17 +22,17 @@ function RegistrationForm() {
 
   const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
-  const [data, setData] = useState({
-    fullName: "",
-    email: "",
-    password: "",
+  const [localData, setLocalData] = useState({
+    fullName: "lol lol",
+    email: "lol@lol.com",
+    password: "12345",
     avatar: null,
   });
   const [avatarUrl, setAvatarUrl] = useState("");
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setData((prevData) => ({
+    setLocalData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -46,7 +46,7 @@ function RegistrationForm() {
     if (file && file.type.startsWith("image/")) {
       const imageUrl = URL.createObjectURL(file);
 
-      setData((prevData) => ({
+      setLocalData((prevData) => ({
         ...prevData,
         avatar: file,
       }));
@@ -57,23 +57,24 @@ function RegistrationForm() {
   // upload image to DB
   const uploadFileToDB = async () => {
     try {
-      if (data.avatar && typeof data.avatar === "string") return data.avatar;
-
       const formDataImg = new FormData();
-      formDataImg.append("image", data.avatar);
+      formDataImg.append("image", localData.avatar);
 
-      const { data: dataUrl } = await axios.post("/upload", formDataImg);
+      const image = await axios.post("/upload", formDataImg);
 
-      return `http://localhost:4444${dataUrl.url}`;
+      setLocalData((prevData) => ({
+        ...prevData,
+        avatar: image,
+      }));
     } catch (error) {
       console.warn(error);
       alertError("Image error", "Error loading file");
-      return null;
+      return { err: true };
     }
   };
 
   const handleDeleteAvatar = () => {
-    setData((prevData) => ({
+    setLocalData((prevData) => ({
       ...prevData,
       avatar: null,
     }));
@@ -89,19 +90,29 @@ function RegistrationForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    let avaUrl = "";
-    if (data.avatar) {
-      avaUrl = await uploadFileToDB();
+    let avatarId = null;
+    if (localData.avatar) {
+      try {
+        const formDataImg = new FormData();
+        formDataImg.append("image", localData.avatar);
+
+        const { data } = await axios.post("/upload", formDataImg);
+
+        avatarId = data.id;
+      } catch (error) {
+        console.warn(error);
+        alertError("Image error", "Error loading file");
+        return;
+      }
     }
 
-    if (avaUrl === null) return;
-
-    const formData = {
-      fullName: data.fullName,
-      email: data.email,
-      password: data.password,
-      avatarUrl: avaUrl,
+    let formData = {
+      fullName: localData.fullName,
+      email: localData.email,
+      password: localData.password,
     };
+
+    if (avatarId) formData["avatarId"] = avatarId;
 
     const resData = await dispatch(fetchRegister(formData));
 
@@ -165,7 +176,7 @@ function RegistrationForm() {
           </Box>
 
           <InputBox
-            value={data.fullName}
+            value={localData.fullName}
             onChange={handleInputChange}
             required
             fullWidth
@@ -175,7 +186,7 @@ function RegistrationForm() {
             autoFocus
           />
           <InputBox
-            value={data.email}
+            value={localData.email}
             onChange={handleInputChange}
             required
             fullWidth
@@ -184,7 +195,7 @@ function RegistrationForm() {
             name="email"
           />
           <InputBox
-            value={data.password}
+            value={localData.password}
             onChange={handleInputChange}
             required
             fullWidth

@@ -15,7 +15,7 @@ export const fetchPopularPosts = createAsyncThunk("posts/fetchPopularPosts", asy
 const initialState = {
   new: {
     items: [],
-    status: "",
+    isLoaded: false,
   },
   popular: {
     items: [],

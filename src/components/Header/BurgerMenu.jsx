@@ -16,6 +16,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import CreateIcon from "@mui/icons-material/Create";
 import PersonIcon from "@mui/icons-material/Person";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
+import { getImageUrlFromBuffer } from "../../services/image";
 
 const BurgerMenu = ({ sx, onClickLogout }) => {
   // auth: show information to
@@ -36,6 +37,7 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
   const { data, isLoaded } = useSelector((state) => state.auth);
   const [open, setOpen] = useState(false); // drawer
   const [isOpenChangeAvatar, setIsOpenChangeAvatar] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState(null);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -48,6 +50,28 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
   const handleDialogClose = () => {
     setIsOpenChangeAvatar(false);
   };
+
+  // function ArrayBufferToBase64(buffer) {
+  //   let binary = "";
+  //   const bytes = new Uint8Array(buffer);
+  //   const len = bytes.byteLength;
+  //   for (let i = 0; i < len; i++) {
+  //     binary += String.fromCharCode(bytes[i]);
+  //   }
+  //   return window.btoa(binary);
+  // }
+
+  // const getImageUrlFromBuffer = (contentType, buffer) => {
+  //   if (contentType && buffer) {
+  //     const base64 = ArrayBufferToBase64(buffer);
+  //     setAvatarUrl(`data:${contentType};base64,${base64}`);
+  //   }
+  // };
+
+  React.useEffect(() => {
+    const url = getImageUrlFromBuffer(data?.avatar?.contentType, data?.avatar?.data?.data);
+    setAvatarUrl(url);
+  }, [data]);
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
@@ -84,7 +108,7 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
         {isAuth && (
           <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
             <Avatar
-              src={data?.avatarUrl}
+              src={avatarUrl}
               onClick={() => setIsOpenChangeAvatar(true)}
               sx={{ width: { xs: 50, sm: 75 }, height: { xs: 50, sm: 75 }, cursor: "pointer" }}
             />
