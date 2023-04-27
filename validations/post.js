@@ -1,8 +1,7 @@
 import { body } from "express-validator";
 
 export const postCreateValidation = [
-  body("title", "Заголовок повинен містити мінімум 3 символів").isLength({ min: 3 }).isString(),
-  body("text", "Текст повинен містити мінімум 10 символів").isLength({ min: 10 }).isString(),
-  body("tags", "Неправильний формат тегів").optional().isArray(),
-  // body("imageUrl", "Неправильне посилання на зображення").optional().isString(),
+  body("title", "Header must contain at least 3 characters").isLength({ min: 3 }).isString(),
+  body("text", "Text must contain at least 5 characters").isLength({ min: 5 }).isString(),
+  body("tags", "Invalid tag format").optional().isArray(),
 ];

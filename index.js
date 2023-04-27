@@ -2,8 +2,6 @@ import express from "express";
 import mongoose from "mongoose";
 import multer from "multer";
 import cors from "cors";
-import { v4 as uuidv4 } from "uuid";
-import * as fs from "fs";
 
 import { loginValidation, registerValidation } from "./validations/auth.js";
 import { checkValidationError } from "./utils/checkValidationError.js";
@@ -66,44 +64,6 @@ app.get("/", (req, res) => {
 app.post("/auth/register", registerValidation, checkValidationError, registerUser);
 app.post("/auth/login", loginValidation, checkValidationError, loginUser);
 app.get("/auth/me", checkAuth, getMe);
-
-// app.post("/upload", upload.single("image"), (req, res) => {
-//   try {
-//     const newFilename = uuidv4() + "." + req.file.originalname.split(".").pop();
-//     const oldPath = req.file.path;
-//     const newPath = req.file.destination + "/" + newFilename;
-
-//     fs.rename(oldPath, newPath, (error) => {
-//       if (error) {
-//         console.log(error);
-//         res.status(400).json({
-//           message: "Невдалося перейменувати файл",
-//         });
-//       } else {
-//         res.json({
-//           url: `/uploads/${newFilename}`,
-//         });
-//       }
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(400).json({
-//       message: "Невдалося завантажити файл",
-//     });
-//   }
-// });
-
-// app.get("/download/:filename", (req, res) => {
-//   try {
-//     const filename = req.params.filename;
-//     const filePath = "uploads/" + filename;
-//     res.download(filePath);
-//   } catch (error) {
-//     res.status(400).json({
-//       message: "Невдалося скачати файл",
-//     });
-//   }
-// });
 
 app.post("/upload", upload.single("image"), uploadFile);
 app.get("/image/:fileId", download);

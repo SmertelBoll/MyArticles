@@ -21,6 +21,7 @@ export const getAllPosts = async (req, res) => {
             path: "avatar",
           },
         })
+        .populate("image")
         .exec();
     } else {
       if (filter) {
@@ -32,6 +33,7 @@ export const getAllPosts = async (req, res) => {
               path: "avatar",
             },
           })
+          .populate("image")
           .exec();
       } else {
         posts = await PostModel.find({ title: regex })
@@ -42,6 +44,7 @@ export const getAllPosts = async (req, res) => {
               path: "avatar",
             },
           })
+          .populate("image")
           .exec();
       }
     }
@@ -49,9 +52,7 @@ export const getAllPosts = async (req, res) => {
     res.send(posts);
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      message: "не вдалося получити статті",
-    });
+    res.status(500).json({ title: "Article error", message: "failed to get articles" });
   }
 };
 
@@ -72,28 +73,30 @@ export const getOnePost = async (req, res) => {
       {
         new: true,
       }
-    ).populate({
-      path: "user",
-      populate: {
-        path: "avatar",
-      },
-    });
+    )
+      .populate({
+        path: "user",
+        populate: {
+          path: "avatar",
+        },
+      })
+      .populate("image");
     res.send(posts);
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      message: "не вдалося получити статтю",
-    });
+    res.status(500).json({ title: "Article error", message: "failed to get article" });
   }
 };
 
 export const createPost = async (req, res) => {
   try {
+    const imageId = req.body.imageId;
+
     const doc = new PostModel({
       title: req.body.title,
       text: req.body.text,
       tags: req.body.tags,
-      imageUrl: req.body.imageUrl,
+      image: imageId,
       user: req.userId,
     });
 
@@ -102,9 +105,7 @@ export const createPost = async (req, res) => {
     res.json(post);
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      message: "не вдалося створити статтю",
-    });
+    res.status(500).json({ title: "Article error", message: "failed to create article" });
   }
 };
 
@@ -117,10 +118,8 @@ export const removePost = async (req, res) => {
     const currentUser = await UserModel.findById(currentUserId);
 
     if (currentUserId !== currentPost[0].user._id.toString() && currentUser.accessLevel !== "admin") {
-      console.log("відмовлено в доступі");
-      return res.status(500).json({
-        message: "відмовлено в доступі",
-      });
+      console.log("access is denied");
+      return res.status(500).json({ title: "Article error", message: "access is denied" });
     }
 
     const post = await PostModel.findOneAndDelete({
@@ -128,8 +127,9 @@ export const removePost = async (req, res) => {
     });
 
     if (!post) {
-      return res.json({
-        message: "стаття не знайдена",
+      return res.status(404).json({
+        title: "Article error",
+        message: "article not found",
       });
     }
 
@@ -138,9 +138,7 @@ export const removePost = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      message: "не вдалося удалити статтю",
-    });
+    res.status(500).json({ title: "Article error", message: "failed to delete article" });
   }
 };
 
@@ -153,11 +151,11 @@ export const updatePost = async (req, res) => {
     const currentUser = await UserModel.findById(currentUserId);
 
     if (currentUserId !== post[0].user._id.toString() && currentUser.accessLevel !== "admin") {
-      console.log("відмовлено в доступі");
-      return res.status(500).json({
-        message: "відмовлено в доступі",
-      });
+      console.log("access is denied");
+      return res.status(500).json({ title: "Article error", message: "access is denied" });
     }
+
+    const imageId = req.body.imageId;
 
     await PostModel.updateOne(
       {
@@ -167,18 +165,16 @@ export const updatePost = async (req, res) => {
         title: req.body.title,
         text: req.body.text,
         tags: req.body.tags,
-        imageUrl: req.body.imageUrl,
+        image: imageId ? imageId : post[0].image,
         user: post[0].user._id,
       }
-    );
+    ).populate("image");
 
     res.json({
       success: true,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      message: "не вдалося обновити статтю",
-    });
+    res.status(500).json({ title: "Article error", message: "failed to update the article" });
   }
 };

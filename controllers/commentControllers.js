@@ -18,9 +18,7 @@ export const getAllCommentsByPost = async (req, res) => {
     res.send(comments);
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      message: "не вдалося получити коментарі",
-    });
+    res.status(500).json({ title: "Comments error", message: "could not get comments" });
   }
 };
 
@@ -76,9 +74,7 @@ export const getAllCommentsByUser = async (req, res) => {
     res.send(comments);
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      message: "не вдалося получити коментарі",
-    });
+    res.status(500).json({ title: "Comments error", message: "could not get comments" });
   }
 };
 
@@ -106,9 +102,7 @@ export const createComment = async (req, res) => {
     res.json(comment);
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      message: "не вдалося написати коментар",
-    });
+    res.status(500).json({ title: "Comments error", message: "could not write a comment" });
   }
 };
 
@@ -121,8 +115,9 @@ export const removeComment = async (req, res) => {
     });
 
     if (!comment) {
-      return res.json({
-        message: "каментар не знайдений",
+      return res.status(404).json({
+        title: "Comments error",
+        message: "no comment found",
       });
     }
 
@@ -142,8 +137,6 @@ export const removeComment = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      message: "не вдалося удалити коментарій",
-    });
+    res.status(500).json({ title: "Comments error", message: "failed to delete comment" });
   }
 };

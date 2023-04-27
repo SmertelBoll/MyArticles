@@ -38,10 +38,12 @@ export const registerUser = async (req, res) => {
       token,
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      message: "не вдалося зареєструватися",
-    });
+    if (error.code === 11000) {
+      return res
+        .status(400)
+        .json({ title: "Authorization error", message: "the user with this email is already registered" });
+    }
+    res.status(500).json({ title: "Authorization error", message: "failed to register" });
   }
 };
 
@@ -50,17 +52,13 @@ export const loginUser = async (req, res) => {
     const user = await UserModel.findOne({ email: req.body.email }).populate("avatar").exec();
 
     if (!user) {
-      return res.status(404).json({
-        message: "користувач не знайдений",
-      });
+      return res.status(404).json({ title: "Authorization error", message: "user not found" });
     }
 
     const isValidPassword = await bcrypt.compare(req.body.password, user.passwordHash);
 
     if (!isValidPassword) {
-      return res.status(400).json({
-        message: "неправильний логін чи пароль",
-      });
+      return res.status(400).json({ title: "Authorization error", message: "wrong login or password" });
     }
 
     const token = jwt.sign(
@@ -80,9 +78,7 @@ export const loginUser = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      message: "не вдалося авторизуватись",
-    });
+    res.status(500).json({ title: "Authorization error", message: "failed to authenticate" });
   }
 };
 
@@ -91,9 +87,7 @@ export const getMe = async (req, res) => {
     const user = await UserModel.findById(req.userId).populate("avatar").exec();
 
     if (!user) {
-      return res.status(404).json({
-        message: "Користувач не знайдений",
-      });
+      return res.status(404).json({ title: "Authorization error", message: "user not found" });
     }
 
     res.json({
@@ -101,8 +95,6 @@ export const getMe = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      message: "Невдалося отримати дані",
-    });
+    res.status(500).json({ title: "Authorization error", message: "failed to get data" });
   }
 };
