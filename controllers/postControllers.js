@@ -1,5 +1,5 @@
-import PostSchema from "../models/post.js";
-import UserSchema from "../models/user.js";
+import PostModel from "../models/post.js";
+import UserModel from "../models/user.js";
 
 export const getAllPosts = async (req, res) => {
   try {
@@ -13,12 +13,36 @@ export const getAllPosts = async (req, res) => {
 
     if (sortBy) {
       sortObj[sortBy] = -1;
-      posts = await PostSchema.find({ title: regex }).sort(sortObj).populate("user").exec();
+      posts = await PostModel.find({ title: regex })
+        .sort(sortObj)
+        .populate({
+          path: "user",
+          populate: {
+            path: "avatar",
+          },
+        })
+        .exec();
     } else {
       if (filter) {
-        posts = await PostSchema.find({ title: regex }).sort({ viewsCount: -1 }).populate("user").exec();
+        posts = await PostModel.find({ title: regex })
+          .sort({ viewsCount: -1 })
+          .populate({
+            path: "user",
+            populate: {
+              path: "avatar",
+            },
+          })
+          .exec();
       } else {
-        posts = await PostSchema.find({ title: regex }).sort({ createdAt: -1 }).populate("user").exec();
+        posts = await PostModel.find({ title: regex })
+          .sort({ createdAt: -1 })
+          .populate({
+            path: "user",
+            populate: {
+              path: "avatar",
+            },
+          })
+          .exec();
       }
     }
 
@@ -35,7 +59,7 @@ export const getOnePost = async (req, res) => {
   try {
     const postId = req.params.id;
 
-    const posts = await PostSchema.findOneAndUpdate(
+    const posts = await PostModel.findOneAndUpdate(
       // filter
       {
         _id: postId, //по чому шукаємо
@@ -48,7 +72,12 @@ export const getOnePost = async (req, res) => {
       {
         new: true,
       }
-    ).populate("user");
+    ).populate({
+      path: "user",
+      populate: {
+        path: "avatar",
+      },
+    });
     res.send(posts);
   } catch (error) {
     console.log(error);
@@ -60,7 +89,7 @@ export const getOnePost = async (req, res) => {
 
 export const createPost = async (req, res) => {
   try {
-    const doc = new PostSchema({
+    const doc = new PostModel({
       title: req.body.title,
       text: req.body.text,
       tags: req.body.tags,
@@ -84,8 +113,8 @@ export const removePost = async (req, res) => {
     const postId = req.params.id;
     const currentUserId = req.userId;
 
-    const currentPost = await PostSchema.find({ _id: postId }).populate("user").exec();
-    const currentUser = await UserSchema.findById(currentUserId);
+    const currentPost = await PostModel.find({ _id: postId }).populate("user").exec();
+    const currentUser = await UserModel.findById(currentUserId);
 
     if (currentUserId !== currentPost[0].user._id.toString() && currentUser.accessLevel !== "admin") {
       console.log("відмовлено в доступі");
@@ -94,7 +123,7 @@ export const removePost = async (req, res) => {
       });
     }
 
-    const post = await PostSchema.findOneAndDelete({
+    const post = await PostModel.findOneAndDelete({
       _id: postId,
     });
 
@@ -120,8 +149,8 @@ export const updatePost = async (req, res) => {
     const postId = req.params.id;
     const currentUserId = req.userId;
 
-    const post = await PostSchema.find({ _id: postId }).populate("user").exec();
-    const currentUser = await UserSchema.findById(currentUserId);
+    const post = await PostModel.find({ _id: postId }).populate("user").exec();
+    const currentUser = await UserModel.findById(currentUserId);
 
     if (currentUserId !== post[0].user._id.toString() && currentUser.accessLevel !== "admin") {
       console.log("відмовлено в доступі");
@@ -130,7 +159,7 @@ export const updatePost = async (req, res) => {
       });
     }
 
-    await PostSchema.updateOne(
+    await PostModel.updateOne(
       {
         _id: postId,
       },

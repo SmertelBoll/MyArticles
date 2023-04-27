@@ -1,13 +1,18 @@
-import CommentSchema from "../models/comment.js";
-import PostSchema from "../models/post.js";
+import CommentModel from "../models/comment.js";
+import PostModel from "../models/post.js";
 
 export const getAllCommentsByPost = async (req, res) => {
   try {
     const postId = req.params.postId;
 
-    const comments = await CommentSchema.find({ post: postId })
+    const comments = await CommentModel.find({ post: postId })
       .sort({ createdAt: -1 })
-      .populate("user")
+      .populate({
+        path: "user",
+        populate: {
+          path: "avatar",
+        },
+      })
       .exec();
 
     res.send(comments);
@@ -25,35 +30,48 @@ export const getAllCommentsByUser = async (req, res) => {
     const limitOfComments = req.query.limit;
     const skipOfComments = req.query.skip;
 
-    const postsByUser = await PostSchema.find({ user: userId }).exec();
+    const postsByUser = await PostModel.find({ user: userId }).exec();
 
     const postsId = postsByUser.map((obj) => obj._id);
 
     let comments = [];
 
     if (limitOfComments && skipOfComments) {
-      comments = await CommentSchema.find({ post: { $in: postsId } })
+      comments = await CommentModel.find({ post: { $in: postsId } })
         .sort({ createdAt: -1 })
         .skip(parseInt(skipOfComments))
         .limit(parseInt(limitOfComments))
-        .populate("user")
+        .populate({
+          path: "user",
+          populate: {
+            path: "avatar",
+          },
+        })
         .exec();
     } else {
       if (limitOfComments) {
-        comments = await CommentSchema.find({ post: { $in: postsId } })
+        comments = await CommentModel.find({ post: { $in: postsId } })
           .sort({ createdAt: -1 })
           .limit(parseInt(limitOfComments))
-          .populate("user")
+          .populate({
+            path: "user",
+            populate: {
+              path: "avatar",
+            },
+          })
           .exec();
       } else {
-        comments = await CommentSchema.find({ post: { $in: postsId } })
+        comments = await CommentModel.find({ post: { $in: postsId } })
           .sort({ createdAt: -1 })
-          .populate("user")
+          .populate({
+            path: "user",
+            populate: {
+              path: "avatar",
+            },
+          })
           .exec();
       }
     }
-
-    console.log(comments);
 
     res.send(comments);
   } catch (error) {
@@ -66,7 +84,7 @@ export const getAllCommentsByUser = async (req, res) => {
 
 export const createComment = async (req, res) => {
   try {
-    const doc = new CommentSchema({
+    const doc = new CommentModel({
       text: req.body.text,
       post: req.body.postId,
       user: req.userId,
@@ -74,7 +92,7 @@ export const createComment = async (req, res) => {
 
     const comment = await doc.save();
 
-    await PostSchema.findOneAndUpdate(
+    await PostModel.findOneAndUpdate(
       // filter
       {
         _id: req.body.postId, //по чому шукаємо
@@ -98,7 +116,7 @@ export const removeComment = async (req, res) => {
   try {
     const commentId = req.params.id;
 
-    const comment = await CommentSchema.findOneAndDelete({
+    const comment = await CommentModel.findOneAndDelete({
       _id: commentId,
     });
 
@@ -108,7 +126,7 @@ export const removeComment = async (req, res) => {
       });
     }
 
-    await PostSchema.findOneAndUpdate(
+    await PostModel.findOneAndUpdate(
       // filter
       {
         _id: comment.post, //по чому шукаємо

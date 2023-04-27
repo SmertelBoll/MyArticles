@@ -15,13 +15,13 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    avatarUrl: {
-      type: String,
-      default: "",
-    },
     accessLevel: {
       type: String,
       default: "ordinary",
+    },
+    avatar: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Image",
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

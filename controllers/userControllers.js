@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-import UserSchema from "../models/user.js";
+import UserModel from "../models/user.js";
+import ImageModel from "../models/image.js";
 
 export const registerUser = async (req, res) => {
   try {
@@ -9,10 +10,14 @@ export const registerUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10); // шифрування
     const hash = await bcrypt.hash(password, salt);
 
-    const doc = new UserSchema({
+    const avatarId = req.body.avatarId;
+
+    const image = await ImageModel.findById(avatarId);
+
+    const doc = new UserModel({
       email: req.body.email,
       fullName: req.body.fullName,
-      avatarUrl: req.body.avatarUrl,
+      avatar: image,
       passwordHash: hash,
     });
 
@@ -42,7 +47,7 @@ export const registerUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   try {
-    const user = await UserSchema.findOne({ email: req.body.email });
+    const user = await UserModel.findOne({ email: req.body.email }).populate("avatar").exec();
 
     if (!user) {
       return res.status(404).json({
@@ -83,7 +88,7 @@ export const loginUser = async (req, res) => {
 
 export const getMe = async (req, res) => {
   try {
-    const user = await UserSchema.findById(req.userId);
+    const user = await UserModel.findById(req.userId).populate("avatar").exec();
 
     if (!user) {
       return res.status(404).json({
