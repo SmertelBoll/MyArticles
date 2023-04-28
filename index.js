@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import multer from "multer";
 import cors from "cors";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 import { loginValidation, registerValidation } from "./validations/auth.js";
 import { checkValidationError } from "./utils/checkValidationError.js";
@@ -25,10 +27,9 @@ import { commentCreateValidation } from "./validations/comment.js";
 import { download, uploadFile } from "./controllers/imageControllers.js";
 
 // підключаємось до бази даних
+const mongoConnection = process.env.MONGO_CONNECTION;
 mongoose
-  .connect(
-    "mongodb+srv://sholop2113:2wWd2RjUy6zggyIP@cluster0.wm49rqk.mongodb.net/myarticles?retryWrites=true&w=majority"
-  )
+  .connect(mongoConnection)
   // перевіряємо підключення
   .then(() => {
     console.log("DB ok");

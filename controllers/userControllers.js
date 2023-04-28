@@ -1,13 +1,17 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 import UserModel from "../models/user.js";
 import ImageModel from "../models/image.js";
 
+const bcrypt_salt = process.env.BCRYPT_SALT;
+
 export const registerUser = async (req, res) => {
   try {
     const password = req.body.password;
-    const salt = await bcrypt.genSalt(10); // шифрування
+    const salt = await bcrypt.genSalt(bcrypt_salt); // шифрування
     const hash = await bcrypt.hash(password, salt);
 
     const avatarId = req.body.avatarId;
