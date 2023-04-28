@@ -43,7 +43,7 @@ const postsSlice = createSlice({
     },
     [fetchNewPosts.rejected]: (state) => {
       state.new.items = [];
-      state.new.status = "error";
+      state.new.isLoaded = false;
     },
     [fetchPopularPosts.pending]: (state) => {
       state.popular.items = [];
@@ -55,7 +55,7 @@ const postsSlice = createSlice({
     },
     [fetchPopularPosts.rejected]: (state) => {
       state.popular.items = [];
-      state.popular.isLoaded = true;
+      state.popular.isLoaded = false;
     },
   },
 });

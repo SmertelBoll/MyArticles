@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:4444",
+  baseURL: "https://my-article.onrender.com",
 });
 
 // При кожному запросі вшивати токен
