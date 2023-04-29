@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Box, debounce } from "@mui/material";
 import ReactDOMServer from "react-dom/server";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import SimpleMDE from "react-simplemde-editor";
 import { useTheme } from "@mui/material/styles";
@@ -15,6 +15,8 @@ import TextFieldCustom from "../../components/customMUI/TextFieldCustom";
 import MainButton from "../../components/Buttons/MainButton";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import UploadIcon from "@mui/icons-material/Upload";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import "easymde/dist/easymde.min.css";
 
@@ -183,7 +185,8 @@ function CreateArticle({ update }) {
         })
         .catch((err) => {
           console.warn(err);
-          alertError("Article error", err.response.data[0].msg);
+          if (err.response.data[0]?.msg) alertError("Article error", err.response.data[0].msg);
+          else alertError(err.response.data.title, err.response.data.message);
         });
     } else {
       // створення
@@ -196,7 +199,8 @@ function CreateArticle({ update }) {
         })
         .catch((err) => {
           console.warn(err);
-          alertError("Article error", err.response.data[0].msg);
+          if (err.response.data[0]?.msg) alertError("Article error", err.response.data[0].msg);
+          else alertError(err.response.data.title, err.response.data.message);
         });
     }
   };
@@ -225,6 +229,8 @@ function CreateArticle({ update }) {
   useEffect(() => {
     if (!update) updateData(localData);
   }, [localData]);
+
+  if (!userData) return <Navigate to="/" />;
 
   return (
     <ContainerCustom paddingY sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -257,8 +263,17 @@ function CreateArticle({ update }) {
             src={imageUrl}
           />
         )}
-        <Box sx={{ display: "flex", gap: 2 }}>
-          <MainButton onClick={() => uploadRef.current.click()}>Upload preview image</MainButton>
+        <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
+          <MainButton sx={{ display: { xs: "none", sm: "flex" } }} onClick={() => uploadRef.current.click()}>
+            Upload preview image
+          </MainButton>
+          <MainButton
+            sx={{ display: { xs: "flex", sm: "none" } }}
+            sxTypography={{ display: "flex", alignItems: "center" }}
+            onClick={() => uploadRef.current.click()}
+          >
+            <UploadIcon />
+          </MainButton>
           <input
             id="UploadWidgetId"
             type="file"
@@ -267,7 +282,20 @@ function CreateArticle({ update }) {
             ref={uploadRef}
             accept="image/*"
           />
-          {imageUrl && <MainButton onClick={handleDeleteImage}>Delete image</MainButton>}
+          {imageUrl && (
+            <>
+              <MainButton onClick={handleDeleteImage} sx={{ display: { xs: "none", sm: "flex" } }}>
+                Delete image
+              </MainButton>{" "}
+              <MainButton
+                sx={{ display: { xs: "flex", sm: "none" } }}
+                sxTypography={{ display: "flex", alignItems: "center" }}
+                onClick={() => uploadRef.current.click()}
+              >
+                <DeleteIcon />
+              </MainButton>
+            </>
+          )}
         </Box>
 
         {/* title */}

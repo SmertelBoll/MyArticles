@@ -118,7 +118,7 @@ function Comments({
                   key={obj._id}
                   text={obj.text}
                   avatarUrl={obj?.user?.avatar}
-                  fullname={obj.user.fullName}
+                  fullname={obj.user?.fullName}
                   smallComment={smallComment}
                 />
               ))

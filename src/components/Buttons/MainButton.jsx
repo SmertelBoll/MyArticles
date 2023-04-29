@@ -2,7 +2,7 @@ import { Button, Typography } from "@mui/material";
 import React from "react";
 
 function MainButton(props) {
-  const { children, sx, ...rest } = props;
+  const { children, sx, sxTypography, ...rest } = props;
   return (
     <Button
       {...rest}
@@ -19,7 +19,9 @@ function MainButton(props) {
         ...sx,
       }}
     >
-      <Typography variant="button">{children}</Typography>
+      <Typography variant="button" {...sxTypography}>
+        {children}
+      </Typography>
     </Button>
   );
 }
