@@ -6,22 +6,15 @@ import TagButton from "../Buttons/TagButton";
 
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import { getImageUrlFromBuffer } from "../../services/image";
 
 function ArticleInfoBlock({ title, text, tags, date, user, viewsCount, commentsCount, isAuth }) {
   const yearMonthDay = date.split("T")[0];
-  const [avatarUrl, setAvatarUrl] = useState("");
-
-  React.useEffect(() => {
-    const url = getImageUrlFromBuffer(user?.avatar);
-    setAvatarUrl(url);
-  }, [user]);
 
   return (
     <Box sx={{ bgcolor: "bg.second", p: { xs: 2, sm: 3 } }}>
       {/* user */}
       <Box sx={{ display: "flex" }}>
-        <Avatar src={avatarUrl} sx={{ mr: 2 }} />
+        <Avatar src={user.avatar} sx={{ mr: 2 }} />
 
         <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <Typography

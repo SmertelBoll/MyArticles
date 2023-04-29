@@ -17,7 +17,6 @@ import MainButton from "../../components/Buttons/MainButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import "easymde/dist/easymde.min.css";
-import { getImageUrlFromBuffer } from "../../services/image";
 
 function CreateArticle({ update }) {
   const theme = useTheme();
@@ -54,7 +53,7 @@ function CreateArticle({ update }) {
             text: res.data.text,
             tags: res.data.tags,
           });
-          setImageUrl(getImageUrlFromBuffer(res.data.image));
+          setImageUrl(res.data.image);
         })
         .catch((err) => {
           console.warn(err);
@@ -136,19 +135,30 @@ function CreateArticle({ update }) {
     setImageUrl("");
   };
 
+  const setFileToBase = () => {
+    return new Promise((resolve) => {
+      const render = new FileReader();
+      render.readAsDataURL(localData.image);
+      render.onloadend = () => {
+        const formDataImg = {
+          image: render.result,
+        };
+        resolve(formDataImg);
+      };
+    });
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    let imageId = null;
-    if (localData.image) {
-      console.log("image!!!");
-      try {
-        const formDataImg = new FormData();
-        formDataImg.append("image", localData.image);
+    let image = null;
+    if (localData.image && typeof localData.image !== "string") {
+      const formDataImg = await setFileToBase();
 
+      try {
         const { data } = await axios.post("/upload", formDataImg);
 
-        imageId = data.id;
+        image = data.url;
       } catch (err) {
         console.warn(err);
         alertError(err.response.data.title, err.response.data.message);
@@ -160,9 +170,8 @@ function CreateArticle({ update }) {
       title: localData.title,
       text: localData.text,
       tags: localData.tags,
+      image: image ? image : localData.image,
     };
-
-    if (imageId) formData["imageId"] = imageId;
 
     if (update) {
       // редагування
@@ -174,7 +183,7 @@ function CreateArticle({ update }) {
         })
         .catch((err) => {
           console.warn(err);
-          alertError("Article error", "failed to update the article");
+          alertError("Article error", err.response.data[0].msg);
         });
     } else {
       // створення
@@ -187,7 +196,7 @@ function CreateArticle({ update }) {
         })
         .catch((err) => {
           console.warn(err);
-          alertError("Article error", "failed to create article");
+          alertError("Article error", err.response.data[0].msg);
         });
     }
   };

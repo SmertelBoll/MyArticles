@@ -2,7 +2,7 @@ import { Button, Typography } from "@mui/material";
 import React from "react";
 
 function SecondaryButton(props) {
-  const { children, sx, active, ...rest } = props;
+  const { children, sx, active } = props;
   return (
     <Button
       {...props}

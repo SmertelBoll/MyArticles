@@ -68,18 +68,30 @@ function RegistrationForm() {
     inputRef.current.click();
   };
 
+  const setFileToBase = () => {
+    return new Promise((resolve) => {
+      const render = new FileReader();
+      render.readAsDataURL(localData.avatar);
+      render.onloadend = () => {
+        const formDataImg = {
+          image: render.result,
+        };
+        resolve(formDataImg);
+      };
+    });
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    let avatarId = null;
-    if (localData.avatar) {
-      try {
-        const formDataImg = new FormData();
-        formDataImg.append("image", localData.avatar);
+    let avatar = null;
+    if (localData.avatar && typeof localData.avatar !== "string") {
+      const formDataImg = await setFileToBase();
 
+      try {
         const { data } = await axios.post("/upload", formDataImg);
 
-        avatarId = data.id;
+        avatar = data.url;
       } catch (err) {
         console.warn(err);
         alertError(err.response.data.title, err.response.data.message);
@@ -93,14 +105,22 @@ function RegistrationForm() {
       password: localData.password,
     };
 
-    if (avatarId) formData["avatarId"] = avatarId;
+    if (avatar) formData["avatar"] = avatar;
 
     const resData = await dispatch(fetchRegister(formData));
 
-    if (resData?.payload?.token) {
-      window.localStorage.setItem("token", resData.payload.token);
+    if (resData?.payload?.error) {
+      const err = resData.payload.error;
+      console.warn(err);
+
+      if (err.response.data[0]) alertError("Authorization error", err.response.data[0].msg);
+      else alertError(err.response.data.title, err.response.data.message);
     } else {
-      alertError("Authorization error", "You have entered incorrect data");
+      if (resData?.payload?.data?.token) {
+        window.localStorage.setItem("token", resData.payload.data.token);
+      } else {
+        alertError("Ooops..", "something went wrong, please try again later");
+      }
     }
   };
 

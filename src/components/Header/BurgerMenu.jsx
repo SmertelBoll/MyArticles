@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { selectIsAuth } from "../../redux/slices/AuthSlice";
-import { getImageUrlFromBuffer } from "../../services/image";
 import MainButton from "../Buttons/MainButton";
 import SecondaryButton from "../Buttons/SecondaryButton";
 import ChangeAvatar from "../ChangeAvatar";
@@ -34,10 +33,9 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
   ];
 
   const isAuth = useSelector(selectIsAuth);
-  const { data, isLoaded } = useSelector((state) => state.auth);
+  const { data } = useSelector((state) => state.auth);
   const [open, setOpen] = useState(false); // drawer
   const [isOpenChangeAvatar, setIsOpenChangeAvatar] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState(null);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -50,11 +48,6 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
   const handleDialogClose = () => {
     setIsOpenChangeAvatar(false);
   };
-
-  React.useEffect(() => {
-    const url = getImageUrlFromBuffer(data?.avatar);
-    setAvatarUrl(url);
-  }, [data]);
 
   return (
     <Box sx={{ display: "flex", ...sx }}>
@@ -91,7 +84,7 @@ const BurgerMenu = ({ sx, onClickLogout }) => {
         {isAuth && (
           <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
             <Avatar
-              src={avatarUrl}
+              src={data?.avatar}
               onClick={() => setIsOpenChangeAvatar(true)}
               sx={{ width: { xs: 50, sm: 75 }, height: { xs: 50, sm: 75 }, cursor: "pointer" }}
             />

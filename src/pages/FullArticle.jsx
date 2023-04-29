@@ -15,7 +15,6 @@ import CircularProgressCustom from "../components/customMUI/CircularProgressCust
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { getImageUrlFromBuffer } from "../services/image";
 
 // these articles cannot be deleted, they are needed for a pleasant decoration of the site and display of its capabilities
 const ids = [
@@ -114,7 +113,7 @@ function FullArticle() {
                 maxHeight: "50vh",
                 objectFit: "cover",
               }}
-              src={getImageUrlFromBuffer(post?.image)}
+              src={post?.image}
             />
 
             <ArticleInfoBlock
