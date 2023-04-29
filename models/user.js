@@ -20,8 +20,7 @@ const UserSchema = new mongoose.Schema(
       default: "ordinary",
     },
     avatar: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Image",
+      type: String,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

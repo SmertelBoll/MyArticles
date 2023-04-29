@@ -24,7 +24,7 @@ import {
   removeComment,
 } from "./controllers/commentControllers.js";
 import { commentCreateValidation } from "./validations/comment.js";
-import { download, uploadFile } from "./controllers/imageControllers.js";
+import { uploadFile } from "./controllers/imageControllers.js";
 
 // підключаємось до бази даних
 const mongoConnection = process.env.MONGO_CONNECTION;
@@ -54,7 +54,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Настройки
-app.use(express.json()); // дозволяє читати json
+// app.use(express.json()); // дозволяє читати json
+app.use(express.json({ limit: "50mb" }));
 app.use(cors());
 app.use("/uploads", express.static("uploads")); // щоб діставати статичні файли з папки (в гугл наприклад)
 
@@ -66,8 +67,9 @@ app.post("/auth/register", registerValidation, checkValidationError, registerUse
 app.post("/auth/login", loginValidation, checkValidationError, loginUser);
 app.get("/auth/me", checkAuth, getMe);
 
+// app.post("/upload", upload.single("image"), uploadFile);
+// app.get("/image/:fileId", download);
 app.post("/upload", upload.single("image"), uploadFile);
-app.get("/image/:fileId", download);
 
 app.get("/posts", getAllPosts);
 app.get("/posts/:id", getOnePost);

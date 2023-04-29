@@ -4,24 +4,29 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import UserModel from "../models/user.js";
-import ImageModel from "../models/image.js";
 
 const bcrypt_salt = process.env.BCRYPT_SALT;
+const jwt_key = process.env.JWT_KEY;
 
 export const registerUser = async (req, res) => {
   try {
     const password = req.body.password;
-    const salt = await bcrypt.genSalt(bcrypt_salt); // шифрування
+    const salt = await bcrypt.genSalt(parseInt(bcrypt_salt)); // шифрування
     const hash = await bcrypt.hash(password, salt);
 
-    const avatarId = req.body.avatarId;
+    const avatar = req.body.avatar;
 
-    const image = await ImageModel.findById(avatarId);
+    console.log({
+      email: req.body.email,
+      fullName: req.body.fullName,
+      avatar: avatar ? avatar : "",
+      passwordHash: hash,
+    });
 
     const doc = new UserModel({
       email: req.body.email,
       fullName: req.body.fullName,
-      avatar: image,
+      avatar: avatar ? avatar : "",
       passwordHash: hash,
     });
 
@@ -31,7 +36,7 @@ export const registerUser = async (req, res) => {
       {
         _id: user._id,
       },
-      "secret-key", // ключ шифрування
+      jwt_key, // ключ шифрування
       {
         expiresIn: "30d", // скільки токен буде існувати
       }
@@ -53,7 +58,7 @@ export const registerUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   try {
-    const user = await UserModel.findOne({ email: req.body.email }).populate("avatar").exec();
+    const user = await UserModel.findOne({ email: req.body.email }).exec();
 
     if (!user) {
       return res.status(404).json({ title: "Authorization error", message: "user not found" });
@@ -69,7 +74,7 @@ export const loginUser = async (req, res) => {
       {
         _id: user._id,
       },
-      "secret-key", // ключ шифрування
+      jwt_key, // ключ шифрування
       {
         expiresIn: "30d", // скільки токен буде існувати
       }
@@ -88,7 +93,7 @@ export const loginUser = async (req, res) => {
 
 export const getMe = async (req, res) => {
   try {
-    const user = await UserModel.findById(req.userId).populate("avatar").exec();
+    const user = await UserModel.findById(req.userId).exec();
 
     if (!user) {
       return res.status(404).json({ title: "Authorization error", message: "user not found" });

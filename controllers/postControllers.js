@@ -13,39 +13,12 @@ export const getAllPosts = async (req, res) => {
 
     if (sortBy) {
       sortObj[sortBy] = -1;
-      posts = await PostModel.find({ title: regex })
-        .sort(sortObj)
-        .populate({
-          path: "user",
-          populate: {
-            path: "avatar",
-          },
-        })
-        .populate("image")
-        .exec();
+      posts = await PostModel.find({ title: regex }).sort(sortObj).populate("user").exec();
     } else {
       if (filter) {
-        posts = await PostModel.find({ title: regex })
-          .sort({ viewsCount: -1 })
-          .populate({
-            path: "user",
-            populate: {
-              path: "avatar",
-            },
-          })
-          .populate("image")
-          .exec();
+        posts = await PostModel.find({ title: regex }).sort({ viewsCount: -1 }).populate("user").exec();
       } else {
-        posts = await PostModel.find({ title: regex })
-          .sort({ createdAt: -1 })
-          .populate({
-            path: "user",
-            populate: {
-              path: "avatar",
-            },
-          })
-          .populate("image")
-          .exec();
+        posts = await PostModel.find({ title: regex }).sort({ createdAt: -1 }).populate("user").exec();
       }
     }
 
@@ -73,14 +46,8 @@ export const getOnePost = async (req, res) => {
       {
         new: true,
       }
-    )
-      .populate({
-        path: "user",
-        populate: {
-          path: "avatar",
-        },
-      })
-      .populate("image");
+    ).populate("user");
+
     res.send(posts);
   } catch (error) {
     console.log(error);
@@ -90,13 +57,13 @@ export const getOnePost = async (req, res) => {
 
 export const createPost = async (req, res) => {
   try {
-    const imageId = req.body.imageId;
+    const image = req.body.image;
 
     const doc = new PostModel({
       title: req.body.title,
       text: req.body.text,
       tags: req.body.tags,
-      image: imageId,
+      image: image ? image : "",
       user: req.userId,
     });
 
@@ -155,7 +122,7 @@ export const updatePost = async (req, res) => {
       return res.status(500).json({ title: "Article error", message: "access is denied" });
     }
 
-    const imageId = req.body.imageId;
+    const image = req.body.image;
 
     await PostModel.updateOne(
       {
@@ -165,10 +132,10 @@ export const updatePost = async (req, res) => {
         title: req.body.title,
         text: req.body.text,
         tags: req.body.tags,
-        image: imageId ? imageId : post[0].image,
+        image: req.body.image,
         user: post[0].user._id,
       }
-    ).populate("image");
+    );
 
     res.json({
       success: true,

@@ -15,8 +15,7 @@ const PostSchema = new mongoose.Schema(
       default: [],
     },
     image: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Image",
+      type: String,
     },
     viewsCount: {
       type: Number,
